@@ -1,13 +1,14 @@
 import math
+
 """
 This module contains all of the objects we need
 """
 
-"""
-This class will represent a player
-"""
-class Player(object):
 
+class Player(object):
+    """
+    This class will represent a player
+    """
     BEGINNER = 1
     INTERMEDIATE = 2
     ADVANCED = 3
@@ -17,8 +18,10 @@ class Player(object):
     _late = False
     _vip = False
 
+
     def __repr__(self):
         return "{}({})".format(self._name, self._level)
+
 
     def __init__(self, name, level, late=False, vip=False):
         self._name = name
@@ -42,11 +45,11 @@ class Player(object):
     def is_late(self):
         return self._vip
 
-"""
-This will represent a game
-"""
-class Match(object):
 
+class Match(object):
+    """
+    This will represent a game
+    """
     _white_player = Player("John Sixpack", 1)
     _black_player = Player("Jane Sixpack", 1)
     _game_time = 20
@@ -65,7 +68,16 @@ class Match(object):
         self._black_player = black
         self._game_time = time
 
-    def set_time(self,time):
+    def get_white_player(self):
+        return self._white_player
+
+
+    def get_black_player(self):
+        return self._black_player
+
+
+
+    def set_time(self, time):
         self._game_time = time
 
     def get_time(self):
@@ -78,10 +90,7 @@ class Match(object):
         return self._result
 
 
-
-
 class Schedule(object):
-
     # This is the number of boards to play, it will determine
     # the number of simultaneous games
     _number_boards = 0
@@ -114,32 +123,57 @@ class Schedule(object):
      [ Match, Match, Match, Match, Match, Match ]
     """
 
-    _rounds = []
+    _rounds = list()
 
     def __repr__(self):
-        return "There are {} rounds. ".format(self._number_of_rounds)
+        return_line = "There are {} rounds.\n".format(len(self._rounds))
+        return_line += "-----\n"
 
+        count = 0
+
+        print("There are {} rounds in the array.\n".format(len(self._rounds)))
+        for individual_round in self._rounds:
+            print("Getting list of matches in round {}\n".format(count))
+            return_line += "Round: {}\n".format(count + 1)
+            return_line += "******************\n"
+            board_counter = 0
+            for match in individual_round:
+                return_line += "BOARD {} -- White: {} Black: {} \n".format(board_counter+1, match.get_white_player(), match.get_black_player())
+                board_counter+=1
+            count+=1
+            return_line += "-----\n"
+        return_line += "-----\n"
+        return return_line
 
     def __init__(self, boards, time_per_game=20):
 
         self._number_boards = boards
         self._game_time = time_per_game
 
-        print ("So we have {} boards.".format(boards))
+        print("So we have {} boards.".format(boards))
         # First thing we need to do is to create the arrays
         # But we need to figure out how many rounds we can have
 
         round_time = self._game_time + self._rounds_gap
         self._number_of_rounds = math.trunc(self._number_minutes / round_time)
 
-        print ("OK, we have space for {} rounds ".format(self._number_of_rounds))
+        print("OK, we have space for {} rounds ".format(self._number_of_rounds))
 
         # Now we can create the array
-        for r in range(0,self._number_of_rounds):
-            print("We are at: {}".format(r))
+        for r in range(0, self._number_of_rounds):
+            # create new list
+            print(self._rounds)
+            print("Creating list # {}\n".format(r))
             self._rounds.append(list())
-            for m in range(0,boards):
-                self._rounds[r].append(Match())
+
+            current_round_list = self._rounds[r]
+
+            print("We are at round: {}".format(r))
+
+            for m in range(0, boards):
+                print ("Adding match #{}\n".format(m))
+                current_round_list.append(Match())
+
+            print("We are done with the round.")
 
         print(self)
-
