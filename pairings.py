@@ -91,6 +91,7 @@ class Match(object):
 
 
 class Schedule(object):
+
     # This is the number of boards to play, it will determine
     # the number of simultaneous games
     _number_boards = 0
@@ -123,9 +124,29 @@ class Schedule(object):
      [ Match, Match, Match, Match, Match, Match ]
     """
 
+    # We're going to keep track of this at the class level for convenience
+    _total_number_of_players = 0
+
+    _advanced_players = []
+    _intermediate_players = []
+    _beginner_players = []
+
+
     _rounds = list()
 
     def __repr__(self):
+        return_line = "Schedule Object:\n"
+        return_line += "Number of boards:{} Number of minutes in the tournament:{} Gap in minutes between rounds:{}" \
+                        " Time in minutes for each game:{} " \
+                        "Team Play?:{} Have Playoff?:{}\n" \
+                        "".format(self._number_boards, self._number_minutes, self._rounds_gap, self._game_time,
+                                  self._team_play, self._have_playoff)
+        return_line += "There are {} rounds.\n".format(len(self._rounds))
+
+
+        return return_line
+
+    def __str__(self):
         return_line = "There are {} rounds.\n".format(len(self._rounds))
         return_line += "-----\n"
 
@@ -138,13 +159,17 @@ class Schedule(object):
             return_line += "******************\n"
             board_counter = 0
             for match in individual_round:
-                return_line += "BOARD {} -- White: {} Black: {} \n".format(board_counter+1, match.get_white_player(), match.get_black_player())
-                board_counter+=1
-            count+=1
+                return_line += "BOARD {} -- White: {} Black: {} \n".format(board_counter + 1, match.get_white_player(),
+                                                                           match.get_black_player())
+                board_counter += 1
+            count += 1
             return_line += "-----\n"
         return_line += "-----\n"
         return return_line
 
+    # The hard question is, what do we initialize with?
+    # So the number of players will be static. But what do we do with the number of boards?
+    # I guess we can try a maximum number of boards, then let
     def __init__(self, boards, time_per_game=20):
 
         self._number_boards = boards
