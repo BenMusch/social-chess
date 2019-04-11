@@ -9,7 +9,7 @@ players = []
 
 def load_players():
 
-    con = sqlite.connect('chess.db')
+    con = sqlite.connect('./db/chess.db')
 
     with con:
         cur = con.cursor()
@@ -22,3 +22,7 @@ def load_players():
 
             players.append(Player(row[1],level=int(row[3]), late=False, vip=(1 == int(row[4]))))
 
+
+    print(players)
+
+load_players()

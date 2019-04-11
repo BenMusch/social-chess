@@ -60,7 +60,7 @@ class Match(object):
 
     _result = DRAW
 
-    def __repr__(self):
+    def __str__(self):
         return "White:{} Black:{} ".format(self._white_player, self._black_player)
 
     def __init__(self, white=Player("John Sixpack", 1), black=Player("Jane Sixpack", 1), time=20):
