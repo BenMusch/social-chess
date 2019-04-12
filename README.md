@@ -1,37 +1,14 @@
-## Welcome to GitHub Pages
+## Social Chess Tournament Generator
 
-You can use the [editor on GitHub](https://github.com/edfactor/social-chess/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This project will provide a Flask application that will allow someone to create and manage a 3-hour chess
+tournament for fun among a range of playing abilities.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Basic Requirements
 
-```markdown
-Syntax highlighted code block
+- A single individual must be able to generate the pairings instantly and manage the results from a phone
+- There should be a page that functions as a leaderboard, to track the results of the tournament in process
+- The players should be saved in a database so they can be re-used across events
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/edfactor/social-chess/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
