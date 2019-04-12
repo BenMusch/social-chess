@@ -202,3 +202,9 @@ class Schedule(object):
             print("We are done with the round.")
 
         print(self)
+
+
+class Tournament(object):
+    """
+    This class will keep track of an individual tournament
+    """
