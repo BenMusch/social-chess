@@ -2,16 +2,14 @@
 This is the command-line tool that drives the creation of tournament pairings. 
 """
 import sqlite3 as sqlite
-import utilities
-
-from chess_entities import Player
+from .chessnouns import player
 
 players = []
 
 
 def load_players():
 
-    con = sqlite.connect("./db/chess.db")
+    con = sqlite.connect("../db/chess.db")
 
     with con:
         cur = con.cursor()
@@ -22,7 +20,7 @@ def load_players():
         for row in rows:
             print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
 
-            players.append(Player(row[1],level=int(row[3]), late=False, vip=(1 == int(row[4]))))
+            players.append(player.Player(row[1],level=int(row[3]), late=False, vip=(1 == int(row[4]))))
 
 
     print(players)

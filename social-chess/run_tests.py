@@ -3,7 +3,6 @@ This is the main testing file that calls all that we have in the
 test directory
 """
 
-import pytest
 import test.test_utilities
 import test.test_scheduler
 

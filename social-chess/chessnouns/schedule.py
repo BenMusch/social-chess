@@ -1,137 +1,9 @@
 """
-This module contains all of the objects we need
+This class will create a proposed schedule for a tournament.
+Note: This is not the same thing as a tournament
 """
-
 import math
-
-
-class Player(object):
-    """
-    This class will represent a player
-    """
-    BEGINNER = 1
-    INTERMEDIATE = 2
-    ADVANCED = 3
-
-    _name = "Blank"
-    _level = BEGINNER
-    _late = False
-    _vip = False
-
-
-    def __repr__(self):
-        return "{}({})".format(self._name, self._level)
-
-
-    def __init__(self, name, level=1, late=False, vip=False):
-        self._name = name
-        self._level = level
-        self._late = late
-        self._vip = vip
-
-
-    def name(self):
-        return self._name
-
-
-    def level(self):
-        return self._level
-
-
-    def is_vip(self):
-        return self._vip
-
-
-    def is_late(self):
-        return self._vip
-
-
-class Game(object):
-    """
-    This will represent a game
-    """
-    _white_player = Player("John Sixpack", 1)
-    _black_player = Player("Jane Sixpack", 1)
-    _game_time = 20
-
-    WHITE_WINS = 0
-    BLACK_WINS = 1
-    DRAW = 2
-
-    _result = None
-
-    def __str__(self):
-        return "White:{} Black:{} ".format(self._white_player, self._black_player)
-
-    def __init__(self, white=Player("John Sixpack", 1), black=Player("Jane Sixpack", 1), time=20):
-        self._white_player = white
-        self._black_player = black
-        self._game_time = time
-
-        # We need to test for a bye
-        if self._white_player.name == "Bye":
-            self._result = self.BLACK_WINS
-        elif self._black_player.name == "Bye":
-            self._result = self.WHITE_WINS
-
-
-    def is_game_over(self):
-        return self._result is not None
-
-    def get_white_player(self):
-        return self._white_player
-
-
-    def get_black_player(self):
-        return self._black_player
-
-
-    def set_time(self, time):
-        self._game_time = time
-
-    def get_time(self):
-        return self._game_time
-
-    def set_result(self, result):
-        self._result = result
-
-    def get_result(self):
-        return self._result
-
-
-class Round(object):
-    """
-    A round is actually two sets of games, where everyone plays
-    or gets a bye. Normally, a round would be a set of games,
-    but a key requirement for such a social event is that people
-    need a break between games to eat, drink, and socialize.
-    
-    This means that only half play at once. So a round is two 
-    sets of games exercising all the players. We will refer
-    to the two sets of games as A and B. 
-    
-    """
-    
-    # There will be a list of Games for the first set
-    # and one for the second. It is important to know
-    # that these lists may not be the same size, to
-    # accommodate unusual numbers of players
-
-    a_games = []
-    b_games = []
-
-    def __init__(self, number_a_games, number_b_games):
-        """
-        To set this up, we're going to initialize the arrays
-        with  the correct number of games
-
-        :param number_a_games:
-        :param number_b_games:
-        """
-        self.a_games = [None] * number_a_games
-        self.b_games = [None] * number_b_games
-
-
+from . import game
 
 class Schedule(object):
 
@@ -246,14 +118,10 @@ class Schedule(object):
 
             for m in range(0, boards):
                 print ("Adding match #{}\n".format(m))
-                current_round_list.append(Game())
+                current_round_list.append(game.Game())
 
             print("We are done with the round.")
 
         print(self)
 
 
-class Tournament(object):
-    """
-    This class will keep track of an individual tournament
-    """
