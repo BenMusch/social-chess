@@ -1,13 +1,14 @@
 """
 This class will create a proposed schedule for a tournament.
-Note: This is not the same thing as a tournament
+Note: This is not the same thing as a tournament, as it does
+not have a date, a playoff, a winner, or some other details
 """
 import math
+import chessnouns
 from . import game
 
 
 class Schedule(object):
-
     # This is the number of boards to play, it will determine
     # the number of simultaneous games
     _number_boards = 0
@@ -16,19 +17,14 @@ class Schedule(object):
     _number_minutes = 160
 
     # Space between games
-    _rounds_gap = 10
+    _rounds_gap = chessnouns.STANDARD_GAME_GAP_TIME
 
-    _game_time = 20
+    _game_time = chessnouns.STANDARD_GAME_TIME
 
     _number_of_rounds = 0
 
     # This is whether it is team or individual
     _team_play = False
-
-    # This will indicate whether we will have a playoff of
-    # the top two scorers
-
-    _have_playoff = False
 
     # This is the data structure that will hold the results
     # It will be an two-dimensional array. An array of rounds
@@ -46,12 +42,11 @@ class Schedule(object):
     def __repr__(self):
         return_line = "Schedule Object:\n"
         return_line += "Number of boards:{} Number of minutes in the tournament:{} Gap in minutes between each set of games:{}" \
-                        " Time in minutes for each game:{} " \
-                        "Team Play?:{} Have Playoff?:{}\n" \
-                        "".format(self._number_boards, self._number_minutes, self._rounds_gap, self._game_time,
-                                  self._team_play, self._have_playoff)
+                       " Time in minutes for each game:{} " \
+                       "Team Play?:{} Have Playoff?:{}\n" \
+                       "".format(self._number_boards, self._number_minutes, self._rounds_gap, self._game_time,
+                                 self._team_play, self._have_playoff)
         return_line += "There are {} rounds.\n".format(len(self._rounds))
-
 
         return return_line
 
@@ -91,7 +86,7 @@ class Schedule(object):
     # The hard question is, what do we initialize with?
     # So the number of players will be static. But what do we do with the number of boards?
     # I guess we can try a maximum number of boards, then let
-    def __init__(self, boards, time_per_game=20):
+    def __init__(self, boards, time_per_game=chessnouns.STANDARD_GAME_TIME):
 
         self._number_boards = boards
         self._game_time = time_per_game
@@ -117,11 +112,9 @@ class Schedule(object):
             print("We are at round: {}".format(r))
 
             for m in range(0, boards):
-                print ("Adding match #{}\n".format(m))
+                print("Adding match #{}\n".format(m))
                 current_round_list.append(game.Game())
 
             print("We are done with the round.")
 
         print(self)
-
-

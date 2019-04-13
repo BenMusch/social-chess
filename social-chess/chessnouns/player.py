@@ -6,7 +6,7 @@ class Player(object):
     This class will represent a player
     """
 
-    _name = "None"
+    _name = chessnouns.NO_NAME
     _level = chessnouns.BEGINNER
     _late = False
     _vip = False
@@ -45,5 +45,5 @@ class Player(object):
     def make_late(self):
         self._late = True
 
-    def make_ontime(self):
+    def make_on_time(self):
         self._late = False

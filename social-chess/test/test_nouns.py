@@ -25,7 +25,7 @@ class TestNouns(object):
         p.make_late()
         assert p.is_late()
 
-        p.make_ontime()
+        p.make_on_time()
         assert not p.is_late()
 
     def test_round_object(self):
