@@ -1,8 +1,8 @@
 """
 This is the file that will test our utility functions
 """
-import pytest
-import utilities
+from chessutilities import utilities
+
 
 def test_get_number_of_boards_and_tweaks():
     """

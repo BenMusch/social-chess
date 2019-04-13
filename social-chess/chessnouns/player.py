@@ -1,13 +1,12 @@
+import chessnouns
+
 class Player(object):
     """
     This class will represent a player
     """
-    BEGINNER = 1
-    INTERMEDIATE = 2
-    ADVANCED = 3
 
     _name = "Blank"
-    _level = BEGINNER
+    _level = chessnouns.BEGINNER
     _late = False
     _vip = False
 
@@ -16,7 +15,16 @@ class Player(object):
         return "{}({})".format(self._name, self._level)
 
 
-    def __init__(self, name, level=1, late=False, vip=False):
+    def __init__(self, name, level=chessnouns.BEGINNER, late=False, vip=False):
+
+        if not isinstance(name, str):
+            print("We got an exception")
+            raise Exception("Names must be strings")
+
+        if level not in range(1,4):
+            print("We got an exception")
+            raise Exception("Level value must be {}, {}, or {}".format(chessnouns.BEGINNER, chessnouns.INTERMEDIATE, chessnouns.ADVANCED))
+
         self._name = name
         self._level = level
         self._late = late

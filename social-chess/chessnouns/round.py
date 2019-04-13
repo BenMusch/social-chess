@@ -1,11 +1,3 @@
-"""
-A round is two sets of games that involve all players.
-This is not intuitive, but it works for our requirements
-at a social event, where everyone plays a game, then sits out a game, in order to
-socialize, get a drink, etc.
-"""
-
-
 class Round(object):
     """
     A round is actually two sets of games, where everyone plays
@@ -24,8 +16,10 @@ class Round(object):
     # that these lists may not be the same size, to
     # accommodate unusual numbers of players
 
-    a_games = []
-    b_games = []
+    _round_number = 1
+
+    _a_games = []
+    _b_games = []
 
     def __init__(self, number_a_games, number_b_games):
         """
@@ -35,5 +29,17 @@ class Round(object):
         :param number_a_games:
         :param number_b_games:
         """
-        self.a_games = [None] * number_a_games
-        self.b_games = [None] * number_b_games
+        self._a_games = [None] * number_a_games
+        self._b_games = [None] * number_b_games
+
+
+    def get_a_games(self):
+        return self._a_games
+
+    def get_b_games(self):
+        return self._b_games
+
+
+    def get_round_number(self):
+        return self._round_number
+

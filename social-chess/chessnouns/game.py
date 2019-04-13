@@ -1,4 +1,5 @@
 from . import player
+import chessnouns
 
 class Game(object):
     """
@@ -8,9 +9,6 @@ class Game(object):
     _black_player = player.Player("Jane Sixpack", 1)
     _game_time = 20
 
-    WHITE_WINS = 0
-    BLACK_WINS = 1
-    DRAW = 2
 
     _result = None
 
@@ -24,9 +22,9 @@ class Game(object):
 
         # We need to test for a bye
         if self._white_player.name == "Bye":
-            self._result = self.BLACK_WINS
+            self._result = chessnouns.BLACK_WINS
         elif self._black_player.name == "Bye":
-            self._result = self.WHITE_WINS
+            self._result = chessnouns.WHITE_WINS
 
 
     def is_game_over(self):
