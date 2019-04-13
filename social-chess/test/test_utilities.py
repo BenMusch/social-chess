@@ -2,6 +2,7 @@
 This is the file that will test our utility functions
 """
 from chessutilities import utilities
+import chessnouns
 
 
 def test_get_number_of_boards_and_tweaks():

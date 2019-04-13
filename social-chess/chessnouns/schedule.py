@@ -5,6 +5,7 @@ Note: This is not the same thing as a tournament
 import math
 from . import game
 
+
 class Schedule(object):
 
     # This is the number of boards to play, it will determine
@@ -31,7 +32,6 @@ class Schedule(object):
 
     # This is the data structure that will hold the results
     # It will be an two-dimensional array. An array of rounds
-
 
     # We're going to keep track of this at the class level for convenience
     _total_number_of_players = 0

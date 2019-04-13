@@ -4,6 +4,7 @@ for our chess tournament solver
 """
 
 import math
+import chessnouns
 
 
 def get_number_of_boards_and_tweaks(number_players):
@@ -36,7 +37,30 @@ def get_number_of_boards_and_tweaks(number_players):
         return minimum_boards, False, True
     elif (number_players % 4) == 2:
         # number of boards plus one, is lopsided, has bye
-        return minimum_boards+1, True, False
+        return minimum_boards + 1, True, False
     else:
         # number of boards plus one, is lopsided, has bye
         return minimum_boards + 1, True, False
+
+
+def level_to_text(level):
+    """
+    This function converts the level constants to text for
+    debugging and display purposes
+
+    :param level: what level the player is
+    :return: text indicating the level
+    """
+
+    if not isinstance(level, int):
+        raise Exception("You have to submit a number")
+
+    if level not in range(chessnouns.BEGINNER, chessnouns.ADVANCED):
+        raise Exception("That number was not in the range of {} to {}".format(chessnouns.BEGINNER, chessnouns.ADVANCED))
+
+    if level == chessnouns.BEGINNER:
+        return "Beginner"
+    elif level == chessnouns.INTERMEDIATE:
+        return "Intermediate"
+    else:
+        return "Advanced"

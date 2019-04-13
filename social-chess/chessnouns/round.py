@@ -21,17 +21,23 @@ class Round(object):
     _a_games = []
     _b_games = []
 
-    def __init__(self, number_a_games, number_b_games):
+    def __init__(self, number_a_games, number_b_games, round_number):
         """
         To set this up, we're going to initialize the arrays
         with  the correct number of games
 
         :param number_a_games:
         :param number_b_games:
+        :param round_number:
         """
+
+        if not (isinstance(number_a_games, int) and (
+                isinstance(number_b_games, int) and (isinstance(round_number, int)))):
+            raise Exception("You must initialize this class with three numbers")
+
         self._a_games = [None] * number_a_games
         self._b_games = [None] * number_b_games
-
+        self._round_number = round_number
 
     def get_a_games(self):
         return self._a_games
@@ -39,7 +45,5 @@ class Round(object):
     def get_b_games(self):
         return self._b_games
 
-
     def get_round_number(self):
         return self._round_number
-
