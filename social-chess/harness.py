@@ -127,18 +127,11 @@ def get_round_options(number_players, minutes_total, minutes_round):
 
 def main():
     load_players()
-
+    print("The number of players we have is: {} ".format(len(players)))
 
 
 if __name__ == '__main__':
     main()
-
-
-load_players()
-
-for i in range(7,51):
-    needed_boards, lopsided, bye = utilities.get_number_of_boards_and_tweaks(i)
-    print("For Players {}, Boards {} Lopsided? {}, Bye? {}".format(i, needed_boards, lopsided, bye))
 
 
 

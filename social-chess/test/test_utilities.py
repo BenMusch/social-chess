@@ -3,6 +3,7 @@ This is the file that will test our utility functions
 """
 from chessutilities import utilities
 import chessnouns
+import pytest
 
 
 def test_get_number_of_boards_and_tweaks():
@@ -67,3 +68,16 @@ def test_get_number_of_boards_and_tweaks():
     #     Round 1B: 38 players, 19 boards
     assert (19, lopsided, bye) == utilities.get_number_of_boards_and_tweaks(75)
 
+
+def test_level_to_text():
+    # Test for fail on passing in a string
+    with pytest.raises(Exception):
+        assert utilities.level_to_text("String")
+
+    # Test for passing in too big a number
+    with pytest.raises(Exception):
+        assert utilities.level_to_text(8)
+
+    assert "Beginner" == utilities.level_to_text(1)
+    assert "Intermediate" == utilities.level_to_text(2)
+    assert "Advanced" == utilities.level_to_text(3)

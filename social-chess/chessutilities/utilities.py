@@ -58,7 +58,7 @@ def level_to_text(level):
     if not isinstance(level, int):
         raise Exception("You have to submit a number")
 
-    if level not in range(chessnouns.BEGINNER, chessnouns.ADVANCED):
+    if level not in range(chessnouns.BEGINNER, chessnouns.ADVANCED+1):
         raise Exception("That number was not in the range of {} to {}".format(chessnouns.BEGINNER, chessnouns.ADVANCED))
 
     if level == chessnouns.BEGINNER:
