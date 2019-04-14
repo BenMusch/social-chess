@@ -18,11 +18,11 @@ class Player(object):
 
         if not isinstance(name, str):
             print("We got an exception")
-            raise Exception("Names must be strings")
+            raise TypeError("Names must be strings")
 
         if level not in range(1, 4):
             print("We got an exception")
-            raise Exception('Level value must be {}, {}, or {}'.format(chessnouns.BEGINNER, chessnouns.INTERMEDIATE,
+            raise ValueError('Level value must be {}, {}, or {}'.format(chessnouns.BEGINNER, chessnouns.INTERMEDIATE,
                                                                        chessnouns.ADVANCED))
 
         self._name = name

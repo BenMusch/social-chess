@@ -7,11 +7,11 @@ class TestNouns(object):
 
     def test_create_player_exceptions(self):
         # Test for fail on player name is not a string
-        with pytest.raises(Exception):
+        with pytest.raises(TypeError):
             assert player.Player(999)
 
         # Test for fail with invalid level
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             assert player.Player("Ed Lyons", 0, False, False)
 
     def test_player_attributes(self):
@@ -69,3 +69,14 @@ class TestNouns(object):
         assert chessnouns.STANDARD_GAME_GAP_TIME == 5
         assert chessnouns.STANDARD_EVENT_LENGTH == 120
         assert chessnouns.STANDARD_PLAYOFF_LENGTH == 20
+
+    def test_playoff_initialization(self):
+        pass
+
+    def test_playoff_set_colors(self):
+        pass
+
+    def test_playoff_get_game(self):
+        # Here we are going to test that our selected options
+        # actually changed the underlying game options
+        pass

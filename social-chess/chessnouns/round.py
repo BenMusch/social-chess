@@ -33,7 +33,7 @@ class Round(object):
 
         if not (isinstance(number_a_games, int) and (
                 isinstance(number_b_games, int) and (isinstance(round_number, int)))):
-            raise Exception("You must initialize this class with three numbers")
+            raise TypeError("You must initialize this class with three numbers")
 
         self._a_games = [None] * number_a_games
         self._b_games = [None] * number_b_games

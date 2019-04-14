@@ -8,6 +8,7 @@ import chessnouns
 
 
 class Playoff(object):
+
     _player_one = None
     _player_two = None
 
@@ -16,7 +17,7 @@ class Playoff(object):
     def __init__(self, player_one, player_two):
 
         if not isinstance(player_one,chessnouns.player) or not isinstance(player_two,chessnouns.player):
-            raise Exception("You must initialize this with player objects, not names")
+            raise TypeError("You must initialize this with player objects, not names")
 
         self._player_one = player_one
         self._player_two = player_two

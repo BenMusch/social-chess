@@ -71,11 +71,11 @@ def test_get_number_of_boards_and_tweaks():
 
 def test_level_to_text():
     # Test for fail on passing in a string
-    with pytest.raises(Exception):
+    with pytest.raises(TypeError):
         assert utilities.level_to_text("String")
 
     # Test for passing in too big a number
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         assert utilities.level_to_text(8)
 
     assert "Beginner" == utilities.level_to_text(1)
