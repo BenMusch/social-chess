@@ -5,7 +5,7 @@ The first player is white in this model
 from . import player
 from . import game
 from chessutilities import utilities
-from chessexceptions import gameerror
+from chessexceptions import game_error
 import chessnouns
 
 
@@ -41,7 +41,7 @@ class Playoff(object):
 
     def get_game(self):
         if self._game is None:
-            raise gameerror.GameError("You must select colors for the players")
+            raise game_error.GameError("You must select colors for the players")
         return self._game
 
     def get_player_one(self):

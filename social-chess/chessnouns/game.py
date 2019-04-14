@@ -6,19 +6,16 @@ class Game(object):
     """
     This will represent a game
     """
-    _white_player = player.Player(chessnouns.DEFAULT_FIRST_PLAYER_NAME, 1)
-    _black_player = player.Player(chessnouns.DEFAULT_SECOND_PLAYER_NAME, 1)
+    _white_player = None
+    _black_player = None
     _game_time = chessnouns.STANDARD_GAME_TIME
 
     _result = None
 
     def __str__(self):
-        return "White:{} Black:{} ".format(self._white_player, self._black_player)
+        return "White:{} Black:{} ".format(self._white_player.get_name(), self._black_player.get_name())
 
-    def __init__(self,
-                 white=player.Player(chessnouns.DEFAULT_FIRST_PLAYER_NAME, 1),
-                 black=player.Player(chessnouns.DEFAULT_SECOND_PLAYER_NAME, 1),
-                 time=chessnouns.STANDARD_GAME_TIME):
+    def __init__(self, white, black, time=chessnouns.STANDARD_GAME_TIME):
 
         self._white_player = white
         self._black_player = black

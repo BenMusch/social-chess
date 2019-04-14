@@ -1,7 +1,7 @@
 from chessnouns import player, round, playoff, game
 import chessnouns
 import pytest
-from chessexceptions import gameerror
+from chessexceptions import game_error
 
 
 class TestNouns(object):
@@ -102,7 +102,7 @@ class TestNouns(object):
                                         player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
 
         # Here we are testing that you can't get the game without colors
-        with pytest.raises(gameerror.GameError):
+        with pytest.raises(game_error.GameError):
             assert playoff_match.get_game()
 
         playoff_match.set_random_colors()
@@ -114,3 +114,13 @@ class TestNouns(object):
         random_name = playoff_game.get_black_player().get_name()
 
         assert random_name == "Ed Lyons" or random_name == "Michael Smith"
+
+    def test_game_init(self):
+        pass
+
+    def test_game_players(self):
+        pass
+
+    def test_game_results(self):
+        pass
+
