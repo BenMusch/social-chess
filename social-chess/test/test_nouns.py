@@ -56,3 +56,16 @@ class TestNouns(object):
         assert chessnouns.WHITE_WINS == 0
         assert chessnouns.BLACK_WINS == 1
         assert chessnouns.DRAW == 2
+
+        assert chessnouns.COLOR_BLACK == 1
+        assert chessnouns.COLOR_WHITE == 0
+
+        assert chessnouns.NO_NAME == "None"
+        assert chessnouns.BYE_NAME == "Bye"
+        assert chessnouns.DEFAULT_FIRST_PLAYER_NAME == "John Smith"
+        assert chessnouns.DEFAULT_SECOND_PLAYER_NAME == "Jane Smith"
+
+        assert chessnouns.STANDARD_GAME_TIME == 10
+        assert chessnouns.STANDARD_GAME_GAP_TIME == 5
+        assert chessnouns.STANDARD_EVENT_LENGTH == 120
+        assert chessnouns.STANDARD_PLAYOFF_LENGTH == 20

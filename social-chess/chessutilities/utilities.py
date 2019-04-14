@@ -5,6 +5,7 @@ for our chess tournament solver
 
 import math
 import chessnouns
+from random import *
 
 
 def get_number_of_boards_and_tweaks(number_players):
@@ -67,3 +68,11 @@ def level_to_text(level):
         return "Intermediate"
     else:
         return "Advanced"
+
+
+def get_random_game_result():
+    return randint(chessnouns.WHITE_WINS, chessnouns.DRAW)
+
+
+def get_random_color():
+    return randint(chessnouns.COLOR_WHITE, chessnouns.COLOR_BLACK)

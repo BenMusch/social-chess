@@ -81,3 +81,29 @@ def test_level_to_text():
     assert "Beginner" == utilities.level_to_text(1)
     assert "Intermediate" == utilities.level_to_text(2)
     assert "Advanced" == utilities.level_to_text(3)
+
+
+def test_random_game_result():
+    """
+    This method just tests the random result generator
+    that we use for testing
+    """
+    possible_result_tuple = (0,1,2)
+
+    for i in range(0,100):
+        x = utilities.get_random_game_result()
+        print(x)
+        assert x in possible_result_tuple
+
+
+def test_random_color_choice():
+    """
+    Testing random color generator
+    """
+    possible_result_tuple = (0,1)
+
+    for i in range(0,100):
+        x = utilities.get_random_color()
+        print(x)
+        assert x in possible_result_tuple
+

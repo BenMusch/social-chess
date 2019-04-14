@@ -9,7 +9,6 @@ players = []
 
 
 def load_players():
-
     con = sqlite.connect("../db/chess.db")
 
     with con:
@@ -21,8 +20,7 @@ def load_players():
         for row in rows:
             print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
 
-            players.append(player.Player(row[1],level=int(row[3]), late=False, vip=(1 == int(row[4]))))
-
+            players.append(player.Player(row[1], level=int(row[3]), late=False, vip=(1 == int(row[4]))))
 
     print(players)
 
@@ -118,11 +116,7 @@ def get_round_options(number_players, minutes_total, minutes_round):
 
     """
 
-
-
-
     answer_array = []
-
 
 
 def main():
@@ -130,8 +124,6 @@ def main():
     print("The number of players we have is: {} ".format(len(players)))
 
 
+
 if __name__ == '__main__':
     main()
-
-
-

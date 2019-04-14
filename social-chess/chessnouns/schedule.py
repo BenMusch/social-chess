@@ -50,6 +50,7 @@ class Schedule(object):
 
         return return_line
 
+
     def __str__(self):
         return_line = "There are {} rounds.\n".format(len(self._rounds))
         return_line += "-----\n"
@@ -83,9 +84,7 @@ class Schedule(object):
         return_line += "-----\n"
         return return_line
 
-    # The hard question is, what do we initialize with?
-    # So the number of players will be static. But what do we do with the number of boards?
-    # I guess we can try a maximum number of boards, then let
+
     def __init__(self, boards, time_per_game=chessnouns.STANDARD_GAME_TIME):
 
         self._number_boards = boards

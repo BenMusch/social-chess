@@ -11,7 +11,7 @@ class Player(object):
     _late = False
     _vip = False
 
-    def __str__(self):
+    def __repr__(self):
         return "{} Level: ({}) Late? {} VIP? {}".format(self._name, self._level, self._late, self._vip)
 
     def __init__(self, name, level=chessnouns.BEGINNER, late=False, vip=False):
