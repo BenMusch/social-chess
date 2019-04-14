@@ -1,6 +1,7 @@
-from chessnouns import player, round
+from chessnouns import player, round, playoff, game
 import chessnouns
 import pytest
+from chessexceptions import gameerror
 
 
 class TestNouns(object):
@@ -17,7 +18,7 @@ class TestNouns(object):
     def test_player_attributes(self):
         p = player.Player("Ed Lyons", chessnouns.ADVANCED, False, False)
 
-        assert p.name() == "Ed Lyons"
+        assert p.get_name() == "Ed Lyons"
         assert not p.is_late()
         assert not p.is_vip()
 
@@ -71,12 +72,45 @@ class TestNouns(object):
         assert chessnouns.STANDARD_PLAYOFF_LENGTH == 20
 
     def test_playoff_initialization(self):
-        pass
+        with pytest.raises(TypeError):
+            assert playoff.Playoff("John Smith", "Michael")
+
+        playoff_match = playoff.Playoff(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                                        player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
+
+        assert playoff_match.get_player_one().get_name() == "Ed Lyons"
+        assert playoff_match.get_player_two().get_name() == "Michael Smith"
 
     def test_playoff_set_colors(self):
-        pass
+        playoff_match = playoff.Playoff(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                                        player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
+
+        playoff_match.establish_player_one_as_white()
+        playoff_game = playoff_match.get_game()
+        assert playoff_game.get_white_player().get_name() == "Ed Lyons"
+        assert playoff_game.get_black_player().get_name() == "Michael Smith"
+
+        playoff_match.establish_player_one_as_black()
+        playoff_game = playoff_match.get_game()
+        assert playoff_game.get_black_player().get_name() == "Ed Lyons"
+        assert playoff_game.get_white_player().get_name() == "Michael Smith"
 
     def test_playoff_get_game(self):
         # Here we are going to test that our selected options
         # actually changed the underlying game options
-        pass
+        playoff_match = playoff.Playoff(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                                        player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
+
+        # Here we are testing that you can't get the game without colors
+        with pytest.raises(gameerror.GameError):
+            assert playoff_match.get_game()
+
+        playoff_match.set_random_colors()
+
+        # Now let's test that we got a game
+        playoff_game = playoff_match.get_game()
+        assert playoff_game is not None
+
+        random_name = playoff_game.get_black_player().get_name()
+
+        assert random_name == "Ed Lyons" or random_name == "Michael Smith"

@@ -1,14 +1,15 @@
 """
 This class will be for the playoff round
+The first player is white in this model
 """
 from . import player
 from . import game
 from chessutilities import utilities
+from chessexceptions import gameerror
 import chessnouns
 
 
 class Playoff(object):
-
     _player_one = None
     _player_two = None
 
@@ -16,7 +17,7 @@ class Playoff(object):
 
     def __init__(self, player_one, player_two):
 
-        if not isinstance(player_one,chessnouns.player) or not isinstance(player_two,chessnouns.player):
+        if not isinstance(player_one, player.Player) or not isinstance(player_two, player.Player):
             raise TypeError("You must initialize this with player objects, not names")
 
         self._player_one = player_one
@@ -28,16 +29,23 @@ class Playoff(object):
         color = utilities.get_random_color()
 
         if color == chessnouns.COLOR_WHITE:
-            self._game = chessnouns.game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH)
+            self._game = game.Game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH)
         else:
-            self._game = chessnouns.game(self._player_two, self._player_one, chessnouns.STANDARD_PLAYOFF_LENGTH)
+            self._game = game.Game(self._player_two, self._player_one, chessnouns.STANDARD_PLAYOFF_LENGTH)
 
-    def choose_white_player_one(self):
-        self._game = chessnouns.game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH)
+    def establish_player_one_as_white(self):
+        self._game = game.Game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH)
 
-    def choose_black_player_one(self):
-        self._game = chessnouns.game(self._player_two, self._player_one, chessnouns.STANDARD_PLAYOFF_LENGTH)
+    def establish_player_one_as_black(self):
+        self._game = game.Game(self._player_two, self._player_one, chessnouns.STANDARD_PLAYOFF_LENGTH)
 
     def get_game(self):
+        if self._game is None:
+            raise gameerror.GameError("You must select colors for the players")
         return self._game
 
+    def get_player_one(self):
+        return self._player_one
+
+    def get_player_two(self):
+        return self._player_two

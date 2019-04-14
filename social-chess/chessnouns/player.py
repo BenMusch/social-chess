@@ -30,10 +30,10 @@ class Player(object):
         self._late = late
         self._vip = vip
 
-    def name(self):
+    def get_name(self):
         return self._name
 
-    def level(self):
+    def get_level(self):
         return self._level
 
     def is_vip(self):

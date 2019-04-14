@@ -25,9 +25,9 @@ class Game(object):
         self._game_time = time
 
         # We need to test for a bye
-        if self._white_player.name == chessnouns.BYE_NAME:
+        if self._white_player.get_name() == chessnouns.BYE_NAME:
             self._result = chessnouns.BLACK_WINS
-        elif self._black_player.name == chessnouns.BYE_NAME:
+        elif self._black_player.get_name() == chessnouns.BYE_NAME:
             self._result = chessnouns.WHITE_WINS
 
     def is_game_over(self):
