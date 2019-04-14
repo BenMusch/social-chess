@@ -116,11 +116,40 @@ class TestNouns(object):
         assert random_name == "Ed Lyons" or random_name == "Michael Smith"
 
     def test_game_init(self):
-        pass
+        new_game = game.Game(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                             player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
 
     def test_game_players(self):
-        pass
+        new_game = game.Game(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                             player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
+
+        player_one = new_game.get_white_player()
+        player_two = new_game.get_black_player()
+
+        assert player_one.get_name() == "Ed Lyons"
+        assert player_two.get_name() == "Michael Smith"
+
+    def test_game_bye(self):
+        new_game = game.Game(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                             player.Player(chessnouns.BYE_NAME))
+
+        assert new_game.get_result() == chessnouns.WHITE_WINS
+        assert new_game.is_game_over() is True
+
+        second_game = game.Game(player.Player(chessnouns.BYE_NAME),
+                                player.Player("Ed Lyons", chessnouns.ADVANCED, False, False))
+
+        assert second_game.get_result() == chessnouns.BLACK_WINS
+        assert second_game.is_game_over() is True
 
     def test_game_results(self):
-        pass
+        new_game = game.Game(player.Player("Ed Lyons", chessnouns.ADVANCED, False, False),
+                             player.Player("Michael Smith", chessnouns.ADVANCED, False, False))
 
+        assert new_game.get_result() is None
+        assert new_game.is_game_over() is False
+
+        new_game.set_result(chessnouns.WHITE_WINS)
+
+        assert new_game.is_game_over() is True
+        assert new_game.get_result() is chessnouns.WHITE_WINS
