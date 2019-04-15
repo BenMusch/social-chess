@@ -1,5 +1,10 @@
-class TestNouns(object):
-    """This test class is just for the many tests needed for
-    generating a tournament schedule
+class TestSchedule(object):
     """
-    pass
+    These test methods are just to test the Schedule class as a container
+    for a completed schedule.
+
+    The testing of the methods for creating a schedule are going to be in
+    the test utilities class
+    """
+    def test_schedule_init(self):
+        pass

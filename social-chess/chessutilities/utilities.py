@@ -59,8 +59,9 @@ def level_to_text(level):
     if not isinstance(level, int):
         raise TypeError("You have to submit a number")
 
-    if level not in range(chessnouns.BEGINNER, chessnouns.ADVANCED+1):
-        raise ValueError("That number was not in the range of {} to {}".format(chessnouns.BEGINNER, chessnouns.ADVANCED))
+    if level not in range(chessnouns.BEGINNER, chessnouns.ADVANCED + 1):
+        raise ValueError(
+            "That number was not in the range of {} to {}".format(chessnouns.BEGINNER, chessnouns.ADVANCED))
 
     if level == chessnouns.BEGINNER:
         return "Beginner"
@@ -72,6 +73,10 @@ def level_to_text(level):
 
 def get_random_game_result():
     return randint(chessnouns.WHITE_WINS, chessnouns.DRAW)
+
+
+def get_random_skill_level():
+    return randint(chessnouns.BEGINNER, chessnouns.ADVANCED)
 
 
 def get_random_color():
