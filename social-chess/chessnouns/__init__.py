@@ -1,6 +1,6 @@
 # We will define our chess noun constants here
 BEGINNER = 1
-LEARNING = 2
+IMPROVING = 2
 ADEPT = 3
 KNIGHT = 4
 KING = 5

@@ -81,6 +81,7 @@ class Schedule(object):
         self._players = players
         self._bye_round = bye
         self._lopsided = lopsided
+        self._number_of_rounds = number_of_rounds
         self._number_boards = number_of_boards
 
     def _set_up_rounds(self):

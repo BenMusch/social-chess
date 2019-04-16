@@ -20,9 +20,9 @@ class Player(object):
             print("We got an exception")
             raise TypeError("Names must be strings")
 
-        if level not in range(1, 4):
+        if level not in range(1, 6):
             print("We got an exception")
-            raise ValueError('Level value must be {} to  {}'.format(chessnouns.BEGINNER, chessnouns.EXPERT))
+            raise ValueError('Level value must be {} to  {}'.format(chessnouns.BEGINNER, chessnouns.KING))
 
         self._name = name
         self._level = level
