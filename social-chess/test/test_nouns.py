@@ -43,16 +43,18 @@ class TestNouns(object):
         assert len(a_list) == 3
         assert len(b_list) == 4
 
-        assert a_list[0] == None
-        assert b_list[0] == None
+        assert a_list[0] is None
+        assert b_list[0] is None
 
     def test_constants(self):
         # Here we are just testing that nobody accidentally
         # messed with the constants in init.py
 
         assert chessnouns.BEGINNER == 1
-        assert chessnouns.INTERMEDIATE == 2
-        assert chessnouns.ADVANCED == 3
+        assert chessnouns.LEARNING == 2
+        assert chessnouns.ADEPT == 3
+        assert chessnouns.KNIGHT == 4
+        assert chessnouns.KING == 5
 
         assert chessnouns.WHITE_WINS == 0
         assert chessnouns.BLACK_WINS == 1

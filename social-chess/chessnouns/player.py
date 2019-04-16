@@ -22,8 +22,7 @@ class Player(object):
 
         if level not in range(1, 4):
             print("We got an exception")
-            raise ValueError('Level value must be {}, {}, or {}'.format(chessnouns.BEGINNER, chessnouns.INTERMEDIATE,
-                                                                       chessnouns.ADVANCED))
+            raise ValueError('Level value must be {} to  {}'.format(chessnouns.BEGINNER, chessnouns.EXPERT))
 
         self._name = name
         self._level = level

@@ -1,7 +1,9 @@
 # We will define our chess noun constants here
 BEGINNER = 1
-INTERMEDIATE = 2
-ADVANCED = 3
+LEARNING = 2
+ADEPT = 3
+KNIGHT = 4
+KING = 5
 
 WHITE_WINS = 0
 BLACK_WINS = 1
