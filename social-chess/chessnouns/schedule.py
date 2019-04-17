@@ -4,7 +4,7 @@ Note: This is not the same thing as a tournament, as it does
 not have a date, a playoff, a winner, or some other details
 """
 import chessnouns
-from . import game
+from . import game, round
 
 
 class Schedule(object):
@@ -84,13 +84,42 @@ class Schedule(object):
         self._number_of_rounds = number_of_rounds
         self._number_boards = number_of_boards
 
-    def _set_up_rounds(self):
+    def set_up_rounds(self):
         """
         This creates the round data structure, which will begin by being populated with
         empty game objects
 
         :return:
         """
+
+        # In our model, the b part of the round is always equal to
+        # the number of boards
+        number_b = self._number_boards
+
+        # The a part of the round is either equal to the number of
+        # boards, or it is one less, if the tournament is lopsided
+
+        number_a = self._number_boards
+
+        if self._lopsided:
+            number_a -= 1
+
+        for count in range(0,self._number_of_rounds):
+            # So we need two lists
+            self._rounds.append(round.Round(number_a, number_b, count+1))
+
+
+    def get_rounds(self):
+        return self._rounds
+
+    def get_beginner_players(self):
+        return self._beginner_players
+
+    def get_intermediate_players(self):
+        return self._intermediate_players
+
+    def get_advanced_players(self):
+        return self._advanced_players
 
     def _sort_players(self):
         """

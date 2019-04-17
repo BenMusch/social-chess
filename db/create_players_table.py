@@ -39,7 +39,7 @@ players = (
     (31, "Becca Rausch", "", 3, 1),
     (32, "Jodi Reed", "", 1, 0),
     (33, "Hirak Shah", "", 4, 0),
-    (34, "Aaron Van Leesten", "", 1, 0),
+    (34, "Aaron Van Leesten", "", 2, 0),
     (35, "Pete Wilson", "", 3, 0),
     (36, "Brad Wyatt", "", 5, 0),
     (37, "Neil Placeholder", "", 1, 0),
