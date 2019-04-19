@@ -26,7 +26,7 @@ def load_players():
         for row in rows:
             print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
 
-            local_players.append(player.Player(row[1],
+            local_players.append(player.Player(row[0], row[1],
                                                level=int(row[3]),
                                                late=False,
                                                vip=(bool(int(row[4])))))

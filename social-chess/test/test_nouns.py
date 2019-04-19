@@ -155,3 +155,6 @@ class TestNouns(object):
 
         assert new_game.is_game_over() is True
         assert new_game.get_result() is chessnouns.WHITE_WINS
+
+    def test_draw_class(self):
+        pass

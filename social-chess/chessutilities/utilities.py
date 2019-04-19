@@ -5,7 +5,9 @@ for our chess tournament solver
 
 import math
 import chessnouns
+from chessnouns import player
 from random import *
+import sqlite3 as sqlite
 
 
 def get_number_of_boards_and_tweaks(number_players):
@@ -80,8 +82,23 @@ def get_random_game_result():
 
 
 def get_random_skill_level():
-    return randint(chessnouns.BEGINNER, chessnouns.ADVANCED)
+    return randint(chessnouns.BEGINNER, chessnouns.KING)
 
 
 def get_random_color():
     return randint(chessnouns.COLOR_WHITE, chessnouns.COLOR_BLACK)
+
+
+def get_player_for_id(identifier):
+    con = sqlite.connect('../../db/chess.db')
+    cur = con.cursor()
+
+    cur.execute('SELECT * FROM players WHERE id=?', identifier)
+
+    rows = cur.fetchall()
+
+    if rows[0] is not None:
+        row = rows[0]
+        return player.Player(row[0], row[1], level=int(row[3]), late=False, vip=(bool(int(row[4]))))
+    else:
+        return None
