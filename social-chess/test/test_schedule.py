@@ -108,3 +108,24 @@ def test_setup():
     assert four_a_games[0] is None
     assert four_a_games[5] is None
 
+    # Now to test out the sorting
+
+    test_schedule.sort_players()
+
+    beginners = test_schedule.get_beginner_players()
+    intermediates = test_schedule.get_intermediate_players()
+    advanceds = test_schedule.get_advanced_players()
+
+    assert len(advanceds) == 15
+    assert len(intermediates) == 19
+    assert len(beginners) == 5
+
+
+def test_placement():
+    """
+    OK, here's the hard part. We are going to test everyone getting
+    placed where they are supposed to.
+    :return:
+    """
+    pass
+

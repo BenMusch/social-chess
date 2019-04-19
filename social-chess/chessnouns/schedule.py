@@ -104,10 +104,9 @@ class Schedule(object):
         if self._lopsided:
             number_a -= 1
 
-        for count in range(0,self._number_of_rounds):
+        for count in range(0, self._number_of_rounds):
             # So we need two lists
-            self._rounds.append(round.Round(number_a, number_b, count+1))
-
+            self._rounds.append(round.Round(number_a, number_b, count + 1))
 
     def get_rounds(self):
         return self._rounds
@@ -121,10 +120,32 @@ class Schedule(object):
     def get_advanced_players(self):
         return self._advanced_players
 
-    def _sort_players(self):
+    def sort_players(self):
         """
         This method breaks the players into their categories
 
         :return:
         """
+        for player in self._players:
+            if player.get_level() == chessnouns.BEGINNER:
+                self._beginner_players.append(player)
+            elif player.get_level() == chessnouns.IMPROVING or player.get_level() == chessnouns.ADEPT:
+                self._intermediate_players.append(player)
+            else:
+                assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
+                self._advanced_players.append(player)
+
+    def schedule_advanced_players(self):
+        """
+        We are going to get the advanced players set up first.
+
+        :return:
+        """
         pass
+
+    def schedule_beginner_players(self):
+        pass
+
+    def schedule_intermediate_players(self):
+        pass
+
