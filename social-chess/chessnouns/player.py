@@ -1,4 +1,5 @@
 import chessnouns
+from . import draw
 
 
 class Player(object):
@@ -11,6 +12,9 @@ class Player(object):
     _level = chessnouns.BEGINNER
     _late = False
     _vip = False
+
+    # This is going to be a temporary variable used in scheduling
+    _draw = None
 
     def __repr__(self):
         return "{} Level: ({}) Late? {} VIP? {}".format(self._name, self._level, self._late, self._vip)
@@ -30,6 +34,12 @@ class Player(object):
         self._level = level
         self._late = late
         self._vip = vip
+
+    def set_draw(self, number_rounds):
+        self._draw = draw.Draw(self, number_rounds)
+
+    def get_draw(self):
+        return self._draw
 
     def get_id(self):
         return self._id

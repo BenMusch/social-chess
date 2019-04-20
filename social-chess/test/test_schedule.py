@@ -44,14 +44,13 @@ def test_start():
     assert (10, True, False) is not (number_of_boards, lopsided, bye)
     assert (10, False, True) is not (number_of_boards, lopsided, bye)
 
-
-def test_setup():
+def get_schedule():
     """
-    This setup will test the initializing of the schedule object
-    then setting up of rounds, and the sorting of players,
-    but not the actual scheduling, which will come later
-    :return:
-    """
+        This setup will test the initializing of the schedule object
+        then setting up of rounds, and the sorting of players,
+        but not the actual scheduling, which will come later
+        :return:
+        """
     players = load_players()
     number_of_players = len(players)
 
@@ -66,6 +65,13 @@ def test_setup():
     test_schedule = schedule.Schedule(players, 4, lopsided, bye, number_of_boards)
 
     assert test_schedule is not None
+
+    return number_of_boards, test_schedule
+
+
+def test_setup():
+
+    number_of_boards, test_schedule = get_schedule()
 
     test_schedule.set_up_rounds()
 
@@ -127,4 +133,9 @@ def test_placement():
     placed where they are supposed to.
     :return:
     """
-    pass
+    number_of_boards, test_schedule = get_schedule()
+
+    test_schedule.set_up_rounds()
+    test_schedule.sort_players()
+
+

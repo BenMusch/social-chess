@@ -4,7 +4,8 @@ Note: This is not the same thing as a tournament, as it does
 not have a date, a playoff, a winner, or some other details
 """
 import chessnouns
-from . import game, round
+from . import game, round, draw
+from random import shuffle
 
 
 class Schedule(object):
@@ -135,13 +136,42 @@ class Schedule(object):
                 assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
                 self._advanced_players.append(player)
 
+    def shuffle_players(self):
+        """
+        This function randomizes the order of the players to create different pairings
+        each run
+        :return:
+        """
+        shuffle(self._beginner_players)
+        shuffle(self._intermediate_players)
+        shuffle(self._advanced_players)
+
+    def set_up_draws(self, number_of_rounds):
+
+        for player in self._beginner_players:
+            player.set_draw(number_of_rounds)
+
+        for player in self._intermediate_players:
+            player.set_draw(number_of_rounds)
+
+        for player in self._advanced_players_players:
+            player.set_draw(number_of_rounds)
+
+
     def schedule_advanced_players(self):
         """
         We are going to get the advanced players set up first.
 
         :return:
         """
-        pass
+
+        # We need to set draw objects for all players
+        self.set_up_draws(4)
+
+        # Let's do round 1
+
+        for candidate_player in self._advanced_players:
+            pass
 
     def schedule_beginner_players(self):
         pass
@@ -149,3 +179,6 @@ class Schedule(object):
     def schedule_intermediate_players(self):
         pass
 
+
+    def schedule_next_game(self, round_number):
+        pass
