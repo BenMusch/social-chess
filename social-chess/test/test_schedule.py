@@ -128,4 +128,3 @@ def test_placement():
     :return:
     """
     pass
-

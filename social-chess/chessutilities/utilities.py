@@ -10,6 +10,23 @@ from random import *
 import sqlite3 as sqlite
 
 
+def get_set_of_players():
+    con = sqlite.connect("../db/chess.db")
+
+    players = []
+
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM players")
+
+        rows = cur.fetchall()
+
+        for row in rows:
+            players.append(player.Player(row[0], row[1], level=int(row[3]), late=False, vip=(1 == int(row[4]))))
+
+    return players
+
+
 def get_number_of_boards_and_tweaks(number_players):
     """
     This method works by understanding that dividing the number of players by four tells you want to do.
@@ -90,10 +107,10 @@ def get_random_color():
 
 
 def get_player_for_id(identifier):
-    con = sqlite.connect('../../db/chess.db')
+    con = sqlite.connect('../db/chess.db')
     cur = con.cursor()
 
-    cur.execute('SELECT * FROM players WHERE id=?', identifier)
+    cur.execute('SELECT * FROM players WHERE id=' + str(identifier))
 
     rows = cur.fetchall()
 
