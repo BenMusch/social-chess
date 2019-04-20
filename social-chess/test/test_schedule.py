@@ -44,6 +44,7 @@ def test_start():
     assert (10, True, False) is not (number_of_boards, lopsided, bye)
     assert (10, False, True) is not (number_of_boards, lopsided, bye)
 
+
 def get_schedule():
     """
         This setup will test the initializing of the schedule object
@@ -70,7 +71,6 @@ def get_schedule():
 
 
 def test_setup():
-
     number_of_boards, test_schedule = get_schedule()
 
     test_schedule.set_up_rounds()
@@ -91,28 +91,7 @@ def test_setup():
 
     # Get each list, test for correct length and contents
 
-    one_a_games = rounds[0].get_a_games()
-    one_b_games = rounds[0].get_b_games()
-    two_a_games = rounds[1].get_a_games()
-    two_b_games = rounds[1].get_b_games()
-    three_a_games = rounds[2].get_a_games()
-    three_b_games = rounds[2].get_b_games()
-    four_a_games = rounds[3].get_a_games()
-    four_b_games = rounds[3].get_b_games()
-
-    assert len(one_a_games) == number_of_boards - 1
-    assert len(one_b_games) == number_of_boards
-    assert len(two_a_games) == number_of_boards - 1
-    assert len(two_b_games) == number_of_boards
-    assert len(three_a_games) == number_of_boards - 1
-    assert len(three_b_games) == number_of_boards
-    assert len(four_a_games) == number_of_boards - 1
-    assert len(four_b_games) == number_of_boards
-
-    assert one_a_games[0] is None
-    assert one_a_games[5] is None
-    assert four_a_games[0] is None
-    assert four_a_games[5] is None
+    # FIXME: What goes here?
 
     # Now to test out the sorting
 
@@ -137,5 +116,3 @@ def test_placement():
 
     test_schedule.set_up_rounds()
     test_schedule.sort_players()
-
-

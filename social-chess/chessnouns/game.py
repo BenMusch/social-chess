@@ -1,5 +1,6 @@
 from . import player
 import chessnouns
+import random
 
 
 class Game(object):
@@ -15,10 +16,17 @@ class Game(object):
     def __str__(self):
         return "White:{} Black:{} ".format(self._white_player.get_name(), self._black_player.get_name())
 
-    def __init__(self, white, black, time=chessnouns.STANDARD_GAME_TIME):
+    def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME):
 
-        self._white_player = white
-        self._black_player = black
+        r1 = random.randint(0, 2)
+
+        if r1 == 1:
+            self._white_player = player_one
+            self._black_player = player_two
+        else:
+            self._white_player = player_two
+            self._black_player = player_one
+
         self._game_time = time
 
         # We need to test for a bye
@@ -29,6 +37,9 @@ class Game(object):
 
     def is_game_over(self):
         return self._result is not None
+
+    def flip_colors(self):
+        self._white_player, self._black_player = self._black_player, self._white_player
 
     def get_white_player(self):
         return self._white_player

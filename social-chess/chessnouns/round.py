@@ -1,3 +1,7 @@
+from . import game
+from chessexceptions import scheduling_error
+
+
 class Round(object):
     """
     A round is actually two sets of games, where everyone plays
@@ -17,6 +21,9 @@ class Round(object):
     # accommodate unusual numbers of players
 
     _round_number = 1
+    _number_of_boards = 0
+    _number_a_games = 0
+    _number_b_games = 0
 
     _a_games = []
     _b_games = []
@@ -31,13 +38,17 @@ class Round(object):
         :param round_number:
         """
 
-        if not (isinstance(number_a_games, int) and (
-                isinstance(number_b_games, int) and (isinstance(round_number, int)))):
+        if not isinstance(number_a_games, int) or isinstance(number_b_games, int) or \
+                isinstance(round_number, int):
             raise TypeError("You must initialize this class with three numbers")
 
-        self._a_games = [None] * number_a_games
-        self._b_games = [None] * number_b_games
         self._round_number = round_number
+
+        # The convention we are using is that the second group has the maximum
+        # number of boards
+        self._number_of_boards = number_b_games
+        self._number_a_games = number_a_games
+        self._number_b_games = number_b_games
 
     def get_a_games(self):
         return self._a_games
@@ -47,3 +58,19 @@ class Round(object):
 
     def get_round_number(self):
         return self._round_number
+
+    def add_to_round(self, game):
+        if self.round_is_finished():
+            raise scheduling_error.SchedulingError("You cannot add a game to a finished round.")
+
+        # Is there room in a?
+        if len(self._a_games) < self._number_a_games:
+            self._a_games.append((game))
+        elif len(self._b_games) < self._number_b_games:
+            self._b_games.append((game))
+        else:
+            # We should not get here
+            raise scheduling_error.SchedulingError("You cannot add a game to a finished round.")
+
+    def round_is_finished(self):
+        return len(self._a_games) < self._number_a_games and len(self._b_games) < self._number_b_games

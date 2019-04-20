@@ -109,6 +109,7 @@ class Schedule(object):
             # So we need two lists
             self._rounds.append(round.Round(number_a, number_b, count + 1))
 
+
     def get_rounds(self):
         return self._rounds
 
@@ -154,7 +155,7 @@ class Schedule(object):
         for player in self._intermediate_players:
             player.set_draw(number_of_rounds)
 
-        for player in self._advanced_players_players:
+        for player in self._advanced_players:
             player.set_draw(number_of_rounds)
 
 
