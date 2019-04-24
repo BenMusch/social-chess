@@ -6,7 +6,7 @@ not have a date, a playoff, a winner, or some other details
 import chessnouns
 from . import game, round, draw
 from random import shuffle
-
+from chessutilities import utilities
 
 class Schedule(object):
     # This is the number of boards to play, it will determine
@@ -195,7 +195,20 @@ class Schedule(object):
 
             # Did we schedule the game?
             if not scheduled:
-                pass
+                # So this means all the other advanced players
+                # are scheduled, so we need to try intermediates
+                for medium_player in self._intermediate_players:
+                    if medium_player.draw.has_full_draw():
+                        continue
+                    if medium_player.draw.has_played_player_id(candidate_player.get_id):
+                        continue
+                    # OK. So we can schedule this!
+                    candidate_player.draw.add_matchup(medium_player.get_id())
+                    medium_player.draw.add_matchup(candidate_player.get_id())
+                    scheduled = True
+
+        # OK, now let us print and see
+        utilities.print_player_draws(self._advanced_players)
 
 
     def schedule_beginner_players(self):
@@ -206,3 +219,10 @@ class Schedule(object):
 
     def schedule_next_game(self, round_number):
         pass
+
+    def fill_in_rounds(self):
+        """
+        So what we are going to do is take everyone's draws
+        and figure out when the games are all going to take place
+        :return:
+        """

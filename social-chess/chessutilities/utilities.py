@@ -119,3 +119,20 @@ def get_player_for_id(identifier):
         return player.Player(row[0], row[1], level=int(row[3]), late=False, vip=(bool(int(row[4]))))
     else:
         return None
+
+
+def print_player_draws(players):
+    """
+    This method will print all the players and their draw
+    information to the command line
+    :param players:
+    :return:
+    """
+    for p in players:
+        print("\nPlayer Name: {} ".format(p.get_name()))
+        print('\n***********')
+        player_draw = p.get_draw()
+        for ind_game in player_draw.get_matchups():
+            temp_player = get_player_for_id(ind_game)
+            print(temp_player.get_name() + '\n')
+        print('\n-----------')
