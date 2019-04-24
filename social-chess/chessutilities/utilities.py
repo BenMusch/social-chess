@@ -107,6 +107,11 @@ def get_random_color():
 
 
 def get_player_for_id(identifier):
+
+    # We need to handle the bye here
+    if identifier == chessnouns.BYE_ID:
+        return player.Player(0, chessnouns.BYE_NAME)
+
     con = sqlite.connect('../db/chess.db')
     cur = con.cursor()
 

@@ -1,5 +1,6 @@
 from . import player
 from chessutilities import utilities
+import chessnouns
 
 
 class Draw(object):
@@ -45,6 +46,9 @@ class Draw(object):
     def add_matchup(self, opposing_player):
         assert isinstance(opposing_player, player.Player)
         self._matchups.append(opposing_player.get_id())
+
+    def add_bye(self):
+        self._matchups.append(chessnouns.BYE_ID)
 
     def clear_matchups(self):
         self._matchups = []
