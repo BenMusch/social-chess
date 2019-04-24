@@ -31,7 +31,6 @@ class TestNouns(object):
         assert not p.is_late()
 
     def test_round_object(self):
-
         test_round = round.Round(2, 2, 1)
 
         a_list = test_round.get_a_games()
@@ -60,213 +59,219 @@ class TestNouns(object):
         # We now need some games
         game_one = game.Game(player_one, player_two)
         game_two = game.Game(player_one, player_three)
+        game_three = game.Game(player_two, player_three)
+        game_four = game.Game(player_five, player_seven)
 
+        # Now let's add some to the round
 
-def test_constants(self):
-    # Here we are just testing that nobody accidentally
-    # messed with the constants in init.py
+        test_round.add_to_round(game_one)
 
-    assert chessnouns.BEGINNER == 1
-    assert chessnouns.IMPROVING == 2
-    assert chessnouns.ADEPT == 3
-    assert chessnouns.KNIGHT == 4
-    assert chessnouns.KING == 5
+        # What is the state of the round?
 
-    assert chessnouns.WHITE_WINS == 0
-    assert chessnouns.BLACK_WINS == 1
-    assert chessnouns.DRAW == 2
+        # First, let's see if the round is done
+        assert test_round.round_is_finished() is False
+        assert len(test_round.get_a_games()) == 1
 
-    assert chessnouns.COLOR_BLACK == 1
-    assert chessnouns.COLOR_WHITE == 0
+        # And let's be sure that the b games are intact
+        assert len(test_round.get_b_games()) == 0
 
-    assert chessnouns.NO_NAME == "None"
-    assert chessnouns.BYE_NAME == "Bye"
-    assert chessnouns.DEFAULT_FIRST_PLAYER_NAME == "John Smith"
-    assert chessnouns.DEFAULT_SECOND_PLAYER_NAME == "Jane Smith"
+    def test_constants(self):
+        # Here we are just testing that nobody accidentally
+        # messed with the constants in init.py
 
-    assert chessnouns.STANDARD_GAME_TIME == 10
-    assert chessnouns.STANDARD_GAME_GAP_TIME == 5
-    assert chessnouns.STANDARD_EVENT_LENGTH == 120
-    assert chessnouns.STANDARD_PLAYOFF_LENGTH == 20
+        assert chessnouns.BEGINNER == 1
+        assert chessnouns.IMPROVING == 2
+        assert chessnouns.ADEPT == 3
+        assert chessnouns.KNIGHT == 4
+        assert chessnouns.KING == 5
 
+        assert chessnouns.WHITE_WINS == 0
+        assert chessnouns.BLACK_WINS == 1
+        assert chessnouns.DRAW == 2
 
-def test_playoff_initialization(self):
-    with pytest.raises(TypeError):
-        assert playoff.Playoff("John Smith", "Michael")
+        assert chessnouns.COLOR_BLACK == 1
+        assert chessnouns.COLOR_WHITE == 0
 
-    playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                                    player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+        assert chessnouns.NO_NAME == "None"
+        assert chessnouns.BYE_NAME == "Bye"
+        assert chessnouns.DEFAULT_FIRST_PLAYER_NAME == "John Smith"
+        assert chessnouns.DEFAULT_SECOND_PLAYER_NAME == "Jane Smith"
 
-    assert playoff_match.get_player_one().get_name() == "Ed Lyons"
-    assert playoff_match.get_player_two().get_name() == "Michael Smith"
+        assert chessnouns.STANDARD_GAME_TIME == 10
+        assert chessnouns.STANDARD_GAME_GAP_TIME == 5
+        assert chessnouns.STANDARD_EVENT_LENGTH == 120
+        assert chessnouns.STANDARD_PLAYOFF_LENGTH == 20
 
+    def test_playoff_initialization(self):
+        with pytest.raises(TypeError):
+            assert playoff.Playoff("John Smith", "Michael")
 
-def test_playoff_set_colors(self):
-    playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                                    player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+        playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                                        player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
-    playoff_match.establish_player_one_as_white()
-    playoff_game = playoff_match.get_game()
-    assert playoff_game.get_white_player().get_name() == "Ed Lyons"
-    assert playoff_game.get_black_player().get_name() == "Michael Smith"
+        assert playoff_match.get_player_one().get_name() == "Ed Lyons"
+        assert playoff_match.get_player_two().get_name() == "Michael Smith"
 
-    playoff_match.establish_player_one_as_black()
-    playoff_game = playoff_match.get_game()
-    assert playoff_game.get_black_player().get_name() == "Ed Lyons"
-    assert playoff_game.get_white_player().get_name() == "Michael Smith"
+    def test_playoff_set_colors(self):
+        playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                                        player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
+        playoff_match.establish_player_one_as_white()
+        playoff_game = playoff_match.get_game()
+        assert playoff_game.get_white_player().get_name() == "Ed Lyons"
+        assert playoff_game.get_black_player().get_name() == "Michael Smith"
 
-def test_playoff_get_game(self):
-    # Here we are going to test that our selected options
-    # actually changed the underlying game options
-    playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                                    player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+        playoff_match.establish_player_one_as_black()
+        playoff_game = playoff_match.get_game()
+        assert playoff_game.get_black_player().get_name() == "Ed Lyons"
+        assert playoff_game.get_white_player().get_name() == "Michael Smith"
 
-    # Here we are testing that you can't get the game without colors
-    with pytest.raises(game_error.GameError):
-        assert playoff_match.get_game()
+    def test_playoff_get_game(self):
+        # Here we are going to test that our selected options
+        # actually changed the underlying game options
+        playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                                        player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
-    playoff_match.set_random_colors()
+        # Here we are testing that you can't get the game without colors
+        with pytest.raises(game_error.GameError):
+            assert playoff_match.get_game()
 
-    # Now let's test that we got a game
-    playoff_game = playoff_match.get_game()
-    assert playoff_game is not None
+        playoff_match.set_random_colors()
 
-    random_name = playoff_game.get_black_player().get_name()
+        # Now let's test that we got a game
+        playoff_game = playoff_match.get_game()
+        assert playoff_game is not None
 
-    assert random_name == "Ed Lyons" or random_name == "Michael Smith"
+        random_name = playoff_game.get_black_player().get_name()
 
+        assert random_name == "Ed Lyons" or random_name == "Michael Smith"
 
-def test_game_init(self):
-    new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                         player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+    def test_game_init(self):
+        new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                             player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
+    def test_game_players(self):
+        new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                             player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
-def test_game_players(self):
-    new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                         player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+        player_one = new_game.get_white_player()
+        player_two = new_game.get_black_player()
 
-    player_one = new_game.get_white_player()
-    player_two = new_game.get_black_player()
+        # Test the flip
 
-    # Test the flip
+        new_game.flip_colors()
 
-    new_game.flip_colors()
+        one = new_game.get_white_player()
 
-    one = new_game.get_white_player()
+        assert one == player_two
 
-    assert one == player_two
+        new_game.flip_colors()
 
-    new_game.flip_colors()
+        one = new_game.get_white_player()
 
-    one = new_game.get_white_player()
+        assert one == player_one
 
-    assert one == player_one
+    def test_game_bye(self):
+        new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                             player.Player(2, chessnouns.BYE_NAME))
 
+        assert new_game.get_result() == chessnouns.WHITE_WINS
+        assert new_game.is_game_over() is True
 
-def test_game_bye(self):
-    new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                         player.Player(2, chessnouns.BYE_NAME))
+        second_game = game.Game(player.Player(2, chessnouns.BYE_NAME),
+                                player.Player(1, "Ed Lyons", chessnouns.KING, False, False))
 
-    assert new_game.get_result() == chessnouns.WHITE_WINS
-    assert new_game.is_game_over() is True
+        assert second_game.get_result() == chessnouns.BLACK_WINS
+        assert second_game.is_game_over() is True
 
-    second_game = game.Game(player.Player(2, chessnouns.BYE_NAME),
-                            player.Player(1, "Ed Lyons", chessnouns.KING, False, False))
+    def test_game_results(self):
+        new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
+                             player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
-    assert second_game.get_result() == chessnouns.BLACK_WINS
-    assert second_game.is_game_over() is True
+        assert new_game.get_result() is None
+        assert new_game.is_game_over() is False
 
+        new_game.set_result(chessnouns.WHITE_WINS)
 
-def test_game_results(self):
-    new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                         player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+        assert new_game.is_game_over() is True
+        assert new_game.get_result() is chessnouns.WHITE_WINS
 
-    assert new_game.get_result() is None
-    assert new_game.is_game_over() is False
+    def test_draw_class(self):
+        players = utilities.get_set_of_players()
 
-    new_game.set_result(chessnouns.WHITE_WINS)
+        clem = players[0]
+        sarah = players[1]
+        will = players[2]
+        evan = players[3]
+        jay = players[4]
 
-    assert new_game.is_game_over() is True
-    assert new_game.get_result() is chessnouns.WHITE_WINS
+        assert clem.get_name() == "Clem Aeppli"
+        assert sarah.get_name() == "Sarah Betancourt"
+        assert will.get_name() == "Will Brown"
+        assert evan.get_name() == "Evan Bruning"
+        assert jay.get_name() == "Jay Cincotti"
 
+        clem_draw = draw.Draw(clem, 4)
 
-def test_draw_class(self):
-    players = utilities.get_set_of_players()
+        # Let's assert some things
 
-    clem = players[0]
-    sarah = players[1]
-    will = players[2]
-    evan = players[3]
-    jay = players[4]
+        assert clem_draw.get_number_of_rounds() == 4
+        assert clem_draw.get_rounds_left() == 4
+        assert len(clem_draw.get_matchups()) == 0
+        assert clem_draw.has_full_draw() is False
+        assert clem_draw.number_matchups_scheduled() == 0
 
-    assert clem.get_name() == "Clem Aeppli"
-    assert sarah.get_name() == "Sarah Betancourt"
-    assert will.get_name() == "Will Brown"
-    assert evan.get_name() == "Evan Bruning"
-    assert jay.get_name() == "Jay Cincotti"
+        # Now we want to add a game with Sarah
 
-    clem_draw = draw.Draw(clem, 4)
+        clem_draw.add_matchup(sarah)
 
-    # Let's assert some things
+        # Now let's check those again
+        assert clem_draw.get_number_of_rounds() == 4
+        assert clem_draw.get_rounds_left() == 3
+        matches = clem_draw.get_matchups()
+        assert matches is not None
+        assert clem_draw.has_full_draw() is False
+        assert clem_draw.number_matchups_scheduled() == 1
 
-    assert clem_draw.get_number_of_rounds() == 4
-    assert clem_draw.get_rounds_left() == 4
-    assert len(clem_draw.get_matchups()) == 0
-    assert clem_draw.has_full_draw() is False
-    assert clem_draw.number_matchups_scheduled() == 0
+        assert len(matches) == 1
+        assert matches[0] == sarah.get_id()
 
-    # Now we want to add a game with Sarah
+        clem_draw.add_matchup(will)
 
-    clem_draw.add_matchup(sarah)
+        # Again
+        assert clem_draw.get_number_of_rounds() == 4
+        assert clem_draw.get_rounds_left() == 2
+        matches = clem_draw.get_matchups()
+        assert matches is not None
+        assert clem_draw.has_full_draw() is False
+        assert clem_draw.number_matchups_scheduled() == 2
 
-    # Now let's check those again
-    assert clem_draw.get_number_of_rounds() == 4
-    assert clem_draw.get_rounds_left() == 3
-    matches = clem_draw.get_matchups()
-    assert matches is not None
-    assert clem_draw.has_full_draw() is False
-    assert clem_draw.number_matchups_scheduled() == 1
+        clem_draw.add_matchup(evan)
 
-    assert len(matches) == 1
-    assert matches[0] == sarah.get_id()
+        # Again
+        assert clem_draw.get_number_of_rounds() == 4
+        assert clem_draw.get_rounds_left() == 1
+        matches = clem_draw.get_matchups()
+        assert matches is not None
+        assert clem_draw.has_full_draw() is False
+        assert clem_draw.number_matchups_scheduled() == 3
 
-    clem_draw.add_matchup(will)
+        clem_draw.add_matchup(jay)
 
-    # Again
-    assert clem_draw.get_number_of_rounds() == 4
-    assert clem_draw.get_rounds_left() == 2
-    matches = clem_draw.get_matchups()
-    assert matches is not None
-    assert clem_draw.has_full_draw() is False
-    assert clem_draw.number_matchups_scheduled() == 2
+        # Again
+        assert clem_draw.get_number_of_rounds() == 4
+        assert clem_draw.get_rounds_left() == 0
+        matches = clem_draw.get_matchups()
+        assert matches is not None
+        assert clem_draw.has_full_draw() is True
+        assert clem_draw.number_matchups_scheduled() == 4
 
-    clem_draw.add_matchup(evan)
+        print(clem_draw)
 
-    # Again
-    assert clem_draw.get_number_of_rounds() == 4
-    assert clem_draw.get_rounds_left() == 1
-    matches = clem_draw.get_matchups()
-    assert matches is not None
-    assert clem_draw.has_full_draw() is False
-    assert clem_draw.number_matchups_scheduled() == 3
-
-    clem_draw.add_matchup(jay)
-
-    # Again
-    assert clem_draw.get_number_of_rounds() == 4
-    assert clem_draw.get_rounds_left() == 0
-    matches = clem_draw.get_matchups()
-    assert matches is not None
-    assert clem_draw.has_full_draw() is True
-    assert clem_draw.number_matchups_scheduled() == 4
-
-    print(clem_draw)
-
-    # Now let's test the clear
-    clem_draw.clear_matchups()
-    assert clem_draw.get_rounds_left() == 4
-    matches = clem_draw.get_matchups()
-    assert len(matches) == 0
-    assert clem_draw.has_full_draw() is False
-    assert clem_draw.number_matchups_scheduled() == 0
+        # Now let's test the clear
+        clem_draw.clear_matchups()
+        assert clem_draw.get_rounds_left() == 4
+        matches = clem_draw.get_matchups()
+        assert len(matches) == 0
+        assert clem_draw.has_full_draw() is False
+        assert clem_draw.number_matchups_scheduled() == 0

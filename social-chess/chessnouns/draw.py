@@ -54,3 +54,12 @@ class Draw(object):
 
     def get_player(self):
         return self._draw_player
+
+    def has_played_player_id(self, id):
+        """
+        This is a convenience method for
+        checking to see if someone has already been scheduled
+        :param id: id
+        :return: bool
+        """
+        return id in self._matchups

@@ -38,8 +38,7 @@ class Round(object):
         :param round_number:
         """
 
-        if not isinstance(number_a_games, int) or isinstance(number_b_games, int) or \
-                isinstance(round_number, int):
+        if not isinstance(number_a_games, int) or not isinstance(number_b_games, int) or not isinstance(round_number, int):
             raise TypeError("You must initialize this class with three numbers")
 
         self._round_number = round_number
@@ -73,4 +72,4 @@ class Round(object):
             raise scheduling_error.SchedulingError("You cannot add a game to a finished round.")
 
     def round_is_finished(self):
-        return len(self._a_games) < self._number_a_games and len(self._b_games) < self._number_b_games
+        return len(self._a_games) == self._number_a_games and len(self._b_games) == self._number_b_games

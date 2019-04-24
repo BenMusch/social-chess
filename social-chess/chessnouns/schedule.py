@@ -109,7 +109,6 @@ class Schedule(object):
             # So we need two lists
             self._rounds.append(round.Round(number_a, number_b, count + 1))
 
-
     def get_rounds(self):
         return self._rounds
 
@@ -158,7 +157,6 @@ class Schedule(object):
         for player in self._advanced_players:
             player.set_draw(number_of_rounds)
 
-
     def schedule_advanced_players(self):
         """
         We are going to get the advanced players set up first.
@@ -167,19 +165,44 @@ class Schedule(object):
         """
 
         # We need to set draw objects for all players
-        self.set_up_draws(4)
+        self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
 
         # Let's do round 1
+        # It's best to think of a round as a single list,
+        # rather than two lists together, as we see in the
+        # round class.
 
         for candidate_player in self._advanced_players:
-            pass
+            if candidate_player.draw.has_full_draw():
+                continue
+            # So he needs a game from another player
+            # Let's try advance first
+            scheduled = False
+            for other_player in self._advanced_players:
+                # First, it's not him, right?
+                if other_player is candidate_player:
+                    continue
+                # Is the other player all scheduled?
+                if other_player.draw.has_full_draw():
+                    continue
+                # Has the other player already played this guy?
+                if other_player.draw.has_played_player_id(candidate_player.get_id):
+                    continue
+                # OK. So we can schedule this!
+                candidate_player.draw.add_matchup(other_player.get_id())
+                other_player.draw.add_matchup(candidate_player.get_id())
+                scheduled = True
+
+            # Did we schedule the game?
+            if not scheduled:
+                pass
+
 
     def schedule_beginner_players(self):
         pass
 
     def schedule_intermediate_players(self):
         pass
-
 
     def schedule_next_game(self, round_number):
         pass
