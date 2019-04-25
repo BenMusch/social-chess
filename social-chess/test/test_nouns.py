@@ -1,4 +1,4 @@
-from chessnouns import player, round, playoff, game, draw
+from chessnouns import player, round, game, draw
 import chessnouns
 import pytest
 from chessutilities import utilities
@@ -102,50 +102,6 @@ class TestNouns(object):
         assert chessnouns.STANDARD_EVENT_LENGTH == 120
         assert chessnouns.STANDARD_PLAYOFF_LENGTH == 20
 
-    def test_playoff_initialization(self):
-        with pytest.raises(TypeError):
-            assert playoff.Playoff("John Smith", "Michael")
-
-        playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                                        player.Player(2, "Michael Smith", chessnouns.KING, False, False))
-
-        assert playoff_match.get_player_one().get_name() == "Ed Lyons"
-        assert playoff_match.get_player_two().get_name() == "Michael Smith"
-
-    def test_playoff_set_colors(self):
-        playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                                        player.Player(2, "Michael Smith", chessnouns.KING, False, False))
-
-        playoff_match.establish_player_one_as_white()
-        playoff_game = playoff_match.get_game()
-        assert playoff_game.get_white_player().get_name() == "Ed Lyons"
-        assert playoff_game.get_black_player().get_name() == "Michael Smith"
-
-        playoff_match.establish_player_one_as_black()
-        playoff_game = playoff_match.get_game()
-        assert playoff_game.get_black_player().get_name() == "Ed Lyons"
-        assert playoff_game.get_white_player().get_name() == "Michael Smith"
-
-    def test_playoff_get_game(self):
-        # Here we are going to test that our selected options
-        # actually changed the underlying game options
-        playoff_match = playoff.Playoff(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                                        player.Player(2, "Michael Smith", chessnouns.KING, False, False))
-
-        # Here we are testing that you can't get the game without colors
-        with pytest.raises(game_error.GameError):
-            assert playoff_match.get_game()
-
-        playoff_match.set_random_colors()
-
-        # Now let's test that we got a game
-        playoff_game = playoff_match.get_game()
-        assert playoff_game is not None
-
-        random_name = playoff_game.get_black_player().get_name()
-
-        assert random_name == "Ed Lyons" or random_name == "Michael Smith"
-
     def test_game_init(self):
         new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
                              player.Player(2, "Michael Smith", chessnouns.KING, False, False))
@@ -154,39 +110,43 @@ class TestNouns(object):
         new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
                              player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
-        player_one = new_game.get_white_player()
-        player_two = new_game.get_black_player()
+        # Set white as player one
+        new_game.make_player_one_white()
+
+        assert "Ed Lyons" == new_game.get_white_player().get_name()
+        assert "Michael Smith" == new_game.get_black_player().get_name()
+
+        # Set black as player one
+        new_game.make_player_two_white()
+
+        assert "Ed Lyons" == new_game.get_black_player().get_name()
+        assert "Michael Smith" == new_game.get_white_player().get_name()
 
         # Test the flip
 
         new_game.flip_colors()
 
-        one = new_game.get_white_player()
-
-        assert one == player_two
+        assert "Ed Lyons" == new_game.get_white_player().get_name()
+        assert "Michael Smith" == new_game.get_black_player().get_name()
 
         new_game.flip_colors()
 
-        one = new_game.get_white_player()
-
-        assert one == player_one
+        assert "Ed Lyons" == new_game.get_black_player().get_name()
+        assert "Michael Smith" == new_game.get_white_player().get_name()
 
     def test_game_bye(self):
-        new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                             player.Player(chessnouns.BYE_ID, chessnouns.BYE_NAME))
+        new_game = game.Game.create_bye_game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False))
 
-        assert new_game.get_result() == chessnouns.WHITE_WINS
-        assert new_game.is_game_over() is True
+        assert new_game.is_bye() is True
 
-        second_game = game.Game(player.Player(0, chessnouns.BYE_NAME),
-                                player.Player(1, "Ed Lyons", chessnouns.KING, False, False))
-
-        assert second_game.get_result() == chessnouns.BLACK_WINS
-        assert second_game.is_game_over() is True
+    def test_game_colors(self):
+        pass
 
     def test_game_results(self):
         new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
                              player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+
+        new_game.make_player_one_white()
 
         assert new_game.get_result() == chessnouns.NO_RESULT
         assert new_game.is_game_over() is False
@@ -195,6 +155,14 @@ class TestNouns(object):
 
         assert new_game.is_game_over() is True
         assert new_game.get_result() == chessnouns.WHITE_WINS
+
+        winner = new_game.get_winning_player()
+        assert winner.get_name() == "Ed Lyons"
+
+        new_game.set_result(chessnouns.BLACK_WINS)
+
+        winner = new_game.get_winning_player()
+        assert winner.get_name() == "Michael Smith"
 
     def test_draw_class(self):
         players = utilities.get_set_of_players()

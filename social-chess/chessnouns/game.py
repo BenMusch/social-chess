@@ -18,8 +18,8 @@ class Game(object):
     """
 
     @classmethod
-    def create_bye_game(cls, player):
-        return Game(player, player.Player.make_bye_player())
+    def create_bye_game(cls, player_getting_bye):
+        return Game(player_getting_bye, player.Player.make_bye_player(), onewhite=False, twowhite=False, bye=True)
 
     def __str__(self):
 
@@ -39,8 +39,16 @@ class Game(object):
 
         return return_line
 
-    def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME, onewhite=False, twowhite=False):
+    def make_player_one_white(self):
+        self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
 
+    def make_player_two_white(self):
+        self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+
+    def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME,
+                 onewhite=False, twowhite=False, bye=False):
+
+        self._bye = bye
         self._player_one = player_one
         self._player_two = player_two
         self._result = chessnouns.NO_RESULT
@@ -61,6 +69,9 @@ class Game(object):
             self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
         else:
             self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+
+    def is_bye(self):
+        return self._bye
 
     def is_game_over(self):
         return self._result != chessnouns.NO_RESULT
@@ -84,7 +95,7 @@ class Game(object):
 
     def get_black_player(self):
         if self._color_code == chessnouns.NO_COLOR_SELECTED:
-            raise game_error.GameError("You cannot get the blacm player without selecting colors")
+            raise game_error.GameError("You cannot get the black player without selecting colors")
         if self._color_code == chessnouns.PLAYER_ONE_IS_BLACK:
             return self._player_one
         else:
@@ -101,3 +112,17 @@ class Game(object):
 
     def get_result(self):
         return self._result
+
+    def get_winning_player(self):
+
+        if self._bye is True:
+            return self._player_one
+
+        if self._color_code == chessnouns.NO_COLOR_SELECTED:
+            raise game_error.GameError("You cannot get the winning player without selecting colors")
+        if self._result == chessnouns.NO_RESULT:
+            raise game_error.GameError("You cannot get the winning player without a result")
+        if self._color_code == chessnouns.PLAYER_ONE_IS_WHITE and self._result == chessnouns.WHITE_WINS:
+            return self._player_one
+        else:
+            return self._player_two
