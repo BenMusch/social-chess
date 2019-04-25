@@ -7,12 +7,6 @@ class Game(object):
     """
     This will represent a game
     """
-    _white_player = None
-    _black_player = None
-    _game_time = chessnouns.STANDARD_GAME_TIME
-
-    _result = None
-
     def __str__(self):
         return "White:{} Black:{} ".format(self._white_player.get_name(), self._black_player.get_name())
 

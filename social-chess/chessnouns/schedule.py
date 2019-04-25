@@ -13,32 +13,6 @@ from chessexceptions import unsolveable_error
 class Schedule(object):
     # This is the number of boards to play, it will determine
     # the number of simultaneous games
-    _number_boards = 0
-
-    _number_of_rounds = 0
-
-    # The lopsided variable is about game sets that differ by one
-    # each time
-    _lopsided = False
-
-    # This variable determines whether or not we need to have one
-    # person sit out one game each round
-    _bye_round = False
-
-    # This is whether it is team or individual
-    _team_play = False
-
-    _players = list()
-
-    # We're going to keep track of this at the class level for convenience
-    _total_number_of_players = 0
-
-    _advanced_players = []
-    _intermediate_players = []
-    _beginner_players = []
-
-    # This is a list of the two-part rounds we will have
-    _rounds = list()
 
     def __repr__(self):
 
@@ -81,11 +55,19 @@ class Schedule(object):
 
     def __init__(self, players, number_of_rounds, lopsided, bye, number_of_boards):
 
+        if players is None:
+            players = []
+
         self._players = players
         self._bye_round = bye
         self._lopsided = lopsided
         self._number_of_rounds = number_of_rounds
         self._number_boards = number_of_boards
+
+        self._advanced_players = []
+        self._intermediate_players = []
+        self._beginner_players = []
+        self._rounds = []
 
     def set_up_rounds(self):
         """

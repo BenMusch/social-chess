@@ -12,13 +12,6 @@ class Draw(object):
     matches for a player
     """
 
-    _matchups = None
-    _draw_player = None
-
-    # The number of rounds is the maximum number
-    # of games
-    _number_of_rounds = 0
-
     def __init__(self, player_for_draw, number_rounds):
         print("Draw initialized for {} ".format(player_for_draw.get_name()))
         self._matchups = list()

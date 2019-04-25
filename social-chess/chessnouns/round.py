@@ -15,18 +15,6 @@ class Round(object):
 
     """
 
-    # There will be a list of Games for the first set
-    # and one for the second. It is important to know
-    # that these lists may not be the same size, to
-    # accommodate unusual numbers of players
-
-    _round_number = 1
-    _number_of_boards = 0
-    _number_a_games = 0
-    _number_b_games = 0
-
-    _a_games = []
-    _b_games = []
 
     def __init__(self, number_a_games, number_b_games, round_number):
         """
@@ -48,6 +36,9 @@ class Round(object):
         self._number_of_boards = number_b_games
         self._number_a_games = number_a_games
         self._number_b_games = number_b_games
+
+        self._a_games = []
+        self._b_games = []
 
     def get_a_games(self):
         return self._a_games

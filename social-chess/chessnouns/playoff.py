@@ -10,18 +10,15 @@ import chessnouns
 
 
 class Playoff(object):
-    _player_one = None
-    _player_two = None
 
-    _game = None
-
-    def __init__(self, player_one, player_two):
+    def __init__(self, player_one, player_two, game=None):
 
         if not isinstance(player_one, player.Player) or not isinstance(player_two, player.Player):
             raise TypeError("You must initialize this with player objects, not names")
 
         self._player_one = player_one
         self._player_two = player_two
+        self._game = game
 
     def set_random_colors(self):
         # We will do randomness by getting a random color

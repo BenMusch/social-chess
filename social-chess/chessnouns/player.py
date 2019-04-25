@@ -7,15 +7,6 @@ class Player(object):
     This class will represent a player
     """
 
-    _id = 0
-    _name = chessnouns.NO_NAME
-    _level = chessnouns.BEGINNER
-    _late = False
-    _vip = False
-
-    # This is going to be a temporary variable used in scheduling
-    _draw = None
-
     def __repr__(self):
         return "{} Level: ({}) Late? {} VIP? {}".format(self._name, self._level, self._late, self._vip)
 
@@ -34,6 +25,7 @@ class Player(object):
         self._level = level
         self._late = late
         self._vip = vip
+        self._draw = None
 
     def set_draw(self, number_rounds):
         print("Setting draw for {}".format(self.get_name()))
