@@ -188,13 +188,13 @@ class TestNouns(object):
         new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
                              player.Player(2, "Michael Smith", chessnouns.KING, False, False))
 
-        assert new_game.get_result() is None
+        assert new_game.get_result() == chessnouns.NO_RESULT
         assert new_game.is_game_over() is False
 
         new_game.set_result(chessnouns.WHITE_WINS)
 
         assert new_game.is_game_over() is True
-        assert new_game.get_result() is chessnouns.WHITE_WINS
+        assert new_game.get_result() == chessnouns.WHITE_WINS
 
     def test_draw_class(self):
         players = utilities.get_set_of_players()

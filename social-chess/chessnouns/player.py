@@ -54,3 +54,7 @@ class Player(object):
 
     def make_on_time(self):
         self._late = False
+
+    @classmethod
+    def make_bye_player(cls):
+        return Player(chessnouns.BYE_ID, chessnouns.BYE_NAME)

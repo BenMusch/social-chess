@@ -1,57 +1,94 @@
 from . import player
 import chessnouns
 import random
+from chessexceptions import game_error
 
 
 class Game(object):
     """
-    This will represent a game
+    This will represent a game. It is one of the most
+    important core components of the system.
+
+    Some things:
+
+    1. You initialize a game with the two players
+    2. You do not choose the colors at that time.
+    3. You can initialize a game as a bye
+
     """
+
+    @classmethod
+    def create_bye_game(cls, player):
+        return Game(player, player.Player.make_bye_player())
+
     def __str__(self):
-        return "White:{} Black:{} ".format(self._white_player.get_name(), self._black_player.get_name())
+
+        if self._color_code == chessnouns.NO_COLOR_SELECTED:
+            color_string = "No colors selected"
+        elif self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
+            color_string = "White [1], Black [2]"
+        else:
+            color_string = "Black [1], White[2]"
+
+        return_line = "{}{} vs. {}{} ".format(self._player_one.get_name(),
+                                              self._player_one.get_level(),
+                                              self._player_two.get_name(),
+                                              self._player_two.get_level(),
+                                              end=" ")
+        return_line += color_string
+
+        return return_line
 
     def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME, onewhite=False, twowhite=False):
 
-        # We need to test for a bye
-        if player_one.get_id() == chessnouns.BYE_ID:
-            self._white_player = player_one
-            self._black_player = player_two
-            self._result = chessnouns.BLACK_WINS
-        elif player_two.get_id() == chessnouns.BYE_ID:
-            self._white_player = player_two
-            self._black_player = player_one
-            self._result = chessnouns.WHITE_WINS
-        else:
-            if onewhite:
-                self._white_player = player_one
-                self._black_player = player_two
-            elif twowhite:
-                self._white_player = player_two
-                self._black_player = player_one
-            else:
-
-                r1 = random.randint(0, 2)
-
-                if r1 == 1:
-                    self._white_player = player_one
-                    self._black_player = player_two
-                else:
-                    self._white_player = player_two
-                    self._black_player = player_one
-
+        self._player_one = player_one
+        self._player_two = player_two
+        self._result = chessnouns.NO_RESULT
         self._game_time = time
 
+        if onewhite:
+            self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
+        elif twowhite:
+            self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+        else:
+            self._color_code = chessnouns.NO_COLOR_SELECTED
+
+    def set_random_colors(self):
+
+        r1 = random.randint(0, 2)
+
+        if r1 == 1:
+            self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
+        else:
+            self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+
     def is_game_over(self):
-        return self._result is not None
+        return self._result != chessnouns.NO_RESULT
 
     def flip_colors(self):
-        self._white_player, self._black_player = self._black_player, self._white_player
+
+        if self._color_code == chessnouns.NO_COLOR_SELECTED:
+            raise game_error.GameError("You cannot flip colors before selecting them")
+        elif self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
+            self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+        else:
+            self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
 
     def get_white_player(self):
-        return self._white_player
+        if self._color_code == chessnouns.NO_COLOR_SELECTED:
+            raise game_error.GameError("You cannot get the white player without selecting colors")
+        if self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
+            return self._player_one
+        else:
+            return self._player_two
 
     def get_black_player(self):
-        return self._black_player
+        if self._color_code == chessnouns.NO_COLOR_SELECTED:
+            raise game_error.GameError("You cannot get the blacm player without selecting colors")
+        if self._color_code == chessnouns.PLAYER_ONE_IS_BLACK:
+            return self._player_one
+        else:
+            return self._player_two
 
     def set_time(self, time):
         self._game_time = time
