@@ -12,14 +12,17 @@ class Draw(object):
     matches for a player
     """
 
-    _matchups = []
+    _matchups = None
     _draw_player = None
 
-    # The number of rounds is the maxumum number
+    # The number of rounds is the maximum number
     # of games
     _number_of_rounds = 0
 
     def __init__(self, player_for_draw, number_rounds):
+        print("Draw initialized for {} ".format(player_for_draw.get_name()))
+        self._matchups = list()
+        print("Number of matchups at init is {} ".format(len(self._matchups)))
         assert isinstance(player_for_draw, player.Player)
         self._draw_player = player_for_draw
         self._number_of_rounds = number_rounds
@@ -28,7 +31,7 @@ class Draw(object):
         return_line = ""
         for person_id in self._matchups:
             selected_player = utilities.get_player_for_id(person_id)
-            return_line += self._draw_player.get_name() + " vs. " + selected_player.get_name()
+            return_line += self._draw_player.get_name() + " vs. " + selected_player.get_name() + " | "
         return return_line
 
     def get_number_of_rounds(self):
@@ -45,6 +48,7 @@ class Draw(object):
 
     def add_matchup(self, opposing_player):
         assert isinstance(opposing_player, player.Player)
+        print("Adding matchup for: {} opponent: {} ".format(self._draw_player.get_name(), opposing_player.get_name()))
         self._matchups.append(opposing_player.get_id())
 
     def add_bye(self):
@@ -54,6 +58,7 @@ class Draw(object):
         self._matchups = []
 
     def has_full_draw(self):
+        print("He has {} matchups in rounds {} ".format(len(self._matchups), self._number_of_rounds))
         return len(self._matchups) == self._number_of_rounds
 
     def get_player(self):

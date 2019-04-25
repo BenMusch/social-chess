@@ -173,12 +173,12 @@ class TestNouns(object):
 
     def test_game_bye(self):
         new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                             player.Player(2, chessnouns.BYE_NAME))
+                             player.Player(chessnouns.BYE_ID, chessnouns.BYE_NAME))
 
         assert new_game.get_result() == chessnouns.WHITE_WINS
         assert new_game.is_game_over() is True
 
-        second_game = game.Game(player.Player(2, chessnouns.BYE_NAME),
+        second_game = game.Game(player.Player(0, chessnouns.BYE_NAME),
                                 player.Player(1, "Ed Lyons", chessnouns.KING, False, False))
 
         assert second_game.get_result() == chessnouns.BLACK_WINS

@@ -26,6 +26,8 @@ class Playoff(object):
     def set_random_colors(self):
         # We will do randomness by getting a random color
         # and setting first player to it
+        # FIXME: If we randomize it here, does it not also happen
+        # in the game class?
         color = utilities.get_random_color()
 
         if color == chessnouns.COLOR_WHITE:
@@ -34,10 +36,12 @@ class Playoff(object):
             self._game = game.Game(self._player_two, self._player_one, chessnouns.STANDARD_PLAYOFF_LENGTH)
 
     def establish_player_one_as_white(self):
-        self._game = game.Game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH)
+        self._game = game.Game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH,
+                               onewhite=True, twowhite=False)
 
     def establish_player_one_as_black(self):
-        self._game = game.Game(self._player_two, self._player_one, chessnouns.STANDARD_PLAYOFF_LENGTH)
+        self._game = game.Game(self._player_one, self._player_two, chessnouns.STANDARD_PLAYOFF_LENGTH,
+                               onewhite=False, twowhite=True)
 
     def get_game(self):
         if self._game is None:

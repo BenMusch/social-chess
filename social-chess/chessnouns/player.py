@@ -22,11 +22,11 @@ class Player(object):
     def __init__(self, identifier, name, level=chessnouns.BEGINNER, late=False, vip=False):
 
         if not isinstance(name, str):
-            print("We got an exception")
+            print("We got an exception in the name:{} ".format(name))
             raise TypeError("Names must be strings")
 
         if level not in range(1, 6):
-            print("We got an exception")
+            print("We got an exception in the level: {}".format(level))
             raise ValueError('Level value must be {} to  {}'.format(chessnouns.BEGINNER, chessnouns.KING))
 
         self._id = identifier
@@ -36,6 +36,7 @@ class Player(object):
         self._vip = vip
 
     def set_draw(self, number_rounds):
+        print("Setting draw for {}".format(self.get_name()))
         self._draw = draw.Draw(self, number_rounds)
 
     def get_draw(self):

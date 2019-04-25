@@ -94,7 +94,7 @@ def test_random_game_result():
 
     for i in range(0, 100):
         x = utilities.get_random_game_result()
-        print(x)
+        #print(x)
         assert x in possible_result_tuple
 
 
@@ -106,7 +106,7 @@ def test_random_color_choice():
 
     for i in range(0, 100):
         x = utilities.get_random_color()
-        print(x)
+        #print(x)
         assert x in possible_result_tuple
 
 def test_get_player_for_id():

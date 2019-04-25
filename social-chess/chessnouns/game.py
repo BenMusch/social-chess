@@ -16,24 +16,36 @@ class Game(object):
     def __str__(self):
         return "White:{} Black:{} ".format(self._white_player.get_name(), self._black_player.get_name())
 
-    def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME):
-
-        r1 = random.randint(0, 2)
-
-        if r1 == 1:
-            self._white_player = player_one
-            self._black_player = player_two
-        else:
-            self._white_player = player_two
-            self._black_player = player_one
-
-        self._game_time = time
+    def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME, onewhite=False, twowhite=False):
 
         # We need to test for a bye
-        if self._white_player.get_name() == chessnouns.BYE_NAME:
+        if player_one.get_id() == chessnouns.BYE_ID:
+            self._white_player = player_one
+            self._black_player = player_two
             self._result = chessnouns.BLACK_WINS
-        elif self._black_player.get_name() == chessnouns.BYE_NAME:
+        elif player_two.get_id() == chessnouns.BYE_ID:
+            self._white_player = player_two
+            self._black_player = player_one
             self._result = chessnouns.WHITE_WINS
+        else:
+            if onewhite:
+                self._white_player = player_one
+                self._black_player = player_two
+            elif twowhite:
+                self._white_player = player_two
+                self._black_player = player_one
+            else:
+
+                r1 = random.randint(0, 2)
+
+                if r1 == 1:
+                    self._white_player = player_one
+                    self._black_player = player_two
+                else:
+                    self._white_player = player_two
+                    self._black_player = player_one
+
+        self._game_time = time
 
     def is_game_over(self):
         return self._result is not None

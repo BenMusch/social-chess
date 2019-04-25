@@ -129,12 +129,16 @@ class Schedule(object):
 
         :return:
         """
+        print("About to sort players")
         for player in self._players:
             if player.get_level() == chessnouns.BEGINNER:
+                print("Adding {} to beginner ".format(player.get_name()))
                 self._beginner_players.append(player)
             elif player.get_level() == chessnouns.IMPROVING or player.get_level() == chessnouns.ADEPT:
+                print("Adding {} to intermediate ".format(player.get_name()))
                 self._intermediate_players.append(player)
             else:
+                print("Adding {} to advanced ".format(player.get_name()))
                 assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
                 self._advanced_players.append(player)
 
@@ -168,6 +172,7 @@ class Schedule(object):
 
         # We need to set draw objects for all players
         # FIXME : We need this to be pulled out for somewhere else
+        print("Setting up draws")
         self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
 
         # Let's do round 1
@@ -176,32 +181,41 @@ class Schedule(object):
         # round class.
 
         for candidate_player in self._advanced_players:
-            if candidate_player.draw.has_full_draw():
-                continue
-            # So he needs a game from another player
-            # Let's try advance first
-            scheduled = False
-            for other_player in self._advanced_players:
-                scheduled = Schedule.try_scheduling_these_guys(candidate_player, other_player)
+            print("Scheduling for: {}".format(candidate_player.get_name()))
 
-            # Did we schedule the game?
-            if not scheduled:
-                # So this means all the other advanced players
-                # are scheduled, so we need to try intermediates
-                for medium_player in self._intermediate_players:
-                    scheduled = Schedule.try_scheduling_these_guys(candidate_player, medium_player)
+            print("Matchups for guy are: {} ".format(candidate_player.get_draw()))
 
-            if not scheduled:
-                # So this means all the other intermediate players
-                # are scheduled, so we need to try beginners
-                for beginner_player in self._beginner_players:
-                    scheduled = Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+            while candidate_player.get_draw().has_full_draw() is False:
 
-            if not scheduled:
-                # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.draw.add_bye()
+                print("Not full continuing.")
+                # So he needs a game from another player
+                # Let's try advance first
+                scheduled = False
+                for other_player in self._advanced_players:
+                    print("Looking at candidate: {}".format(other_player.get_name()))
+                    scheduled = Schedule.try_scheduling_these_guys(candidate_player, other_player)
+
+                # Did we schedule the game?
+                if not scheduled:
+                    # So this means all the other advanced players
+                    # are scheduled, so we need to try intermediates
+                    for medium_player in self._intermediate_players:
+                        print("Looking at candidate: {}".format(medium_player.get_name()))
+                        scheduled = Schedule.try_scheduling_these_guys(candidate_player, medium_player)
+
+                if not scheduled:
+                    # So this means all the other intermediate players
+                    # are scheduled, so we need to try beginners
+                    for beginner_player in self._beginner_players:
+                        print("Looking at candidate: {}".format(beginner_player.get_name()))
+                        scheduled = Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+
+                if not scheduled:
+                    # FIXME: Let's try adding a bye - is this the answer?
+                    candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
+        print("About to print advanced players.")
         utilities.print_player_draws(self._advanced_players)
 
     @classmethod
@@ -213,22 +227,23 @@ class Schedule(object):
         :return: bool - did we succeed?
         """
         # First, it's not him, right?
-        if first is second:
+        if first.get_id() == second.get_id():
             return False
         # Is the other player all scheduled?
-        if second.draw.has_full_draw():
+        if second.get_draw().has_full_draw():
             return False
         # Has the other player already played this guy?
-        if second.draw.has_played_player_id(first.get_id):
+        if second.get_draw().has_played_player_id(first.get_id):
             return False
         # OK. So we can schedule this!
-        first.draw.add_matchup(second.get_id())
-        second.draw.add_matchup(first.get_id())
+        print("We got a hit!")
+        first.get_draw().add_matchup(second)
+        second.get_draw().add_matchup(first)
         return True
 
     def schedule_beginner_players(self):
         for candidate_player in self._beginner_players:
-            if candidate_player.draw.has_full_draw():
+            if candidate_player.get_draw().has_full_draw():
                 continue
             # So he needs a game from another player
             scheduled = False
@@ -237,15 +252,16 @@ class Schedule(object):
 
             if not scheduled:
                 # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.draw.add_bye()
+                candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
+        print("About to print beginner players.")
         utilities.print_player_draws(self._beginner_players)
 
     def schedule_intermediate_players(self):
 
         for candidate_player in self._intermediate_players:
-            if candidate_player.draw.has_full_draw():
+            if candidate_player.get_draw().has_full_draw():
                 continue
             # So he needs a game from another player
             # Let's try advance first
@@ -262,9 +278,10 @@ class Schedule(object):
 
             if not scheduled:
                 # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.draw.add_bye()
+                candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
+        print("About to print intermediate players.")
         utilities.print_player_draws(self._intermediate_players)
 
     def schedule_next_game(self, round_number):
@@ -276,3 +293,4 @@ class Schedule(object):
         and figure out when the games are all going to take place
         :return:
         """
+        pass
