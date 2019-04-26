@@ -111,16 +111,16 @@ class Schedule(object):
 
         :return:
         """
-        print("About to sort players")
+        #print("About to sort players")
         for player in self._players:
             if player.get_level() == chessnouns.BEGINNER:
-                print("Adding {} to beginner ".format(player.get_name()))
+                #print("Adding {} to beginner ".format(player.get_name()))
                 self._beginner_players.append(player)
             elif player.get_level() == chessnouns.IMPROVING or player.get_level() == chessnouns.ADEPT:
-                print("Adding {} to intermediate ".format(player.get_name()))
+                #print("Adding {} to intermediate ".format(player.get_name()))
                 self._intermediate_players.append(player)
             else:
-                print("Adding {} to advanced ".format(player.get_name()))
+                #print("Adding {} to advanced ".format(player.get_name()))
                 assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
                 self._advanced_players.append(player)
 
@@ -163,16 +163,16 @@ class Schedule(object):
     def initialize_draws_for_players(self):
         # We need to set draw objects for all players
 
-        print("Setting up draws")
+        #print("Setting up draws")
         self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
 
 
     def schedule_advanced_players(self):
 
         for candidate_player in self._advanced_players:
-            print("Scheduling for: {}".format(candidate_player.get_name()))
+            #print("Scheduling for: {}".format(candidate_player.get_name()))
 
-            print("Matchups for player are: {} ".format(candidate_player.get_draw()))
+            #print("Matchups for player are: {} ".format(candidate_player.get_draw()))
 
             while candidate_player.get_draw().has_full_draw() is False:
 
@@ -196,7 +196,7 @@ class Schedule(object):
 
         # OK, now let us print and see
         print("***********")
-        print("About to print advanced players.")
+        print("About to print advanced players (LEVELS 4-5).")
         utilities.print_player_draws(self._advanced_players)
 
     @classmethod
@@ -236,7 +236,7 @@ class Schedule(object):
 
         # OK, now let us print and see
         print("***********")
-        print("About to print beginner players.")
+        print("About to print beginner players (LEVEL 1).")
         utilities.print_player_draws(self._beginner_players)
 
     def schedule_intermediate_players(self):
@@ -256,7 +256,7 @@ class Schedule(object):
 
         # OK, now let us print and see
         print("***********")
-        print("About to print intermediate players.")
+        print("About to print intermediate players (LEVEL 2,3).")
         utilities.print_player_draws(self._intermediate_players)
 
     def schedule_next_game(self, round_number):

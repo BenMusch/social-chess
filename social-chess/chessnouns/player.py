@@ -28,7 +28,7 @@ class Player(object):
         self._draw = None
 
     def set_draw(self, number_rounds):
-        print("Setting draw for {}".format(self.get_name()))
+        #print("Setting draw for {}".format(self.get_name()))
         self._draw = draw.Draw(self, number_rounds)
 
     def get_draw(self):

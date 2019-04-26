@@ -24,7 +24,7 @@ def load_players():
         rows = cur.fetchall()
 
         for row in rows:
-            print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+            #print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
 
             local_players.append(player.Player(row[0], row[1],
                                                level=int(row[3]),
@@ -101,9 +101,9 @@ def test_setup():
     intermediates = test_schedule.get_intermediate_players()
     advanceds = test_schedule.get_advanced_players()
 
-    assert len(advanceds) == 15
-    assert len(intermediates) == 19
-    assert len(beginners) == 5
+    assert len(advanceds) == 14
+    assert len(intermediates) == 21
+    assert len(beginners) == 4
 
     test_schedule.initialize_draws_for_players()
     test_schedule.shuffle_players()

@@ -13,9 +13,9 @@ class Draw(object):
     """
 
     def __init__(self, player_for_draw, number_rounds):
-        print("Draw initialized for {}({}) ".format(player_for_draw.get_name(), player_for_draw.get_level()))
+        #print("Draw initialized for {}({}) ".format(player_for_draw.get_name(), player_for_draw.get_level()))
         self._matchups = list()
-        print("Number of matchups at init is {} ".format(len(self._matchups)))
+        #print("Number of matchups at init is {} ".format(len(self._matchups)))
         assert isinstance(player_for_draw, player.Player)
         self._draw_player = player_for_draw
         self._number_of_rounds = number_rounds

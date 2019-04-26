@@ -15,7 +15,7 @@ players = (
     (7, "Stefanie Coxe", "", 3, 0),
     (8, "Brendan Crighton", "", 3, 1),
     (9, "Josh Cutler", "", 2, 1),
-    (10, "Rachel Dec", "", 4, 0),
+    (10, "Rachel Dec", "", 3, 0),
     (11, "Mike Deehan", "", 2, 0),
     (12, "Joe Deering", "", 4, 0),
     (13, "Gintautas Dumcius", "", 2, 0),
@@ -42,9 +42,9 @@ players = (
     (34, "Aaron Van Leesten", "", 2, 0),
     (35, "Pete Wilson", "", 3, 0),
     (36, "Brad Wyatt", "", 5, 0),
-    (37, "Neil Placeholder", "", 1, 0),
+    (37, "Jon Santiago", "", 3, 1),
     (38, "Fred Phantom", "", 5, 0),
-    (39, "Mark Wraith", "", 3, 0)
+    (39, "Jim Aloisi", "", 3, 1)
 )
 
 with con:
