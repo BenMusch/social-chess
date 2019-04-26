@@ -112,6 +112,10 @@ def test_setup():
     test_schedule.schedule_intermediate_players()
     test_schedule.schedule_beginner_players()
 
+    test_schedule.set_schedule_colors()
+
+    test_schedule.print_schedule()
+
 
 def xx_placement():
     """

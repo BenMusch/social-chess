@@ -185,61 +185,62 @@ class TestNouns(object):
 
         assert clem_draw.get_number_of_rounds() == 4
         assert clem_draw.get_rounds_left() == 4
-        assert len(clem_draw.get_matchups()) == 0
+        assert len(clem_draw.get_games()) == 0
         assert clem_draw.has_full_draw() is False
-        assert clem_draw.number_matchups_scheduled() == 0
+        assert clem_draw.number_games_scheduled() == 0
 
         # Now we want to add a game with Sarah
 
-        clem_draw.add_matchup(sarah)
+        clem_draw.add_game(sarah)
 
         # Now let's check those again
         assert clem_draw.get_number_of_rounds() == 4
         assert clem_draw.get_rounds_left() == 3
-        matches = clem_draw.get_matchups()
-        assert matches is not None
+        games = clem_draw.get_games()
+        assert games is not None
         assert clem_draw.has_full_draw() is False
-        assert clem_draw.number_matchups_scheduled() == 1
+        assert clem_draw.number_games_scheduled() == 1
 
-        assert len(matches) == 1
-        assert matches[0] == sarah.get_id()
+        assert len(games) == 1
 
-        clem_draw.add_matchup(will)
+        assert games[0].contains_player(sarah)
+
+        clem_draw.add_game(will)
 
         # Again
         assert clem_draw.get_number_of_rounds() == 4
         assert clem_draw.get_rounds_left() == 2
-        matches = clem_draw.get_matchups()
-        assert matches is not None
+        games = clem_draw.get_games()
+        assert games is not None
         assert clem_draw.has_full_draw() is False
-        assert clem_draw.number_matchups_scheduled() == 2
+        assert clem_draw.number_games_scheduled() == 2
 
-        clem_draw.add_matchup(evan)
+        clem_draw.add_game(evan)
 
         # Again
         assert clem_draw.get_number_of_rounds() == 4
         assert clem_draw.get_rounds_left() == 1
-        matches = clem_draw.get_matchups()
-        assert matches is not None
+        games = clem_draw.get_games()
+        assert games is not None
         assert clem_draw.has_full_draw() is False
-        assert clem_draw.number_matchups_scheduled() == 3
+        assert clem_draw.number_games_scheduled() == 3
 
-        clem_draw.add_matchup(jay)
+        clem_draw.add_game(jay)
 
         # Again
         assert clem_draw.get_number_of_rounds() == 4
         assert clem_draw.get_rounds_left() == 0
-        matches = clem_draw.get_matchups()
-        assert matches is not None
+        games = clem_draw.get_games()
+        assert games is not None
         assert clem_draw.has_full_draw() is True
-        assert clem_draw.number_matchups_scheduled() == 4
+        assert clem_draw.number_games_scheduled() == 4
 
         print(clem_draw)
 
         # Now let's test the clear
-        clem_draw.clear_matchups()
+        clem_draw.clear_games()
         assert clem_draw.get_rounds_left() == 4
-        matches = clem_draw.get_matchups()
-        assert len(matches) == 0
+        games = clem_draw.get_games()
+        assert len(games) == 0
         assert clem_draw.has_full_draw() is False
-        assert clem_draw.number_matchups_scheduled() == 0
+        assert clem_draw.number_games_scheduled() == 0

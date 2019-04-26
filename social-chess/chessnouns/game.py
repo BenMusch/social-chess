@@ -61,6 +61,9 @@ class Game(object):
         else:
             self._color_code = chessnouns.NO_COLOR_SELECTED
 
+    def are_colors_set(self):
+        return self._color_code != chessnouns.NO_COLOR_SELECTED
+
     def set_random_colors(self):
 
         r1 = random.randint(0, 2)
@@ -70,8 +73,14 @@ class Game(object):
         else:
             self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
 
+    def contains_player(self, player):
+        return self._player_one == player or self._player_two == player
+
     def is_bye(self):
         return self._bye
+
+    def get_players(self):
+        return [self._player_one, self._player_two]
 
     def is_game_over(self):
         return self._result != chessnouns.NO_RESULT

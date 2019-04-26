@@ -111,16 +111,16 @@ class Schedule(object):
 
         :return:
         """
-        #print("About to sort players")
+        # print("About to sort players")
         for player in self._players:
             if player.get_level() == chessnouns.BEGINNER:
-                #print("Adding {} to beginner ".format(player.get_name()))
+                # print("Adding {} to beginner ".format(player.get_name()))
                 self._beginner_players.append(player)
             elif player.get_level() == chessnouns.IMPROVING or player.get_level() == chessnouns.ADEPT:
-                #print("Adding {} to intermediate ".format(player.get_name()))
+                # print("Adding {} to intermediate ".format(player.get_name()))
                 self._intermediate_players.append(player)
             else:
-                #print("Adding {} to advanced ".format(player.get_name()))
+                # print("Adding {} to advanced ".format(player.get_name()))
                 assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
                 self._advanced_players.append(player)
 
@@ -147,11 +147,10 @@ class Schedule(object):
 
     def _loop_against_list(self, candidate_player, list_of_players):
 
-
         is_done = False
 
         for other_player in list_of_players:
-            #print("Looking at candidate: {}".format(other_player.get_name()))
+            # print("Looking at candidate: {}".format(other_player.get_name()))
             Schedule.try_scheduling_these_guys(candidate_player, other_player)
             finished = candidate_player.get_draw().has_full_draw()
             if finished:
@@ -163,16 +162,15 @@ class Schedule(object):
     def initialize_draws_for_players(self):
         # We need to set draw objects for all players
 
-        #print("Setting up draws")
+        # print("Setting up draws")
         self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
-
 
     def schedule_advanced_players(self):
 
         for candidate_player in self._advanced_players:
-            #print("Scheduling for: {}".format(candidate_player.get_name()))
+            # print("Scheduling for: {}".format(candidate_player.get_name()))
 
-            #print("Matchups for player are: {} ".format(candidate_player.get_draw()))
+            # print("Matchups for player are: {} ".format(candidate_player.get_draw()))
 
             while candidate_player.get_draw().has_full_draw() is False:
 
@@ -194,11 +192,6 @@ class Schedule(object):
                 # FIXME: Let's try adding a bye - is this the answer?
                 candidate_player.get_draw().add_bye()
 
-        # OK, now let us print and see
-        print("***********")
-        print("About to print advanced players (LEVELS 4-5).")
-        utilities.print_player_draws(self._advanced_players)
-
     @classmethod
     def try_scheduling_these_guys(cls, first, second):
         """
@@ -214,14 +207,14 @@ class Schedule(object):
         if second.get_draw().has_full_draw():
             return False
         # Have they played
-        if second.get_draw().has_played_player_id(first.get_id):
+        if second.get_draw().has_played_player_id(first.get_id()):
             return False
-        if first.get_draw().has_played_player_id(second.get_id):
+        if first.get_draw().has_played_player_id(second.get_id()):
             return False
         # OK. So we can schedule this!
-        #print("We got a hit!")
-        first.get_draw().add_matchup(second)
-        second.get_draw().add_matchup(first)
+        # print("We got a hit!")
+        first.get_draw().add_game(second)
+        second.get_draw().add_game(first)
         return True
 
     def schedule_beginner_players(self):
@@ -233,11 +226,6 @@ class Schedule(object):
 
             # FIXME: Let's try adding a bye - is this the answer?
             candidate_player.get_draw().add_bye()
-
-        # OK, now let us print and see
-        print("***********")
-        print("About to print beginner players (LEVEL 1).")
-        utilities.print_player_draws(self._beginner_players)
 
     def schedule_intermediate_players(self):
 
@@ -254,18 +242,63 @@ class Schedule(object):
 
             # FIXME: Let's try adding a bye - is this
 
+    def set_schedule_colors(self):
+        """
+        Right now this is just going to do it randomly
+
+        :return:
+        """
+        master_list = self._advanced_players + self._intermediate_players + self._beginner_players
+
+        for each_player in master_list:
+            games = each_player.get_draw().get_games()
+            for ind_game in games:
+                if not ind_game.are_colors_set():
+                    ind_game.set_random_colors()
+
+        # Now we are going to make sure nobody got all one color
+        # We will run through the loop twice, as the first
+        # pass might have created a one-color draw for another
+
+        for each_player in master_list:
+            each_draw = each_player.get_draw()
+            if each_draw.is_all_one_color():
+                # Do something!
+                each_draw.flip_color_two_games()
+
+        for each_player in master_list:
+            each_draw = each_player.get_draw()
+            if each_draw.is_all_one_color():
+                # Do something!
+
+                each_draw.flip_color_two_games()
+
+    def schedule_next_game(self, round_number):
+        pass
+
+    def print_schedule(self):
+        # OK, now let us print and see
+        print("***********")
+        print("About to print beginner players (LEVEL 1).")
+        utilities.print_player_draws(self._beginner_players)
+
         # OK, now let us print and see
         print("***********")
         print("About to print intermediate players (LEVEL 2,3).")
         utilities.print_player_draws(self._intermediate_players)
 
-    def schedule_next_game(self, round_number):
-        pass
+        # OK, now let us print and see
+        print("***********")
+        print("About to print advanced players (LEVELS 4-5).")
+        utilities.print_player_draws(self._advanced_players)
 
     def fill_in_rounds(self):
         """
         So what we are going to do is take everyone's draws
         and figure out when the games are all going to take place
+
+
+
         :return:
         """
         pass
