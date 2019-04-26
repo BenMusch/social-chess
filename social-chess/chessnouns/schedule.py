@@ -145,72 +145,57 @@ class Schedule(object):
         for player in self._advanced_players:
             player.set_draw(number_of_rounds)
 
-    def schedule_advanced_players(self):
-        """
-        We are going to get the advanced players set up first.
+    def _loop_against_list(self, candidate_player, list_of_players):
 
-        :return:
-        """
 
+        is_done = False
+
+        for other_player in list_of_players:
+            #print("Looking at candidate: {}".format(other_player.get_name()))
+            Schedule.try_scheduling_these_guys(candidate_player, other_player)
+            finished = candidate_player.get_draw().has_full_draw()
+            if finished:
+                is_done = True
+                break
+
+        return is_done
+
+    def initialize_draws_for_players(self):
         # We need to set draw objects for all players
-        # FIXME : We need this to be pulled out for somewhere else
+
         print("Setting up draws")
         self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
 
-        # Let's do round 1
-        # It's best to think of a round as a single list,
-        # rather than two lists together, as we see in the
-        # round class.
+
+    def schedule_advanced_players(self):
 
         for candidate_player in self._advanced_players:
             print("Scheduling for: {}".format(candidate_player.get_name()))
 
-            print("Matchups for guy are: {} ".format(candidate_player.get_draw()))
+            print("Matchups for player are: {} ".format(candidate_player.get_draw()))
 
             while candidate_player.get_draw().has_full_draw() is False:
 
-                print("Not full continuing.")
-                # So he needs a game from another player
-                # Let's try advance first
-                scheduled = False
-                for other_player in self._advanced_players:
-                    print("Looking at candidate: {}".format(other_player.get_name()))
-                    Schedule.try_scheduling_these_guys(candidate_player, other_player)
-                    finished = candidate_player.get_draw().has_full_draw()
-                    if finished:
-                        break
+                finished = self._loop_against_list(candidate_player, self._advanced_players)
 
                 if finished:
                     continue
 
-                # So this means all the other advanced players
-                # are scheduled, so we need to try intermediates
-                for medium_player in self._intermediate_players:
-                    print("Looking at candidate: {}".format(medium_player.get_name()))
-                    Schedule.try_scheduling_these_guys(candidate_player, medium_player)
-                    finished = candidate_player.get_draw().has_full_draw()
-                    if finished:
-                        break
+                finished = self._loop_against_list(candidate_player, self._intermediate_players)
+
                 if finished:
                     continue
 
+                finished = self._loop_against_list(candidate_player, self._beginner_players)
 
-                # So this means all the other intermediate players
-                # are scheduled, so we need to try beginners
-                for beginner_player in self._beginner_players:
-                    print("Looking at candidate: {}".format(beginner_player.get_name()))
-                    Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
-                    finished = candidate_player.get_draw().has_full_draw()
-                    if finished:
-                        break
                 if finished:
                     continue
-
 
                 # FIXME: Let's try adding a bye - is this the answer?
                 candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
+        print("***********")
         print("About to print advanced players.")
         utilities.print_player_draws(self._advanced_players)
 
@@ -234,19 +219,15 @@ class Schedule(object):
         if first.get_draw().has_played_player_id(second.get_id):
             return False
         # OK. So we can schedule this!
-        print("We got a hit!")
+        #print("We got a hit!")
         first.get_draw().add_matchup(second)
         second.get_draw().add_matchup(first)
         return True
 
     def schedule_beginner_players(self):
         for candidate_player in self._beginner_players:
-            for beginner_player in self._beginner_players:
-                print("Looking at candidate: {}".format(beginner_player.get_name()))
-                Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
-                finished = candidate_player.get_draw().has_full_draw()
-                if finished:
-                    break
+            finished = self._loop_against_list(candidate_player, self._beginner_players)
+
             if finished:
                 continue
 
@@ -254,35 +235,27 @@ class Schedule(object):
             candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
+        print("***********")
         print("About to print beginner players.")
         utilities.print_player_draws(self._beginner_players)
 
     def schedule_intermediate_players(self):
 
         for candidate_player in self._intermediate_players:
-            for medium_player in self._intermediate_players:
-                print("Looking at candidate: {}".format(medium_player.get_name()))
-                Schedule.try_scheduling_these_guys(candidate_player, medium_player)
-                finished = candidate_player.get_draw().has_full_draw()
-                if finished:
-                    break
+            finished = self._loop_against_list(candidate_player, self._intermediate_players)
+
             if finished:
                 continue
 
-            # So this means all the other intermediate players
-            # are scheduled, so we need to try beginners
-            for beginner_player in self._beginner_players:
-                print("Looking at candidate: {}".format(beginner_player.get_name()))
-                Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
-                finished = candidate_player.get_draw().has_full_draw()
-                if finished:
-                    break
+            finished = self._loop_against_list(candidate_player, self._beginner_players)
+
             if finished:
                 continue
 
             # FIXME: Let's try adding a bye - is this
 
         # OK, now let us print and see
+        print("***********")
         print("About to print intermediate players.")
         utilities.print_player_draws(self._intermediate_players)
 

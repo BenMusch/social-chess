@@ -105,6 +105,9 @@ def test_setup():
     assert len(intermediates) == 19
     assert len(beginners) == 5
 
+    test_schedule.initialize_draws_for_players()
+    test_schedule.shuffle_players()
+
     test_schedule.schedule_advanced_players()
     test_schedule.schedule_intermediate_players()
     test_schedule.schedule_beginner_players()
