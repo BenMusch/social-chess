@@ -20,11 +20,11 @@ class Draw(object):
         self._draw_player = player_for_draw
         self._number_of_rounds = number_rounds
 
-    def __repr__(self):
-        return_line = ""
+    def __str__(self):
+        return_line = "{}'s Draw--- ".format(self._draw_player.get_name(), end= "++")
         for person_id in self._matchups:
             selected_player = utilities.get_player_for_id(person_id)
-            return_line += self._draw_player.get_name() + " vs. " + selected_player.get_name() + " | "
+            return_line += selected_player.get_name() + " | "
         return return_line
 
     def get_number_of_rounds(self):
@@ -52,7 +52,7 @@ class Draw(object):
 
     def has_full_draw(self):
         print("He has {} matchups in rounds {} ".format(len(self._matchups), self._number_of_rounds))
-        return len(self._matchups) == self._number_of_rounds
+        return len(self._matchups) >= self._number_of_rounds
 
     def get_player(self):
         return self._draw_player

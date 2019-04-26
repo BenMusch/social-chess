@@ -175,26 +175,40 @@ class Schedule(object):
                 scheduled = False
                 for other_player in self._advanced_players:
                     print("Looking at candidate: {}".format(other_player.get_name()))
-                    scheduled = Schedule.try_scheduling_these_guys(candidate_player, other_player)
+                    Schedule.try_scheduling_these_guys(candidate_player, other_player)
+                    finished = candidate_player.get_draw().has_full_draw()
+                    if finished:
+                        break
 
-                # Did we schedule the game?
-                if not scheduled:
-                    # So this means all the other advanced players
-                    # are scheduled, so we need to try intermediates
-                    for medium_player in self._intermediate_players:
-                        print("Looking at candidate: {}".format(medium_player.get_name()))
-                        scheduled = Schedule.try_scheduling_these_guys(candidate_player, medium_player)
+                if finished:
+                    continue
 
-                if not scheduled:
-                    # So this means all the other intermediate players
-                    # are scheduled, so we need to try beginners
-                    for beginner_player in self._beginner_players:
-                        print("Looking at candidate: {}".format(beginner_player.get_name()))
-                        scheduled = Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+                # So this means all the other advanced players
+                # are scheduled, so we need to try intermediates
+                for medium_player in self._intermediate_players:
+                    print("Looking at candidate: {}".format(medium_player.get_name()))
+                    Schedule.try_scheduling_these_guys(candidate_player, medium_player)
+                    finished = candidate_player.get_draw().has_full_draw()
+                    if finished:
+                        break
+                if finished:
+                    continue
 
-                if not scheduled:
-                    # FIXME: Let's try adding a bye - is this the answer?
-                    candidate_player.get_draw().add_bye()
+
+                # So this means all the other intermediate players
+                # are scheduled, so we need to try beginners
+                for beginner_player in self._beginner_players:
+                    print("Looking at candidate: {}".format(beginner_player.get_name()))
+                    Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+                    finished = candidate_player.get_draw().has_full_draw()
+                    if finished:
+                        break
+                if finished:
+                    continue
+
+
+                # FIXME: Let's try adding a bye - is this the answer?
+                candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
         print("About to print advanced players.")
@@ -214,8 +228,10 @@ class Schedule(object):
         # Is the other player all scheduled?
         if second.get_draw().has_full_draw():
             return False
-        # Has the other player already played this guy?
+        # Have they played
         if second.get_draw().has_played_player_id(first.get_id):
+            return False
+        if first.get_draw().has_played_player_id(second.get_id):
             return False
         # OK. So we can schedule this!
         print("We got a hit!")
@@ -225,16 +241,17 @@ class Schedule(object):
 
     def schedule_beginner_players(self):
         for candidate_player in self._beginner_players:
-            if candidate_player.get_draw().has_full_draw():
+            for beginner_player in self._beginner_players:
+                print("Looking at candidate: {}".format(beginner_player.get_name()))
+                Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+                finished = candidate_player.get_draw().has_full_draw()
+                if finished:
+                    break
+            if finished:
                 continue
-            # So he needs a game from another player
-            scheduled = False
-            for other_player in self._beginner_players:
-                scheduled = Schedule.try_scheduling_these_guys(candidate_player, other_player)
 
-            if not scheduled:
-                # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.get_draw().add_bye()
+            # FIXME: Let's try adding a bye - is this the answer?
+            candidate_player.get_draw().add_bye()
 
         # OK, now let us print and see
         print("About to print beginner players.")
@@ -243,24 +260,27 @@ class Schedule(object):
     def schedule_intermediate_players(self):
 
         for candidate_player in self._intermediate_players:
-            if candidate_player.get_draw().has_full_draw():
+            for medium_player in self._intermediate_players:
+                print("Looking at candidate: {}".format(medium_player.get_name()))
+                Schedule.try_scheduling_these_guys(candidate_player, medium_player)
+                finished = candidate_player.get_draw().has_full_draw()
+                if finished:
+                    break
+            if finished:
                 continue
-            # So he needs a game from another player
-            # Let's try advance first
-            scheduled = False
-            for other_player in self._intermediate_players:
-                scheduled = Schedule.try_scheduling_these_guys(candidate_player, other_player)
 
-            # Did we schedule the game?
-            if not scheduled:
-                # So this means all the other intermediate players
-                # are scheduled, so we need to try beginners
-                for beginner_player in self._beginner_players:
-                    scheduled = Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+            # So this means all the other intermediate players
+            # are scheduled, so we need to try beginners
+            for beginner_player in self._beginner_players:
+                print("Looking at candidate: {}".format(beginner_player.get_name()))
+                Schedule.try_scheduling_these_guys(candidate_player, beginner_player)
+                finished = candidate_player.get_draw().has_full_draw()
+                if finished:
+                    break
+            if finished:
+                continue
 
-            if not scheduled:
-                # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.get_draw().add_bye()
+            # FIXME: Let's try adding a bye - is this
 
         # OK, now let us print and see
         print("About to print intermediate players.")

@@ -134,10 +134,6 @@ def print_player_draws(players):
     :return:
     """
     for p in players:
-        print("\nPlayer Name: {} ".format(p.get_name()))
-        print('***********')
+
         player_draw = p.get_draw()
-        for ind_game in player_draw.get_matchups():
-            temp_player = get_player_for_id(ind_game)
-            print(temp_player.get_name(), end='|')
-        print('\n-----------')
+        print(player_draw)
