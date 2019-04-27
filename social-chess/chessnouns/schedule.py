@@ -69,6 +69,17 @@ class Schedule(object):
         self._beginner_players = []
         self._rounds = []
 
+        # We need these for the social split
+        self._advanced_a = []
+        self._advanced_b = []
+        self._intermediate_a = []
+        self._intermediate_b = []
+        self._beginner_a = []
+        self._beginner_b = []
+
+        self._a_group = []
+        self._b_group = []
+
     def set_up_rounds(self):
         """
         This creates the round data structure, which will begin by being populated with
@@ -113,10 +124,10 @@ class Schedule(object):
         """
         # print("About to sort players")
         for player in self._players:
-            if player.get_level() == chessnouns.BEGINNER:
+            if player.get_level() == chessnouns.BEGINNER or player.get_level() == chessnouns.IMPROVING:
                 # print("Adding {} to beginner ".format(player.get_name()))
                 self._beginner_players.append(player)
-            elif player.get_level() == chessnouns.IMPROVING or player.get_level() == chessnouns.ADEPT:
+            elif player.get_level() == chessnouns.ADEPT:
                 # print("Adding {} to intermediate ".format(player.get_name()))
                 self._intermediate_players.append(player)
             else:
@@ -164,6 +175,42 @@ class Schedule(object):
 
         # print("Setting up draws")
         self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+
+    def get_total_number_players(self):
+        return len(self._advanced_players) + len(self._intermediate_players) + len(self._beginner_players)
+
+    def divide_players(self):
+        # FIXME: It's probably better to test to see if the number of advanced
+        # players is less than half
+
+        # So let's add the advanced to group a, unless there's a latecomer
+        for candidate_player in self._advanced_players:
+            if candidate_player.is_late():
+                self._b_group.append(candidate_player)
+            else:
+                self._a_group.append(candidate_player)
+
+        # So we should have 14 out of the needed 20
+
+        # Let's do the beginners
+        for candidate_player in self._beginner_players:
+            self._b_group.append(candidate_player)
+
+        # So group B now has 4
+
+        # Now we need to use the intermediates to fill out the groups
+        # How many do we need?
+
+        needed = 20 - len(self._a_group)
+
+        for i in range(0,needed):
+            self._a_group.append(self._intermediate_players[i])
+
+        for j in range(needed, len(self._intermediate_players)):
+            self._b_group.append(self._intermediate_players[j])
+
+        # OK. So the groups should have the right numbers
+        return self._a_group, self._b_group
 
     def schedule_advanced_players(self):
 
@@ -292,13 +339,77 @@ class Schedule(object):
         print("About to print advanced players (LEVELS 4-5).")
         utilities.print_player_draws(self._advanced_players)
 
+    def _print_all_rounds(self, rounds):
+        """""
+        So we are going to print out all the rounds
+        """
+        print("Schedule of all games")
+        count = 1
+        for ind_round in rounds:
+            print("Round {}:".format(count))
+            for ind_game in ind_round:
+                print(ind_game)
+            count += 1
+
     def fill_in_rounds(self):
         """
         So what we are going to do is take everyone's draws
         and figure out when the games are all going to take place
 
+        So we're looking at a set of rounds like:
 
-
+        9 games - 1 bye
+        10 games
+        9 games - 1 bye
+        10 games
+        9 games - 1 bye
+        10 games
+        9 games - 1 bye
+        10 games
         :return:
         """
-        pass
+        players = utilities.get_set_of_players()
+
+        clem = players[0]
+        sarah = players[1]
+        will = players[2]
+        evan = players[3]
+        jay = players[4]
+
+        real_game = game.Game(clem, sarah)
+        real_game.set_random_colors()
+        bye_game = game.Game.create_bye_game(will)
+        bye_game.set_random_colors()
+
+        first_set = [real_game] * 9
+        first_set.append(bye_game)
+        second_set = [real_game] * 10
+
+        third_set = [real_game] * 9
+        third_set.append(bye_game)
+        fourth_set = [real_game] * 10
+
+        fifth_set = [real_game] * 9
+        fifth_set.append(bye_game)
+        sixth_set = [real_game] * 10
+
+        seventh_set = [real_game] * 9
+        seventh_set.append(bye_game)
+        eighth_set = [real_game] * 10
+
+        rounds = [first_set, second_set, third_set, fourth_set, fifth_set,
+                  sixth_set, seventh_set, eighth_set]
+
+        # So let's try to add the real games
+        player_one = self._advanced_players[0]
+        one_draw = player_one.get_draw()
+        one_draw_games = one_draw.get_games()
+        first_set[0] = one_draw_games[0]
+        third_set[0] = one_draw_games[1]
+        fifth_set[0] = one_draw_games[2]
+
+        seventh_set[0] = one_draw_games[3]
+
+        # Now let's get preston
+
+        self._print_all_rounds(rounds)

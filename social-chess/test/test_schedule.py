@@ -102,19 +102,40 @@ def test_setup():
     advanceds = test_schedule.get_advanced_players()
 
     assert len(advanceds) == 14
-    assert len(intermediates) == 21
-    assert len(beginners) == 4
+    assert len(intermediates) == 13
+    assert len(beginners) == 12
 
     test_schedule.initialize_draws_for_players()
     test_schedule.shuffle_players()
 
-    test_schedule.schedule_advanced_players()
-    test_schedule.schedule_intermediate_players()
-    test_schedule.schedule_beginner_players()
+    # We need to split players into two groups
+    # to allow alternate playing rounds
 
-    test_schedule.set_schedule_colors()
+    a, b = test_schedule.divide_players()
 
-    test_schedule.print_schedule()
+    print("\nFirst list was: {} ".format(len(a)))
+
+
+
+
+    for thing in a:
+        print("{} ({})".format(thing.get_name(), thing.get_level()))
+
+    print("\nSecond list was: {} ".format(len(b)))
+    for other in b:
+        print("{} ({})".format(other.get_name(), other.get_level()))
+
+    #test_schedule.schedule_advanced_players()
+    #test_schedule.schedule_intermediate_players()
+    #test_schedule.schedule_beginner_players()
+
+    #test_schedule.set_schedule_colors()
+
+
+    #test_schedule.print_schedule()
+
+    #test_schedule.fill_in_rounds()
+
 
 
 def xx_placement():

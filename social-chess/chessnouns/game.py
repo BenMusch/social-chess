@@ -30,7 +30,7 @@ class Game(object):
         else:
             color_string = "Black [1], White[2]"
 
-        return_line = "{}{} vs. {}{} ".format(self._player_one.get_name(),
+        return_line = "{}({}) vs. {}({}) ".format(self._player_one.get_name(),
                                               self._player_one.get_level(),
                                               self._player_two.get_name(),
                                               self._player_two.get_level(),
