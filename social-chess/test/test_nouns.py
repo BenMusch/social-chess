@@ -7,29 +7,6 @@ from chessexceptions import game_error
 
 class TestNouns(object):
 
-    def test_create_player_exceptions(self):
-        # Test for fail on player name is not a string
-        with pytest.raises(TypeError):
-            assert player.Player(1, 999)
-
-        # Test for fail with invalid level
-        with pytest.raises(ValueError):
-            assert player.Player(1, "Ed Lyons", 0, False, False)
-
-    def test_player_attributes(self):
-        p = player.Player(1, "Ed Lyons", chessnouns.KING, False, False)
-
-        assert p.get_name() == "Ed Lyons"
-        assert not p.is_late()
-        assert not p.is_vip()
-
-        # Make flag changes
-        p.make_late()
-        assert p.is_late()
-
-        p.make_on_time()
-        assert not p.is_late()
-
     def test_round_object(self):
         test_round = round.Round(2, 2, 1)
 
@@ -74,8 +51,3 @@ class TestNouns(object):
 
         # And let's be sure that the b games are intact
         assert len(test_round.get_b_games()) == 0
-
-
-
-
-

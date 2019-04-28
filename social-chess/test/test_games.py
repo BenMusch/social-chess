@@ -9,7 +9,13 @@ Fixtures are first, then the tests
 
 
 @pytest.fixture(scope="module")
-def get_games(self):
+def get_players():
+    players = []
+    return players
+
+
+@pytest.fixture(scope="module")
+def get_games():
     """
     This fixture gets games
     :param self:

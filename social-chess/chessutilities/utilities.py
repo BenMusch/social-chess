@@ -10,21 +10,7 @@ from random import *
 import sqlite3 as sqlite
 
 
-def get_set_of_players():
-    con = sqlite.connect("../db/chess.db")
 
-    players = []
-
-    with con:
-        cur = con.cursor()
-        cur.execute("SELECT * FROM players")
-
-        rows = cur.fetchall()
-
-        for row in rows:
-            players.append(player.Player(row[0], row[1], level=int(row[3]), late=False, vip=(1 == int(row[4]))))
-
-    return players
 
 
 def get_number_of_boards_and_tweaks(number_players):
