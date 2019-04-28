@@ -36,13 +36,13 @@ class Round(object):
     def get_round_number(self):
         return self._round_number
 
-    def add_game_to_round(self, game):
+    def add_game_to_round(self, new_game):
         if self.round_is_finished():
             raise scheduling_error.SchedulingError("You cannot add a game to a finished round.")
 
         # Is there room in a?
         if len(self._games) < self._number_of_games:
-            self._games.append((game))
+            self._games.append((new_game))
         else:
             # We should not get here
             raise scheduling_error.SchedulingError("You cannot add a game to a finished round.")

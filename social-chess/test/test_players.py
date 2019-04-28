@@ -7,7 +7,7 @@ from chessnouns import player
 @pytest.fixture(scope="module")
 def get_players(self):
     """
-    This fixture gets games
+    This fixture gets players
     :param self:
     :return:
     """

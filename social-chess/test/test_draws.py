@@ -1,12 +1,35 @@
 import pytest
 import chessnouns
 from chessutilities import utilities
-from chessnouns import player, game
+from chessnouns import player, game, draw
+import sqlite3 as sqlite
 
 
-def test_draw_class():
-    # FIXME: change to fixture
-    players = utilities.get_set_of_players()
+@pytest.fixture(scope="module")
+def get_players():
+    """
+    This fixture gets players
+    :param self:
+    :return:
+    """
+    con = sqlite.connect("../db/chess.db")
+
+    players = []
+
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM players")
+
+        rows = cur.fetchall()
+
+        for row in rows:
+            players.append(player.Player(row[0], row[1], level=int(row[3]), late=False, vip=(1 == int(row[4]))))
+
+    return players
+
+
+def get_draws():
+    players = get_players()
 
     clem = players[0]
     sarah = players[1]
@@ -20,7 +43,35 @@ def test_draw_class():
     assert evan.get_name() == "Evan Bruning"
     assert jay.get_name() == "Jay Cincotti"
 
-    clem_draw = draw.Draw(clem, 4)
+    clem.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+    sarah.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+    will.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+    evan.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+    jay.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+
+    return clem.get_draw(), sarah.get_draw(), will.get_draw(), evan.get_draw(), jay.get_draw()
+
+
+def get_one_draw():
+    players = get_players()
+    clem = players[0]
+    assert clem.get_name() == "Clem Aeppli"
+    clem.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+
+    return clem.get_draw()
+
+
+@pytest.fixture(scope="module")
+def test_draw_class(get_players):
+
+    players = get_players
+    clem = players[0]
+    sarah = players[1]
+    will = players[2]
+    evan = players[3]
+    jay = players[4]
+
+    clem_draw = get_one_draw()
 
     # Let's assert some things
 
