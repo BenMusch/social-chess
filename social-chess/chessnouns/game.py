@@ -18,32 +18,43 @@ class Game(object):
     """
 
     @classmethod
-    def create_bye_game(cls, player_getting_bye):
-        return Game(player_getting_bye, player.Player.make_bye_player(), onewhite=False, twowhite=False, bye=True)
+    def create_bye_game(cls, player_getting_bye, onewhite=True, twowhite=False):
+        return Game(player_getting_bye, player.Player.make_bye_player(), onewhite=onewhite, twowhite=twowhite, bye=True)
 
     def __str__(self):
 
         if self._color_code == chessnouns.NO_COLOR_SELECTED:
             color_string = "No colors selected"
         elif self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
-            color_string = "White [1], Black [2]"
-        else:
-            color_string = "Black [1], White[2]"
+            return_line = "{}({})[W] vs. {}({})[B] ".format(self._player_one.get_name(),
+                                                      self._player_one.get_level(),
+                                                      self._player_two.get_name(),
+                                                      self._player_two.get_level(),
+                                                      end=" ")
 
-        return_line = "{}({}) vs. {}({}) ".format(self._player_one.get_name(),
-                                              self._player_one.get_level(),
-                                              self._player_two.get_name(),
-                                              self._player_two.get_level(),
-                                              end=" ")
-        return_line += color_string
+
+            # color_string = "White [1], Black [2]"
+        else:
+            return_line = "{}({})[W] vs. {}({})[B] ".format(self._player_two.get_name(),
+                                                      self._player_two.get_level(),
+                                                      self._player_one.get_name(),
+                                                      self._player_one.get_level(),
+                                                      end=" ")
+
 
         return return_line
+
+    def __repr__ (self):
+        return self.__str__()
 
     def make_player_one_white(self):
         self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
 
     def make_player_two_white(self):
         self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+
+    def get_game_points(self):
+        return int(self._player_one.get_level()) + int(self._player_two.get_level())
 
     def __init__(self, player_one, player_two, time=chessnouns.STANDARD_GAME_TIME,
                  onewhite=False, twowhite=False, bye=False):

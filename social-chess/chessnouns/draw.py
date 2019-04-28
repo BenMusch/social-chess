@@ -68,7 +68,7 @@ class Draw(object):
         self._games = []
 
     def has_full_draw(self):
-        # print("He has {} matchups in rounds {} ".format(len(self._matchups), self._number_of_rounds))
+        #print("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games), self._number_of_rounds))
         return len(self._games) >= self._number_of_rounds
 
     def get_player(self):

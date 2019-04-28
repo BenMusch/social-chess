@@ -24,7 +24,7 @@ def load_players():
         rows = cur.fetchall()
 
         for row in rows:
-            #print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
+            # print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
 
             local_players.append(player.Player(row[0], row[1],
                                                level=int(row[3]),
@@ -113,29 +113,82 @@ def test_setup():
 
     a, b = test_schedule.divide_players()
 
-    print("\nFirst list was: {} ".format(len(a)))
-
-
-
+    print("\nFirst Group has: {} players ".format(len(a)))
 
     for thing in a:
         print("{} ({})".format(thing.get_name(), thing.get_level()))
 
-    print("\nSecond list was: {} ".format(len(b)))
+
+    print("\nSecond Group has: {} players ".format(len(b)))
     for other in b:
         print("{} ({})".format(other.get_name(), other.get_level()))
 
-    #test_schedule.schedule_advanced_players()
-    #test_schedule.schedule_intermediate_players()
-    #test_schedule.schedule_beginner_players()
-
-    #test_schedule.set_schedule_colors()
 
 
-    #test_schedule.print_schedule()
+    test_schedule.start_over_players()
 
-    #test_schedule.fill_in_rounds()
 
+    """
+    test_schedule.schedule_a_players()
+
+    test_schedule.schedule_b_players()
+
+    test_schedule.set_schedule_colors()
+
+    test_schedule.print_group_players(test_schedule.get_a_players())
+    print("---------------")
+    test_schedule.print_group_players(test_schedule.get_b_players())
+
+    print("GETTING GAMES")
+
+    list_of_a_games = test_schedule.get_all_a_games()
+    print("There are {} A Games.".format(len(list_of_a_games)))
+
+    print(list_of_a_games)
+
+    print("\n\nSORTING GAMES")
+
+    sorted_list = sorted(list_of_a_games, key=get_points)
+
+    print(sorted_list)
+
+    print("\n\nSCHEDULING A GAMES: RANDOM")
+
+    rounds_list = test_schedule.schedule_a_games(None)
+
+    count = 1
+    for round in rounds_list:
+        print("ROUND: {} ".format(count))
+        print(round)
+        count += 1
+    
+    print("\n\nSCHEDULING A GAMES: SORTED")
+
+    rounds_list = test_schedule.schedule_a_games(sorted_list)
+
+    count = 1
+    for round in rounds_list:
+        print("ROUND: {} ".format(count))
+        print(round)
+        count += 1
+
+    test_schedule.print_draw_report(rounds_list)
+    
+    """
+
+    # test_schedule.schedule_advanced_players()
+    # test_schedule.schedule_intermediate_players()
+    # test_schedule.schedule_beginner_players()
+
+    #
+
+    # test_schedule.print_schedule()
+
+    # test_schedule.fill_in_rounds()
+
+
+def get_points(game):
+    return game.get_game_points()
 
 
 def xx_placement():
