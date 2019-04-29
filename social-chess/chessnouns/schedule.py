@@ -145,17 +145,6 @@ class Schedule(object):
         shuffle(self._intermediate_players)
         shuffle(self._advanced_players)
 
-    def set_up_draws(self, number_of_rounds):
-
-        for player in self._beginner_players:
-            player.set_draw(number_of_rounds)
-
-        for player in self._intermediate_players:
-            player.set_draw(number_of_rounds)
-
-        for player in self._advanced_players:
-            player.set_draw(number_of_rounds)
-
     def _loop_against_list(self, candidate_player, list_of_players):
 
         is_done = False
@@ -174,8 +163,14 @@ class Schedule(object):
     def initialize_draws_for_players(self):
         # We need to set draw objects for all players
 
-        # print("Setting up draws")
-        self.set_up_draws(chessnouns.DEFAULT_NUMBER_OF_GAMES)
+        for player in self._beginner_players:
+            player.set_draw(self._number_of_rounds)
+
+        for player in self._intermediate_players:
+            player.set_draw(self._number_of_rounds)
+
+        for player in self._advanced_players:
+            player.set_draw(self._number_of_rounds)
 
     def get_total_number_players(self):
         return len(self._advanced_players) + len(self._intermediate_players) + len(self._beginner_players)
@@ -332,64 +327,6 @@ class Schedule(object):
 
         return first_set, second_set, third_set, fourth_set
 
-    def schedule_a_players(self):
-        for candidate_player in self._a_group:
-            print("Scheduling for: {}".format(candidate_player.get_name()))
-
-            print("Matchups for player are: {} ".format(candidate_player.get_draw()))
-
-            while candidate_player.get_draw().has_full_draw() is False:
-
-                finished = self._loop_against_list(candidate_player, self._a_group)
-
-                if finished:
-                    continue
-
-                # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.get_draw().add_bye()
-
-    def schedule_b_players(self):
-        for candidate_player in self._b_group:
-            # print("Scheduling for: {}".format(candidate_player.get_name()))
-
-            # print("Matchups for player are: {} ".format(candidate_player.get_draw()))
-
-            while candidate_player.get_draw().has_full_draw() is False:
-
-                finished = self._loop_against_list(candidate_player, self._b_group)
-
-                if finished:
-                    continue
-
-                # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.get_draw().add_bye()
-
-    def schedule_advanced_players(self):
-
-        for candidate_player in self._advanced_players:
-            # print("Scheduling for: {}".format(candidate_player.get_name()))
-
-            # print("Matchups for player are: {} ".format(candidate_player.get_draw()))
-
-            while candidate_player.get_draw().has_full_draw() is False:
-
-                finished = self._loop_against_list(candidate_player, self._advanced_players)
-
-                if finished:
-                    continue
-
-                finished = self._loop_against_list(candidate_player, self._intermediate_players)
-
-                if finished:
-                    continue
-
-                finished = self._loop_against_list(candidate_player, self._beginner_players)
-
-                if finished:
-                    continue
-
-                # FIXME: Let's try adding a bye - is this the answer?
-                candidate_player.get_draw().add_bye()
 
     @classmethod
     def try_scheduling_these_guys(cls, first, second):
@@ -416,64 +353,6 @@ class Schedule(object):
         second.get_draw().add_game(first)
         return True
 
-    def schedule_beginner_players(self):
-        for candidate_player in self._beginner_players:
-            finished = self._loop_against_list(candidate_player, self._beginner_players)
-
-            if finished:
-                continue
-
-            # FIXME: Let's try adding a bye - is this the answer?
-            candidate_player.get_draw().add_bye()
-
-    def schedule_intermediate_players(self):
-
-        for candidate_player in self._intermediate_players:
-            finished = self._loop_against_list(candidate_player, self._intermediate_players)
-
-            if finished:
-                continue
-
-            finished = self._loop_against_list(candidate_player, self._beginner_players)
-
-            if finished:
-                continue
-
-            # FIXME: Let's try adding a bye - is this
-
-    def set_schedule_colors(self):
-        """
-        Right now this is just going to do it randomly
-
-        :return:
-        """
-        master_list = self._a_group + self._b_group
-
-        for each_player in master_list:
-            games = each_player.get_draw().get_games()
-            for ind_game in games:
-                if not ind_game.are_colors_set():
-                    ind_game.set_random_colors()
-
-        # Now we are going to make sure nobody got all one color
-        # We will run through the loop twice, as the first
-        # pass might have created a one-color draw for another
-
-        for each_player in master_list:
-            each_draw = each_player.get_draw()
-            if each_draw.is_all_one_color():
-                # Do something!
-                each_draw.flip_color_two_games()
-
-        for each_player in master_list:
-            each_draw = each_player.get_draw()
-            if each_draw.is_all_one_color():
-                # Do something!
-
-                each_draw.flip_color_two_games()
-
-    def schedule_next_game(self, round_number):
-        pass
 
     def print_group_players(self, group):
         utilities.print_player_draws(group)

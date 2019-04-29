@@ -11,6 +11,7 @@ def test_constants():
     # messed with the constants in init.py
 
     assert chessnouns.DEFAULT_NUMBER_OF_GAMES == 4
+    assert chessnouns.DEFAULT_NUMBER_OF_ROUNDS == 8
 
     assert chessnouns.BEGINNER == 1
     assert chessnouns.IMPROVING == 2

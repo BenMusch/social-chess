@@ -68,7 +68,7 @@ class Draw(object):
         self._games = []
 
     def has_full_draw(self):
-        #print("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games), self._number_of_rounds))
+        # print("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games), self._number_of_rounds))
         return len(self._games) >= self._number_of_rounds
 
     def get_player(self):
@@ -101,12 +101,11 @@ class Draw(object):
                     whites += 1
 
         if whites == chessnouns.DEFAULT_NUMBER_OF_GAMES or blacks == chessnouns.DEFAULT_NUMBER_OF_GAMES:
-            print ("Someone had all one color")
+            print("Someone had all one color")
             return True
         else:
 
             return False
-
 
     def has_played_player_id(self, id):
         """
@@ -126,3 +125,9 @@ class Draw(object):
                 return True
 
         return False
+
+    def get_total_raw_points(self):
+        pass
+
+    def get_total_weighted_points(self):
+        pass
