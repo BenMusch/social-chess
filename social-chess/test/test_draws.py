@@ -1,8 +1,5 @@
-import pytest
 import chessnouns
-from chessutilities import utilities
 from chessnouns import player, game, draw
-import sqlite3 as sqlite
 
 
 def get_draws(get_all_players):

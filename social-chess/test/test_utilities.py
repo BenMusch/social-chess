@@ -1,6 +1,3 @@
-"""
-This is the file that will test our utility functions
-"""
 from chessutilities import utilities
 import chessnouns
 import pytest

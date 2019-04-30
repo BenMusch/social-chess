@@ -1,9 +1,10 @@
 import pytest
 import sqlite3 as sqlite
 from chessnouns import player, game
+import chessutilities
 
 """
-This will hold the fixtues that are needed across test files
+This will hold the fixtures that are needed across test files
 """
 
 
@@ -14,7 +15,7 @@ def get_all_players():
     :param self:
     :return:
     """
-    con = sqlite.connect("../db/chess.db")
+    con = sqlite.connect(chessutilities.DATABASE_TEST_LOCATION)
 
     players = []
 

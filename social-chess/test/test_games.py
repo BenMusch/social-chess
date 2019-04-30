@@ -1,7 +1,5 @@
-import pytest
 import chessnouns
 from chessnouns import player, game
-import sqlite3 as sqlite
 
 """
 This group of tests are for the game class

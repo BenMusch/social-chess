@@ -5,6 +5,7 @@ for our chess tournament solver
 
 import math
 import chessnouns
+import chessutilities
 from chessnouns import player
 from random import *
 import sqlite3 as sqlite
@@ -91,10 +92,10 @@ def get_random_color():
 
 def get_player_for_id(identifier):
     # We need to handle the bye here
-    if identifier == chessnouns.BYE_ID:
-        return player.Player(0, chessnouns.BYE_NAME)
+    if chessnouns.BYE_ID == identifier:
+        return player.Player.make_bye_player()
 
-    con = sqlite.connect('../db/chess.db')
+    con = sqlite.connect(chessutilities.DATABASE_PROD_LOCATION)
     cur = con.cursor()
 
     cur.execute('SELECT * FROM players WHERE id=' + str(identifier))
