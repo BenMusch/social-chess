@@ -1,30 +1,6 @@
 import pytest
-import sqlite3 as sqlite
 import chessnouns
 from chessnouns import player
-
-
-@pytest.fixture(scope="module")
-def get_players(self):
-    """
-    This fixture gets players
-    :param self:
-    :return:
-    """
-    con = sqlite.connect("../db/chess.db")
-
-    players = []
-
-    with con:
-        cur = con.cursor()
-        cur.execute("SELECT * FROM players")
-
-        rows = cur.fetchall()
-
-        for row in rows:
-            players.append(player.Player(row[0], row[1], level=int(row[3]), late=False, vip=(1 == int(row[4]))))
-
-    return players
 
 
 def test_create_player_exceptions():

@@ -10,9 +10,6 @@ from random import *
 import sqlite3 as sqlite
 
 
-
-
-
 def get_number_of_boards_and_tweaks(number_players):
     """
     This method works by understanding that dividing the number of players by four tells you want to do.
@@ -93,7 +90,6 @@ def get_random_color():
 
 
 def get_player_for_id(identifier):
-
     # We need to handle the bye here
     if identifier == chessnouns.BYE_ID:
         return player.Player(0, chessnouns.BYE_NAME)
@@ -120,6 +116,5 @@ def print_player_draws(players):
     :return:
     """
     for p in players:
-
         player_draw = p.get_draw()
         print(player_draw)

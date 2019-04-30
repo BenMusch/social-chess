@@ -1,7 +1,5 @@
 from chessnouns import schedule, player
 from chessutilities import utilities
-import sqlite3 as sqlite
-import pytest
 
 """
 These test methods are just to test the Schedule class as a container
@@ -12,37 +10,9 @@ the test utilities class
 """
 
 
-@pytest.fixture(scope="module")
-def load_players():
-    local_players = []
+def test_initialize_schedule(get_all_players):
 
-    con = sqlite.connect('../db/chess.db')  # If this is run from pytest in main dir, this is right
-
-    with con:
-        cur = con.cursor()
-        cur.execute("SELECT * FROM players")
-
-        rows = cur.fetchall()
-
-        for row in rows:
-            # print(f"{row[0]} {row[1]} {row[2]} {row[3]} {row[4]}")
-
-            local_players.append(player.Player(row[0], row[1],
-                                               level=int(row[3]),
-                                               late=False,
-                                               vip=(bool(int(row[4])))))
-
-    return local_players
-
-
-def test_initialize_schedule(load_players):
-    """
-        This setup will test the initializing of the schedule object
-        then setting up of rounds, and the sorting of players,
-        but not the actual scheduling, which will come later
-        :return:
-        """
-    players = load_players
+    players = get_all_players
     number_of_players = len(players)
 
     assert number_of_players == 39
@@ -56,8 +26,8 @@ def test_initialize_schedule(load_players):
     # FIXME: We should test other things here
 
 
-def test_setup(load_players):
-    players = load_players
+def test_setup(get_all_players):
+    players = get_all_players
 
     test_schedule = schedule.Schedule(players, 8, True, True, 10)
 
