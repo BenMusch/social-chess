@@ -156,7 +156,7 @@ class Game(object):
     def get_result(self):
         return self._result
 
-    def get_winning_player(self):
+    def get_winning_and_losing_player(self):
 
         if self._bye is True:
             return self._player_one
@@ -166,6 +166,6 @@ class Game(object):
         if self._result == chessnouns.NO_RESULT:
             raise game_error.GameError("You cannot get the winning player without a result")
         if self._color_code == chessnouns.PLAYER_ONE_IS_WHITE and self._result == chessnouns.WHITE_WINS:
-            return self._player_one
+            return self._player_one, self._player_two
         else:
-            return self._player_two
+            return self._player_two, self._player_one

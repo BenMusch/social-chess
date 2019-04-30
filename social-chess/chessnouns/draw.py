@@ -1,6 +1,7 @@
 from . import player, game
 from chessutilities import utilities
 import chessnouns
+from chessexceptions import game_error
 
 
 class Draw(object):
@@ -126,8 +127,84 @@ class Draw(object):
 
         return False
 
+    def _get_points_for_level(self, level):
+        """
+        This gets used when an upset is over and
+        we just need the points for that level
+
+        """
+        if level == chessnouns.KING:
+            return chessnouns.LEVEL_FIVE_LEVEL_WIN
+        elif level == chessnouns.KNIGHT:
+            return chessnouns.LEVEL_FOUR_LEVEL_WIN
+        elif level == chessnouns.ADEPT:
+            return chessnouns.LEVEL_THREE_LEVEL_WIN
+        elif level == chessnouns.IMPROVING:
+            return chessnouns.LEVEL_TWO_LEVEL_WIN
+        else:
+            return chessnouns.LEVEL_ONE_LEVEL_WIN
+
+    def _get_points_for_upset(self, level):
+
+        if level == chessnouns.KING:
+            return chessnouns.LEVEL_FOUR_UPSET_WIN
+        elif level == chessnouns.KNIGHT:
+            return chessnouns.LEVEL_THREE_UPSET_WIN
+        elif level == chessnouns.ADEPT:
+            return chessnouns.LEVEL_TWO_UPSET_WIN
+        else:
+            return chessnouns.LEVEL_ONE_UPSET_WIN
+
     def get_total_raw_points(self):
-        pass
+
+        raw_points = 0
+
+        if self.number_games_scheduled() == 0:
+            raise game_error.GameError("You cannot calculate a score without games")
+
+        for individual_game in self.get_games():
+            if individual_game.get_result() == chessnouns.DRAW:
+                # OK, so there is a draw
+                continue
+
+            winning_player, losing_player = individual_game.get_winning_and_losing_player()
+
+            if winning_player.name() == self._draw_player.get_name():
+                # OK, so we won
+                my_level = self._draw_player.get_level()
+                other_level = losing_player.get_level()
+
+                if my_level == chessnouns.KING:
+                    raw_points += self._get_points_for_level(other_level)
+
+                elif my_level == chessnouns.KNIGHT:
+                    if other_level == chessnouns.KING:
+                        raw_points += self._get_points_for_upset(other_level)
+                    else:
+                        raw_points += self._get_points_for_level(other_level)
+
+                elif my_level == chessnouns.ADEPT:
+                    if other_level >= chessnouns.KNIGHT:
+                        raw_points += self._get_points_for_upset(other_level)
+                    else:
+                        raw_points += self._get_points_for_level(other_level)
+
+                elif my_level == chessnouns.IMPROVING:
+                    if other_level >= chessnouns.ADEPT:
+                        raw_points += self._get_points_for_upset(other_level)
+                    else:
+                        raw_points += self._get_points_for_level(other_level)
+
+                elif my_level == chessnouns.BEGINNER:
+                    if other_level >= chessnouns.IMPROVING:
+                        raw_points += self._get_points_for_upset(other_level)
+                    else:
+                        raw_points += self._get_points_for_level(other_level)
+
+
+
+        return raw_points
 
     def get_weighted_score(self):
-        pass
+        if self.number_games_scheduled() == 0:
+            raise game_error.GameError("You cannot calculate a score without games")
