@@ -15,7 +15,7 @@ players = (
     (7, "Stefanie Coxe", "", 3, 0),
     (8, "Brendan Crighton", "", 3, 1),
     (9, "Josh Cutler", "", 2, 1),
-    (10, "Rachel Dec", "", 3, 0),
+    (10, "Rachel Dec", "", 4, 0),
     (11, "Mike Deehan", "", 2, 0),
     (12, "Joe Deering", "", 4, 0),
     (13, "Gintautas Dumcius", "", 2, 0),
@@ -25,7 +25,7 @@ players = (
     (17, "Joe Gravellese", "", 3, 0),
     (18, "Christian Greve", "", 4, 0),
     (19, "Brian Jencunas", "", 3, 0),
-    (20, "Maya Jonas-Silver", "", 5, 0),
+    (20, "Maya Jonas-Silver", "", 4, 0),
     (21, "Steve Koczela", "", 5, 0),
     (22, "Ed Lyons", "", 5, 0),
     (23, "Juana Matias", "", 3, 0),
@@ -39,12 +39,15 @@ players = (
     (31, "Becca Rausch", "", 3, 1),
     (32, "Jodi Reed", "", 1, 0),
     (33, "Hirak Shah", "", 4, 0),
-    (34, "Aaron Van Leesten", "", 2, 0),
+    (34, "Aaron Van Leesten", "", 3, 0),
     (35, "Pete Wilson", "", 3, 0),
     (36, "Brad Wyatt", "", 5, 0),
     (37, "Jon Santiago", "", 3, 1),
-    (38, "Fred Phantom", "", 5, 0),
-    (39, "Jim Aloisi", "", 3, 1)
+    (38, "Cory Amzon", "", 1, 0),
+    (39, "Jim Aloisi", "", 3, 1),
+    (40, "Sean Barkowsky", "", 5, 0),
+    (41, "Andrew Perrino", "", 4, 0)
+
 )
 
 with con:

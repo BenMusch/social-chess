@@ -80,30 +80,6 @@ class Schedule(object):
         self._a_group = []
         self._b_group = []
 
-    def set_up_rounds(self):
-        """
-        This creates the round data structure, which will begin by being populated with
-        empty game objects
-
-        :return:
-        """
-
-        # In our model, the b part of the round is always equal to
-        # the number of boards
-        number_b = self._number_boards
-
-        # The a part of the round is either equal to the number of
-        # boards, or it is one less, if the tournament is lopsided
-
-        number_a = self._number_boards
-
-        if self._lopsided:
-            number_a -= 1
-
-        for count in range(0, self._number_of_rounds):
-            # So we need two lists
-            self._rounds.append(round.Round(number_a, number_b, count + 1))
-
     def get_rounds(self):
         return self._rounds
 
@@ -327,7 +303,6 @@ class Schedule(object):
 
         return first_set, second_set, third_set, fourth_set
 
-
     @classmethod
     def try_scheduling_these_guys(cls, first, second):
         """
@@ -352,7 +327,6 @@ class Schedule(object):
         first.get_draw().add_game(second)
         second.get_draw().add_game(first)
         return True
-
 
     def print_group_players(self, group):
         utilities.print_player_draws(group)
