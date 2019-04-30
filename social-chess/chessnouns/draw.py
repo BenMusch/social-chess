@@ -129,5 +129,5 @@ class Draw(object):
     def get_total_raw_points(self):
         pass
 
-    def get_total_weighted_points(self):
+    def get_weighted_score(self):
         pass

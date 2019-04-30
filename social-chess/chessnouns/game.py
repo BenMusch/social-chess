@@ -24,27 +24,30 @@ class Game(object):
     def __str__(self):
 
         if self._color_code == chessnouns.NO_COLOR_SELECTED:
-            color_string = "No colors selected"
+            return_line = "{}({})[N] vs. {}({})[N] ".format(self._player_one.get_name(),
+                                                            self._player_one.get_level(),
+                                                            self._player_two.get_name(),
+                                                            self._player_two.get_level(),
+                                                            end=" ")
+
         elif self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
             return_line = "{}({})[W] vs. {}({})[B] ".format(self._player_one.get_name(),
-                                                      self._player_one.get_level(),
-                                                      self._player_two.get_name(),
-                                                      self._player_two.get_level(),
-                                                      end=" ")
-
+                                                            self._player_one.get_level(),
+                                                            self._player_two.get_name(),
+                                                            self._player_two.get_level(),
+                                                            end=" ")
 
             # color_string = "White [1], Black [2]"
         else:
             return_line = "{}({})[W] vs. {}({})[B] ".format(self._player_two.get_name(),
-                                                      self._player_two.get_level(),
-                                                      self._player_one.get_name(),
-                                                      self._player_one.get_level(),
-                                                      end=" ")
-
+                                                            self._player_two.get_level(),
+                                                            self._player_one.get_name(),
+                                                            self._player_one.get_level(),
+                                                            end=" ")
 
         return return_line
 
-    def __repr__ (self):
+    def __repr__(self):
         return self.__str__()
 
     def make_player_one_white(self):
@@ -75,9 +78,29 @@ class Game(object):
     def are_colors_set(self):
         return self._color_code != chessnouns.NO_COLOR_SELECTED
 
-    def set_random_colors(self):
+    def set_random_result(self):
 
         r1 = random.randint(0, 2)
+
+        if r1 == 1:
+            self._color_code = chessnouns.PLAYER_ONE_IS_WHITE
+        else:
+            self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
+
+    def set_random_results(self):
+
+        r1 = random.randint(1, 11)
+
+        if r1 == 1:
+            self._result = chessnouns.DRAW
+        elif r1 < 6:
+            self._result = chessnouns.BLACK_WINS
+        else:
+            self._result = chessnouns.WHITE_WINS
+
+    def set_random_colors(self):
+
+        r1 = random.randint(1, 2)
 
         if r1 == 1:
             self._color_code = chessnouns.PLAYER_ONE_IS_WHITE

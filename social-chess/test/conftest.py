@@ -32,6 +32,39 @@ def get_all_players():
 
 
 @pytest.fixture(scope="module")
+def get_five_players(get_all_players):
+    five_players = get_all_players[0:5]
+    return five_players
+
+
+@pytest.fixture(scope="module")
+def get_five_draws(get_all_players):
+    draws = []
+    five_players = get_all_players[0:5]
+    print("We had {} players. ".format(len(five_players)))
+
+    # Now we need to set up the draws
+
+    for player in five_players:
+        player.set_draw(4)
+
+    for ind_player in five_players:
+        while not ind_player.get_draw().has_full_draw():
+            schedule_draw_games(ind_player, five_players)
+        draws.append(ind_player.get_draw())
+
+    return draws
+
+
+def schedule_draw_games(candidate_player, player_list):
+    for other_player in player_list:
+        if not other_player.get_draw().has_full_draw() and not candidate_player.get_draw().has_played_player_id(
+                other_player.get_id()):
+            candidate_player.get_draw().add_game(other_player)
+            other_player.get_draw().add_game(candidate_player)
+
+
+@pytest.fixture(scope="module")
 def get_four_games():
     """
     We need to create some games

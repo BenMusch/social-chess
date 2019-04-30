@@ -1,6 +1,30 @@
 import chessnouns
 from chessnouns import player, game, draw
 
+"""
+Test get total points
+Test get weighted score
+Test has played player id
+"""
+
+
+def randomize_colors(draws):
+    for ind_draw in draws:
+        for ind_game in ind_draw.get_games():
+            ind_game.set_random_colors()
+
+
+def randomize_results(draws):
+    for ind_draw in draws:
+        for ind_game in ind_draw.get_games():
+            ind_game.set_random_colors()
+
+
+def test_something(get_five_draws):
+    draws = get_five_draws
+    print(draws)
+    assert len(draws) == 5
+
 
 def get_draws(get_all_players):
     players = get_all_players
@@ -34,8 +58,6 @@ def test_draw_class(get_all_players):
     evan = players[3]
     jay = players[4]
 
-    players = get_all_players
-    clem = players[0]
     assert clem.get_name() == "Clem Aeppli"
     clem.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
     clem_draw = clem.get_draw()
