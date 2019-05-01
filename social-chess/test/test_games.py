@@ -1,5 +1,8 @@
 import chessnouns
 from chessnouns import player, game
+import pytest
+import chessexceptions
+from chessexceptions import game_error
 
 """
 This group of tests are for the game class
@@ -10,6 +13,7 @@ Fixtures are first, then the tests
 def test_game_init(get_all_players):
     test_players = get_all_players
     new_game = game.Game(test_players[0], test_players[1])
+
 
 def test_game_strings(get_all_players):
     """
@@ -27,7 +31,7 @@ def test_game_strings(get_all_players):
     print(second_game)
 
     assert str(new_game) == "Clem Aeppli(1)[N] vs. Sarah Betancourt(2)[N]"
-    assert str(second_game)== "Will Brown(5)[N] vs. Tracy Corley(2)[N]"
+    assert str(second_game) == "Will Brown(5)[N] vs. Tracy Corley(2)[N]"
 
     # Now we need to assign colors
 
@@ -87,9 +91,26 @@ def test_game_strings(get_all_players):
 
 
 def test_winner_and_loser(get_all_players):
+    print('\n---------------------------\nTesting Game Winner and Loser\n---------------------------')
+
     test_players = get_all_players
+
     new_game = game.Game(test_players[0], test_players[1])
 
+    # First let us make sure we can't get it yet
+    with pytest.raises(chessexceptions.game_error.GameError):
+        assert new_game.get_winning_and_losing_player()
+
+    new_game.make_player_one_white()
+    new_game.set_result(chessnouns.WHITE_WINS)
+
+    winner, loser = new_game.get_winning_and_losing_player()
+
+    assert winner is not None
+    assert loser is not None
+
+    assert winner.get_id() == test_players[0].get_id()
+    assert loser.get_id() == test_players[1].get_id()
 
 
 def test_game_players(get_all_players):
