@@ -26,14 +26,14 @@ def test_something(get_five_draws):
 
     candidate_draw = draws[0]
 
-    # OK, let's make some results
+    # First, clem
+
+    print(candidate_draw.get_player().get_name())
 
     first_game = candidate_draw.get_games()[0]
     second_game = candidate_draw.get_games()[1]
     third_game = candidate_draw.get_games()[2]
     fourth_game = candidate_draw.get_games()[3]
-
-
 
     # Now we will loop through and set the winners
     first_game.make_player_one_white()
@@ -54,9 +54,54 @@ def test_something(get_five_draws):
     print(third_game)
     print(fourth_game)
 
+    clem_raw_points = candidate_draw.get_total_raw_points()
+    clem_weighted_points = candidate_draw.get_total_weighted_score()
+
+    assert clem_raw_points == 3
+    assert clem_weighted_points == 3.6
+
     # OK, let's get the scores
-    print("Points for player: {} ".format(candidate_draw.get_total_raw_points()))
-    print("Weighted score for player: {} ".format(candidate_draw.get_total_weighted_score()))
+    print("Points for player: {} ".format(clem_raw_points))
+    print("Weighted score for player: {} ".format(clem_weighted_points))
+
+    # Second, Will
+
+    second_draw = draws[2]
+
+    print(second_draw.get_player().get_name())
+
+    first_game = second_draw.get_games()[0]
+    second_game = second_draw.get_games()[1]
+    third_game = second_draw.get_games()[2]
+    fourth_game = second_draw.get_games()[3]
+
+    # Now we will loop through and set the winners
+    first_game.make_player_one_white()
+    first_game.set_result(chessnouns.WHITE_WINS)
+
+    second_game.make_player_one_white()
+    second_game.set_result(chessnouns.WHITE_WINS)
+
+    third_game.make_player_one_white()
+    third_game.set_result(chessnouns.WHITE_WINS)
+
+    fourth_game.make_player_two_white()
+    fourth_game.set_result(chessnouns.WHITE_WINS)
+
+    # Let's get the names
+    print(first_game)
+    print(second_game)
+    print(third_game)
+    print(fourth_game)
+
+    will_raw_points = second_draw.get_total_raw_points()
+    will_weighted_points = second_draw.get_total_weighted_score()
+
+    print("Points for player: {} ".format(will_raw_points))
+    print("Weighted score for player: {} ".format(will_weighted_points))
+
+    assert will_raw_points == 3
+    assert will_weighted_points == 2.1
 
 
 def get_draws(get_all_players):
