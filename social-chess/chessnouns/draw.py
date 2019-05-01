@@ -155,9 +155,9 @@ class Draw(object):
         else:
             return chessnouns.LEVEL_ONE_UPSET_WIN
 
-    def get_total_raw_points(self):
+    def get_total_weighted_score(self):
 
-        raw_points = 0
+        weighted_points = 0
 
         if self.number_games_scheduled() == 0:
             raise game_error.GameError("You cannot calculate a score without games")
@@ -165,44 +165,67 @@ class Draw(object):
         for individual_game in self.get_games():
             if individual_game.get_result() == chessnouns.DRAW:
                 # OK, so there is a draw
+                weighted_points += 0.5
                 continue
 
             winning_player, losing_player = individual_game.get_winning_and_losing_player()
 
-            if winning_player.name() == self._draw_player.get_name():
+            if winning_player.get_name() == self._draw_player.get_name():
                 # OK, so we won
                 my_level = self._draw_player.get_level()
                 other_level = losing_player.get_level()
 
                 if my_level == chessnouns.KING:
-                    raw_points += self._get_points_for_level(other_level)
+                    weighted_points += self._get_points_for_level(other_level)
 
                 elif my_level == chessnouns.KNIGHT:
                     if other_level == chessnouns.KING:
-                        raw_points += self._get_points_for_upset(other_level)
+                        weighted_points += self._get_points_for_upset(other_level)
                     else:
-                        raw_points += self._get_points_for_level(other_level)
+                        weighted_points += self._get_points_for_level(other_level)
 
                 elif my_level == chessnouns.ADEPT:
                     if other_level >= chessnouns.KNIGHT:
-                        raw_points += self._get_points_for_upset(other_level)
+                        weighted_points += self._get_points_for_upset(other_level)
                     else:
-                        raw_points += self._get_points_for_level(other_level)
+                        weighted_points += self._get_points_for_level(other_level)
 
                 elif my_level == chessnouns.IMPROVING:
                     if other_level >= chessnouns.ADEPT:
-                        raw_points += self._get_points_for_upset(other_level)
+                        weighted_points += self._get_points_for_upset(other_level)
                     else:
-                        raw_points += self._get_points_for_level(other_level)
+                        weighted_points += self._get_points_for_level(other_level)
 
                 elif my_level == chessnouns.BEGINNER:
                     if other_level >= chessnouns.IMPROVING:
-                        raw_points += self._get_points_for_upset(other_level)
+                        weighted_points += self._get_points_for_upset(other_level)
                     else:
-                        raw_points += self._get_points_for_level(other_level)
+                        weighted_points += self._get_points_for_level(other_level)
 
-        return raw_points
+        return weighted_points
 
-    def get_weighted_score(self):
+    def get_total_raw_points(self):
+
+        raw_points = 0
+
         if self.number_games_scheduled() == 0:
             raise game_error.GameError("You cannot calculate a score without games")
+
+        count = 0
+        for individual_game in self.get_games():
+            count += 1
+            print("Entering game {} ".format(count))
+            if individual_game.get_result() == chessnouns.DRAW:
+                # OK, so there is a draw
+                print("It was a draw")
+                raw_points += 0.5
+                continue
+
+            winning_player, losing_player = individual_game.get_winning_and_losing_player()
+
+            if winning_player.get_name() == self._draw_player.get_name():
+                print("It was a win for {}({}) ".format(winning_player.get_name(), winning_player.get_level()))
+                print("It was against: {}({}) ".format(losing_player.get_name(), losing_player.get_level()))
+                raw_points += 1
+
+        return raw_points

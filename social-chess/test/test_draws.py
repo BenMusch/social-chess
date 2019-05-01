@@ -33,24 +33,30 @@ def test_something(get_five_draws):
     third_game = candidate_draw.get_games()[2]
     fourth_game = candidate_draw.get_games()[3]
 
-    # Let's get the names
-    print(first_game)
-    print(second_game)
-    print(third_game)
-    print(fourth_game)
+
 
     # Now we will loop through and set the winners
     first_game.make_player_one_white()
     first_game.set_result(chessnouns.WHITE_WINS)
 
     second_game.make_player_one_white()
-    second_game.set_result(chessnouns.BLACK_WINS)
+    second_game.set_result(chessnouns.WHITE_WINS)
 
     third_game.make_player_one_white()
     third_game.set_result(chessnouns.WHITE_WINS)
 
     fourth_game.make_player_two_white()
     fourth_game.set_result(chessnouns.WHITE_WINS)
+
+    # Let's get the names
+    print(first_game)
+    print(second_game)
+    print(third_game)
+    print(fourth_game)
+
+    # OK, let's get the scores
+    print("Points for player: {} ".format(candidate_draw.get_total_raw_points()))
+    print("Weighted score for player: {} ".format(candidate_draw.get_total_weighted_score()))
 
 
 def get_draws(get_all_players):
