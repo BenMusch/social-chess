@@ -29,6 +29,12 @@ class Game(object):
         else:
             level_string = "{}"
 
+        # We need to handle bye
+        if self._player_two.get_id() == chessnouns.BYE_ID:
+            # OK we have one
+            return "{} has a bye".format(self._player_one.get_name())
+
+
         # # Brian Jencunas(3)[N] vs. Christian Greve(4)[N]
         if self._color_code == chessnouns.NO_COLOR_SELECTED:
             return_line = "{}".format(self._player_one.get_name())
@@ -57,6 +63,32 @@ class Game(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def get_leaderboard_string_white_first(self):
+        """
+        This will be a white-first rendering of the game
+        for the leaderboard
+        """
+
+        # We need to handle bye
+        if self._player_two.get_id() == chessnouns.BYE_ID:
+            # OK we have one
+            return "{} | Bye".format(self._player_one.get_name())
+
+        white = self.get_white_player()
+        black = self.get_black_player()
+        return "{} vs. {}".format(white.get_name(), black.get_name())
+
+    def get_leaderboard_array_white_first(self):
+
+        if self._player_two.get_id() == chessnouns.BYE_ID:
+            # OK we have one
+            return [self._player_one.get_name(), chessnouns.BYE_NAME]
+        else:
+            white = self.get_white_player()
+            black = self.get_black_player()
+            return [white.get_name(), black.get_name()]
+
 
     def make_player_one_white(self):
         self._color_code = chessnouns.PLAYER_ONE_IS_WHITE

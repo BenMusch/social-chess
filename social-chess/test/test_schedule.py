@@ -60,4 +60,4 @@ def test_setup(get_all_players):
     for other in b:
         print("{} ({})".format(other.get_name(), other.get_level()))
 
-    test_schedule.start_over_players()
+    test_schedule.schedule_players()

@@ -190,16 +190,19 @@ class Schedule(object):
     def get_b_players(self):
         return self._b_group
 
-    def start_over_players(self):
+    def schedule_players(self):
 
-        first, second, third, fourth = self.start_over_a_players()
-        fifth, sixth, seventh, eighth = self.start_over_b_players()
+        first, second, third, fourth = self._scheule_a_players()
+        fifth, sixth, seventh, eighth = self._schedule_b_players()
 
         my_rounds = [first, fifth, second, sixth, third, seventh, fourth, eighth]
 
         self._print_all_rounds(my_rounds)
 
-    def start_over_a_players(self):
+    def _assign_scheduled_games_to_draws(self):
+        pass
+
+    def _scheule_a_players(self):
         # So we've got 20 and 10 slots
         first_half_a = self._a_group[0:10]
         second_half_a = self._a_group[10:20]
@@ -240,7 +243,7 @@ class Schedule(object):
 
         return first_set, second_set, third_set, fourth_set
 
-    def start_over_b_players(self):
+    def _schedule_b_players(self):
 
         # So we've got 19 and 10 slots
 

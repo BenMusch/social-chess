@@ -20,7 +20,7 @@ def randomize_results(draws):
             ind_game.set_random_result()
 
 
-def test_something(get_five_draws):
+def test_scoring(get_five_draws):
     draws = get_five_draws
     assert len(draws) == 5
 
