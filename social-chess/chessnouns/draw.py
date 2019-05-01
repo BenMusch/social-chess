@@ -23,16 +23,16 @@ class Draw(object):
 
     def __str__(self):
         return_line = "{}'s ({}) Draw--- ".format(self._draw_player.get_name(), self._draw_player.get_level(), end="++")
-        for game in self._games:
-            players = game.get_players()
+        for ind_game in self._games:
+            players = ind_game.get_players()
             if players[0].get_id() == self._draw_player.get_id():
                 # Then player one is ours
                 opposing_player = players[1]
             else:
                 opposing_player = players[0]
 
-            if game.are_colors_set():
-                white = game.get_white_player()
+            if ind_game.are_colors_set():
+                white = ind_game.get_white_player()
                 if white == self._draw_player:
                     color_string = "W vs."
                 else:
@@ -200,8 +200,6 @@ class Draw(object):
                         raw_points += self._get_points_for_upset(other_level)
                     else:
                         raw_points += self._get_points_for_level(other_level)
-
-
 
         return raw_points
 

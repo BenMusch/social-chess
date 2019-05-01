@@ -45,8 +45,8 @@ def get_five_draws(get_all_players):
 
     # Now we need to set up the draws
 
-    for player in five_players:
-        player.set_draw(4)
+    for ind_player in five_players:
+        ind_player.set_draw(4)
 
     for ind_player in five_players:
         while not ind_player.get_draw().has_full_draw():
@@ -58,6 +58,8 @@ def get_five_draws(get_all_players):
 
 def schedule_draw_games(candidate_player, player_list):
     for other_player in player_list:
+        if other_player.get_id() == candidate_player.get_id():
+            continue
         if not other_player.get_draw().has_full_draw() and not candidate_player.get_draw().has_played_player_id(
                 other_player.get_id()):
             candidate_player.get_draw().add_game(other_player)

@@ -11,6 +11,11 @@ def test_game_init(get_all_players):
     test_players = get_all_players
     new_game = game.Game(test_players[0], test_players[1])
 
+def test_winner_and_loser(get_all_players):
+    test_players = get_all_players
+    new_game = game.Game(test_players[0], test_players[1])
+
+
 
 def test_game_players(get_all_players):
     test_players = get_all_players
@@ -66,10 +71,10 @@ def test_game_results(get_four_games):
     assert new_game.is_game_over() is True
     assert new_game.get_result() == chessnouns.WHITE_WINS
 
-    winner = new_game.get_winning_player()
+    winner, _ = new_game.get_winning_and_losing_player()
     assert winner.get_name() == "Ed Lyons"
 
     new_game.set_result(chessnouns.BLACK_WINS)
 
-    winner = new_game.get_winning_player()
+    winner, _ = new_game.get_winning_and_losing_player()
     assert winner.get_name() == "Michael Smith"

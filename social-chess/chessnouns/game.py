@@ -98,6 +98,65 @@ class Game(object):
         else:
             self._result = chessnouns.WHITE_WINS
 
+    def _tally_player_win(self, winning_player):
+        """
+        This method is used as an internal function
+        that assigns the win to the right player and
+        color
+        :param winning_player:
+        :return:
+        """
+
+        if self.get_white_player().get_id() == winning_player.get_id():
+            self._result = chessnouns.WHITE_WINS
+        else:
+            # So he's black
+            self._result = chessnouns.BLACK_WINS
+
+    def set_likely_random_results(self):
+        """
+        This is an improvement on the random result generator
+        that will acknowledge that the more experienced player
+        usually will win
+        """
+
+        first_player_level = self._player_one.get_level()
+        second_player_level = self._player_two.get_level()
+
+        # Let's get the draw out of the way - very unlikely
+        number = random.randint(1, 15)
+
+        if number == 1:
+            self._result = chessnouns.DRAW
+            return
+
+        num = random.randint(1, 10)
+
+        if first_player_level > second_player_level:
+            # So the first player is more likely to win
+            # let's see if he does
+            if num > 3:  # yes
+                self._tally_player_win(self._player_one)
+
+            else:  # no
+                self._tally_player_win(self._player_two)
+
+        elif second_player_level > first_player_level:
+            # So the second player is more likely to win
+            # let's see if he does
+            if num > 3:  # yes
+                self._tally_player_win(self._player_two)
+            else:  # no
+                self._tally_player_win(self._player_one)
+
+        else:
+            # So they are evenly matched
+            even_number = random.randint(1, 2)
+            if even_number == 1:
+                self._tally_player_win(self._player_one)
+            else:
+                self._tally_player_win(self._player_two)
+
     def set_random_colors(self):
 
         r1 = random.randint(1, 2)
@@ -107,8 +166,8 @@ class Game(object):
         else:
             self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
 
-    def contains_player(self, player):
-        return self._player_one == player or self._player_two == player
+    def contains_player(self, candidate_player):
+        return self._player_one == candidate_player or self._player_two == candidate_player
 
     def is_bye(self):
         return self._bye
