@@ -23,27 +23,35 @@ class Game(object):
 
     def __str__(self):
 
-        if self._color_code == chessnouns.NO_COLOR_SELECTED:
-            return_line = "{}({})[N] vs. {}({})[N] ".format(self._player_one.get_name(),
-                                                            self._player_one.get_level(),
-                                                            self._player_two.get_name(),
-                                                            self._player_two.get_level(),
-                                                            end=" ")
-
-        elif self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
-            return_line = "{}({})[W] vs. {}({})[B] ".format(self._player_one.get_name(),
-                                                            self._player_one.get_level(),
-                                                            self._player_two.get_name(),
-                                                            self._player_two.get_level(),
-                                                            end=" ")
-
-            # color_string = "White [1], Black [2]"
+        # The complexity here is about whether we want to show levels in the output
+        if chessnouns.SHOW_LEVELS:
+            level_string = "({})"
         else:
-            return_line = "{}({})[W] vs. {}({})[B] ".format(self._player_two.get_name(),
-                                                            self._player_two.get_level(),
-                                                            self._player_one.get_name(),
-                                                            self._player_one.get_level(),
-                                                            end=" ")
+            level_string = "{}"
+
+        # # Brian Jencunas(3)[N] vs. Christian Greve(4)[N]
+        if self._color_code == chessnouns.NO_COLOR_SELECTED:
+            return_line = "{}".format(self._player_one.get_name())
+            return_line += level_string.format(self._player_one.get_level() if chessnouns.SHOW_LEVELS else "")
+            return_line += "[N] vs. {}".format(self._player_two.get_name())
+            return_line += level_string.format(self._player_two.get_level() if chessnouns.SHOW_LEVELS else "")
+            return_line += "[N]"
+
+        # Brian Jencunas(3)[W] vs. Christian Greve(4)[B]
+        elif self._color_code == chessnouns.PLAYER_ONE_IS_WHITE:
+            return_line = "{}".format(self._player_one.get_name())
+            return_line += level_string.format(self._player_one.get_level() if chessnouns.SHOW_LEVELS else "")
+            return_line += "[W] vs. {}".format(self._player_two.get_name())
+            return_line += level_string.format(self._player_two.get_level() if chessnouns.SHOW_LEVELS else "")
+            return_line += "[B]"
+
+        # Brian Jencunas(3)[W] vs. Christian Greve(4)[B]
+        else:
+            return_line = "{}".format(self._player_two.get_name())
+            return_line += level_string.format(self._player_two.get_level() if chessnouns.SHOW_LEVELS else "")
+            return_line += "[W] vs. {}".format(self._player_one.get_name())
+            return_line += level_string.format(self._player_one.get_level() if chessnouns.SHOW_LEVELS else "")
+            return_line += "[B]"
 
         return return_line
 

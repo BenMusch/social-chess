@@ -49,9 +49,8 @@ def test_something(get_five_draws):
     third_game.make_player_one_white()
     third_game.set_result(chessnouns.WHITE_WINS)
 
-    fourth_game.make_player_one_black()
+    fourth_game.make_player_two_white()
     fourth_game.set_result(chessnouns.WHITE_WINS)
-
 
 
 def get_draws(get_all_players):
