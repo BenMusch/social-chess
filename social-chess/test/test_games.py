@@ -6,19 +6,15 @@ from chessexceptions import game_error
 
 """
 This group of tests are for the game class
-Fixtures are first, then the tests
 """
-
-
-def test_game_init(get_all_players):
-    test_players = get_all_players
-    new_game = game.Game(test_players[0], test_players[1])
 
 
 def test_game_strings(get_all_players):
     """
-    A game will get rendered in different ways
-
+    A game will get rendered in different ways,
+    sometimes in a schedule, sometimes in a
+    leaderboard, sometimes with levels,
+    sometimes without
     """
     print('\n---------------------------\nTesting Game String Ouputs\n---------------------------')
     test_players = get_all_players
@@ -26,9 +22,6 @@ def test_game_strings(get_all_players):
     second_game = game.Game(test_players[2], test_players[5])
 
     # First let us test both strings without colors assigned
-
-    print(new_game)
-    print(second_game)
 
     assert str(new_game) == "Clem Aeppli(1)[N] vs. Sarah Betancourt(2)[N]"
     assert str(second_game) == "Will Brown(5)[N] vs. Tracy Corley(2)[N]"
@@ -40,9 +33,6 @@ def test_game_strings(get_all_players):
 
     # Leaderboard
 
-    print(new_game.get_leaderboard_string_white_first())
-    print(second_game.get_leaderboard_string_white_first())
-
     assert new_game.get_leaderboard_string_white_first() == "Clem Aeppli vs. Sarah Betancourt"
     assert second_game.get_leaderboard_string_white_first() == "Tracy Corley vs. Will Brown"
 
@@ -52,9 +42,6 @@ def test_game_strings(get_all_players):
     assert string_array[1] == "Sarah Betancourt"
 
     # Traditional
-
-    print(new_game)
-    print(second_game)
 
     assert str(new_game) == "Clem Aeppli(1)[W] vs. Sarah Betancourt(2)[B]"
     assert str(second_game) == "Tracy Corley(2)[W] vs. Will Brown(5)[B]"
@@ -67,20 +54,14 @@ def test_game_strings(get_all_players):
     assert new_game.get_leaderboard_string_white_first() == "Sarah Betancourt vs. Clem Aeppli"
     assert second_game.get_leaderboard_string_white_first() == "Will Brown vs. Tracy Corley"
 
-    print(new_game)
-    print(second_game)
-
     assert str(new_game) == "Sarah Betancourt(2)[W] vs. Clem Aeppli(1)[B]"
     assert str(second_game) == "Will Brown(5)[W] vs. Tracy Corley(2)[B]"
 
     # Let's try a bye
 
     bye_game = game.Game.create_bye_game(test_players[5])
-    print(bye_game)
 
     assert str(bye_game) == "Tracy Corley has a bye"
-
-    print(bye_game.get_leaderboard_string_white_first())
 
     assert bye_game.get_leaderboard_string_white_first() == "Tracy Corley | Bye"
 
@@ -98,7 +79,7 @@ def test_winner_and_loser(get_all_players):
     new_game = game.Game(test_players[0], test_players[1])
 
     # First let us make sure we can't get it yet
-    with pytest.raises(chessexceptions.game_error.GameError):
+    with pytest.raises(game_error.GameError):
         assert new_game.get_winning_and_losing_player()
 
     new_game.make_player_one_white()
@@ -113,7 +94,8 @@ def test_winner_and_loser(get_all_players):
     assert loser.get_id() == test_players[1].get_id()
 
 
-def test_game_players(get_all_players):
+def test_game_players_and_colors(get_all_players):
+    print('\n---------------------------\nTesting Game Players and Colors\n---------------------------')
     test_players = get_all_players
     new_game = game.Game(test_players[0], test_players[1])
 
@@ -143,19 +125,21 @@ def test_game_players(get_all_players):
 
 
 def test_game_bye(get_all_players):
+    print('\n---------------------------\nTesting Game Bye\n---------------------------')
+
     test_players = get_all_players
     new_game = game.Game.create_bye_game(test_players[0])
 
     assert new_game.is_bye() is True
 
 
-def test_game_colors(get_four_games):
-    pass
+def test_game_results(get_all_players):
+    print('\n---------------------------\nTesting Game Results\n---------------------------')
 
+    test_players = get_all_players
 
-def test_game_results(get_four_games):
-    new_game = game.Game(player.Player(1, "Ed Lyons", chessnouns.KING, False, False),
-                         player.Player(2, "Michael Smith", chessnouns.KING, False, False))
+    new_game = game.Game(test_players[0],
+                         test_players[1])
 
     new_game.make_player_one_white()
 
@@ -168,9 +152,9 @@ def test_game_results(get_four_games):
     assert new_game.get_result() == chessnouns.WHITE_WINS
 
     winner, _ = new_game.get_winning_and_losing_player()
-    assert winner.get_name() == "Ed Lyons"
+    assert winner.get_name() == "Clem Aeppli"
 
     new_game.set_result(chessnouns.BLACK_WINS)
 
     winner, _ = new_game.get_winning_and_losing_player()
-    assert winner.get_name() == "Michael Smith"
+    assert winner.get_name() == "Sarah Betancourt"

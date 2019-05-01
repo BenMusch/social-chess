@@ -2,25 +2,11 @@ import chessnouns
 from chessnouns import player, game, draw
 
 """
-Test get total points
-Test get weighted score
-Test has played player id
+Testing of the draw class
 """
 
-
-def randomize_colors(draws):
-    for ind_draw in draws:
-        for ind_game in ind_draw.get_games():
-            ind_game.set_random_colors()
-
-
-def randomize_results(draws):
-    for ind_draw in draws:
-        for ind_game in ind_draw.get_games():
-            ind_game.set_random_result()
-
-
 def test_scoring(get_five_draws):
+    print('\n---------------------------\nTesting Draw Scoring\n---------------------------')
     draws = get_five_draws
     assert len(draws) == 5
 
@@ -104,31 +90,8 @@ def test_scoring(get_five_draws):
     assert will_weighted_points == 2.1
 
 
-def get_draws(get_all_players):
-    players = get_all_players
-
-    clem = players[0]
-    sarah = players[1]
-    will = players[2]
-    evan = players[3]
-    jay = players[4]
-
-    assert clem.get_name() == "Clem Aeppli"
-    assert sarah.get_name() == "Sarah Betancourt"
-    assert will.get_name() == "Will Brown"
-    assert evan.get_name() == "Evan Bruning"
-    assert jay.get_name() == "Jay Cincotti"
-
-    clem.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
-    sarah.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
-    will.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
-    evan.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
-    jay.set_draw(chessnouns.DEFAULT_NUMBER_OF_GAMES)
-
-    return clem.get_draw(), sarah.get_draw(), will.get_draw(), evan.get_draw(), jay.get_draw()
-
-
 def test_draw_class(get_all_players):
+    print('\n---------------------------\nTesting Draw Class Properties\n---------------------------')
     players = get_all_players
     clem = players[0]
     sarah = players[1]
