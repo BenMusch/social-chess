@@ -61,8 +61,8 @@ def schedule_draw_games(candidate_player, player_list):
             continue
         if not other_player.get_draw().has_full_draw() and not candidate_player.get_draw().has_played_player_id(
                 other_player.get_id()):
-            candidate_player.get_draw().add_game(other_player)
-            other_player.get_draw().add_game(candidate_player)
+            candidate_player.get_draw().add_game_by_player(other_player)
+            other_player.get_draw().add_game_by_player(candidate_player)
 
 
 @pytest.fixture(scope="module")

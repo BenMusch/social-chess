@@ -57,9 +57,13 @@ class Draw(object):
     def number_games_scheduled(self):
         return len(self._games)
 
-    def add_game(self, opposing_player):
+    def add_game_by_player(self, opposing_player):
         assert isinstance(opposing_player, player.Player)
         self._games.append(game.Game(self._draw_player, opposing_player))
+
+    def add_game_with_game(self, game_to_add):
+        assert isinstance(game_to_add, game.Game)
+        self._games.append(game_to_add)
 
     def add_bye(self):
 

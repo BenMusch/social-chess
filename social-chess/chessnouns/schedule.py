@@ -201,7 +201,14 @@ class Schedule(object):
         self._print_all_rounds()
 
     def assign_scheduled_games_to_draws(self):
-        pass
+
+        for ind_round in self._rounds:
+            for ind_game in ind_round:
+                game_players = ind_game.get_players()
+                game_players[0].get_draw().add_game_with_game(ind_game)
+                if game_players[1].get_id() != chessnouns.BYE_ID:
+                    game_players[1].get_draw().add_game_with_game(ind_game)
+
 
     """
     This should just be internal functions until get/set
@@ -362,8 +369,8 @@ class Schedule(object):
             return False
         # OK. So we can schedule this!
         # print("We got a hit!")
-        first.get_draw().add_game(second)
-        second.get_draw().add_game(first)
+        first.get_draw().add_game_by_player(second)
+        second.get_draw().add_game_by_player(first)
         return True
 
     def _is_a_mirror_game(self, candidate_game, game_list):

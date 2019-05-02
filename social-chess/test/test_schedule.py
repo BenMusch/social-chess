@@ -80,6 +80,8 @@ def test_setup(get_all_players):
 
     test_schedule.schedule_players()
 
+    test_schedule.initialize_draws_for_players()
+
     test_schedule.assign_scheduled_games_to_draws()
 
     test_schedule._print_player_draws()

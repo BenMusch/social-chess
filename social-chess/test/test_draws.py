@@ -113,7 +113,7 @@ def test_draw_class(get_all_players):
 
     # Now we want to add a game with Sarah
 
-    clem_draw.add_game(sarah)
+    clem_draw.add_game_by_player(sarah)
 
     # Now let's check those again
     assert clem_draw.get_number_of_rounds() == 4
@@ -127,7 +127,7 @@ def test_draw_class(get_all_players):
 
     assert games[0].contains_player(sarah)
 
-    clem_draw.add_game(will)
+    clem_draw.add_game_by_player(will)
 
     # Again
     assert clem_draw.get_number_of_rounds() == 4
@@ -137,7 +137,7 @@ def test_draw_class(get_all_players):
     assert clem_draw.has_full_draw() is False
     assert clem_draw.number_games_scheduled() == 2
 
-    clem_draw.add_game(evan)
+    clem_draw.add_game_by_player(evan)
 
     # Again
     assert clem_draw.get_number_of_rounds() == 4
@@ -147,7 +147,7 @@ def test_draw_class(get_all_players):
     assert clem_draw.has_full_draw() is False
     assert clem_draw.number_games_scheduled() == 3
 
-    clem_draw.add_game(jay)
+    clem_draw.add_game_by_player(jay)
 
     # Again
     assert clem_draw.get_number_of_rounds() == 4
