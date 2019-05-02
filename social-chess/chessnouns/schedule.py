@@ -69,6 +69,7 @@ class Schedule(object):
         self._intermediate_players = []
         self._beginner_players = []
         self._rounds = []
+        self._bye = bye
 
         # We need these for the social split
         self._a_group = []
@@ -209,7 +210,6 @@ class Schedule(object):
                 if game_players[1].get_id() != chessnouns.BYE_ID:
                     game_players[1].get_draw().add_game_with_game(ind_game)
 
-
     """
     This should just be internal functions until get/set
     """
@@ -280,6 +280,8 @@ class Schedule(object):
 
         b_boards = self._calculate_a_boards_needed()
 
+        # For 37, b_boards = 10
+
         if self._lopsided:
             b_boards_extra = 1
         else:
@@ -295,7 +297,7 @@ class Schedule(object):
         first_half_a = self._b_group[0:b_boards]
 
         # Group of 10
-        second_half_a = self._b_group[b_boards:b_boards * 2 + b_boards_extra]
+        second_half_a = self._b_group[b_boards:]
 
         first_names = [a.get_name() for a in first_half_a]
         second_names = [a.get_name() for a in second_half_a]
@@ -307,44 +309,45 @@ class Schedule(object):
         count = 0
 
         for i in range(0, b_boards):
-            if i == 9:
-                first_set.append(game.Game.create_bye_game(second_half_a[count], onewhite=True, twowhite=False))
-            else:
-                first_set.append(game.Game(first_half_a[count], second_half_a[count], onewhite=True, twowhite=False))
+
+            first_set.append(game.Game(first_half_a[count], second_half_a[count], onewhite=True, twowhite=False))
             count += 1
+
+        if self._bye:
+            first_set.append(game.Game.create_bye_game(second_half_a[count], onewhite=True, twowhite=False))
 
         second_set = []
         count = 0
 
         for i in range(0, b_boards):
-            if i == 9:
-                second_set.append(game.Game.create_bye_game(second_half_a[count - 1], onewhite=False, twowhite=True))
-            else:
-                second_set.append(
+            second_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 1], onewhite=False, twowhite=True))
             count += 1
+
+        if self._bye:
+            second_set.append(game.Game.create_bye_game(second_half_a[count - 1], onewhite=False, twowhite=True))
 
         third_set = []
         count = 0
 
         for i in range(0, b_boards):
-            if i == 9:
-                third_set.append(game.Game.create_bye_game(second_half_a[count - 2], onewhite=True, twowhite=False))
-            else:
-                third_set.append(
+            third_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 2], onewhite=True, twowhite=False))
             count += 1
+
+        if self._bye:
+            third_set.append(game.Game.create_bye_game(second_half_a[count - 2], onewhite=True, twowhite=False))
 
         fourth_set = []
         count = 0
 
         for i in range(0, b_boards):
-            if i == 9:
-                fourth_set.append(game.Game.create_bye_game(second_half_a[count - 3], onewhite=False, twowhite=True))
-            else:
-                fourth_set.append(
+            fourth_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 3], onewhite=False, twowhite=True))
             count += 1
+
+        if self._bye:
+            fourth_set.append(game.Game.create_bye_game(second_half_a[count - 3], onewhite=False, twowhite=True))
 
         return first_set, second_set, third_set, fourth_set
 
@@ -395,6 +398,11 @@ class Schedule(object):
         for p in self._players:
             player_draw = p.get_draw()
             print(player_draw)
+
+        # Now let's do it again for games
+        for p in self._players:
+            player_draw = p.get_draw()
+            print("Player: {} Games: {}".format(p.get_name(), len(player_draw.get_games())))
 
     def _print_schedule(self):
         # OK, now let us print and see
