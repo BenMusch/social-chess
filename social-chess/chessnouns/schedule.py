@@ -6,8 +6,9 @@ not have a date, a playoff, a winner, or some other details
 import chessnouns
 from . import game, round, draw
 from random import shuffle
+import math
 from chessutilities import utilities
-from chessexceptions import unsolveable_error
+from chessexceptions import unsolveable_error, scheduling_error
 
 
 class Schedule(object):
@@ -53,7 +54,7 @@ class Schedule(object):
         return_line += "-----\n"
         return return_line
 
-    def __init__(self, players, number_of_rounds, lopsided, bye, number_of_boards):
+    def __init__(self, players, number_of_rounds, lopsided, bye):
 
         if players is None:
             players = []
@@ -62,7 +63,7 @@ class Schedule(object):
         self._bye_round = bye
         self._lopsided = lopsided
         self._number_of_rounds = number_of_rounds
-        self._number_boards = number_of_boards
+        # self._number_boards = number_of_boards
 
         self._advanced_players = []
         self._intermediate_players = []
@@ -72,7 +73,6 @@ class Schedule(object):
         # We need these for the social split
         self._a_group = []
         self._b_group = []
-
 
     def sort_players(self):
         """
@@ -115,9 +115,39 @@ class Schedule(object):
         shuffle(self._intermediate_players)
         shuffle(self._advanced_players)
 
+    def _calculate_a_boards_needed(self):
+
+        # Let's imagine 14, 15, 16, 17
+        number = math.trunc(len(self._players) / 4)
+
+        return number
+
+    def _calculate_b_boards_needed(self):
+        """
+        The a slot is always the even players divided
+        by 4. Extras are always added to the b
+        set. This was done to make it more likely
+        someone unexpectedly late wouldn't miss their game
+        """
+
+        # Let's imagine 14, 15, 16, 17
+        number = math.trunc(len(self._players) / 4)
+
+        # So we'd have 4, 5, 4, 5
+
+        if len(self._players) % 4 == 3:
+            number += 2
+        elif len(self._players) % 4 == 1 or len(self._players) % 4 == 2:
+            number += 1
+
+        return number
+
     def divide_players(self):
-        # FIXME: It's probably better to test to see if the number of advanced
-        # players is less than half
+
+        half_players = math.trunc(len(self._players) / 2)
+
+        if len(self._advanced_players) > half_players:
+            raise scheduling_error.SchedulingError("You must have fewer than half be advanced players to schedule.")
 
         # So let's add the advanced to group a, unless there's a latecomer
         for candidate_player in self._advanced_players:
@@ -126,18 +156,31 @@ class Schedule(object):
             else:
                 self._a_group.append(candidate_player)
 
-        # So we should have 14 out of the needed 20
+        if len(self._beginner_players) > half_players:
+            raise scheduling_error.SchedulingError("You must have fewer than half be advanced players to schedule.")
 
         # Let's do the beginners
         for candidate_player in self._beginner_players:
             self._b_group.append(candidate_player)
+
+        # Let's get a feel for what we have now.
+
+        # We need twice the slots as boards
+        needed_a_slots = self._calculate_a_boards_needed() * 2
+
+        print("Needed a slots was: {} ".format(needed_a_slots))
+
+        needed_b_slots = self._calculate_b_boards_needed() * 2
+
+        actual_a_slots = len(self._a_group)
+        actual_b_slots = len(self._b_group)
 
         # So group B now has 4
 
         # Now we need to use the intermediates to fill out the groups
         # How many do we need?
 
-        needed = 20 - len(self._a_group)
+        needed = needed_a_slots - actual_a_slots
 
         for i in range(0, needed):
             self._a_group.append(self._intermediate_players[i])
@@ -184,39 +227,42 @@ class Schedule(object):
 
     def _schedule_a_players(self):
         # So we've got 20 and 10 slots
-        first_half_a = self._a_group[0:10]
-        second_half_a = self._a_group[10:20]
+
+        a_boards = self._calculate_a_boards_needed()
+
+        first_half_a = self._a_group[0:a_boards]
+        second_half_a = self._a_group[a_boards:a_boards * 2]
 
         first_names = [a.get_name() for a in first_half_a]
         second_names = [a.get_name() for a in second_half_a]
 
-        # print("First half is: {} ".format(first_names))
-        # print("Second half is: {} ".format(second_names))
+        print("First half is: {} ".format(first_names))
+        print("Second half is: {} ".format(second_names))
 
         first_set = []
 
         time = chessnouns.STANDARD_GAME_TIME,
 
         count = 0
-        for i in range(0, 10):
+        for i in range(0, a_boards):
             first_set.append(game.Game(first_half_a[count], second_half_a[count], onewhite=True, twowhite=False))
             count += 1
 
         second_set = []
         count = 0
-        for i in range(0, 10):
+        for i in range(0, a_boards):
             second_set.append(game.Game(first_half_a[count], second_half_a[count - 1], onewhite=False, twowhite=True))
             count += 1
 
         third_set = []
         count = 0
-        for i in range(0, 10):
+        for i in range(0, a_boards):
             third_set.append(game.Game(first_half_a[count], second_half_a[count - 2], onewhite=True, twowhite=False))
             count += 1
 
         fourth_set = []
         count = 0
-        for i in range(0, 10):
+        for i in range(0, a_boards):
             fourth_set.append(game.Game(first_half_a[count], second_half_a[count - 3], onewhite=False, twowhite=True))
 
             count += 1
@@ -225,26 +271,35 @@ class Schedule(object):
 
     def _schedule_b_players(self):
 
+        b_boards = self._calculate_a_boards_needed()
+
+        if self._lopsided:
+            b_boards_extra = 1
+        else:
+            b_boards_extra = 0
+
+        print("B Boards was {} and the extra was {} ".format(b_boards, b_boards_extra))
+
         # So we've got 19 and 10 slots
 
         # So we need 2 groups of 9
 
         # Group of 9
-        first_half_a = self._b_group[0:9]
+        first_half_a = self._b_group[0:b_boards]
 
         # Group of 10
-        second_half_a = self._b_group[9:19]
+        second_half_a = self._b_group[b_boards:b_boards * 2 + b_boards_extra]
 
         first_names = [a.get_name() for a in first_half_a]
         second_names = [a.get_name() for a in second_half_a]
 
-        # print("First half is: {} ".format(first_names))
-        # print("Second half is: {} ".format(second_names))
+        print("First half is: {} ".format(first_names))
+        print("Second half is: {} ".format(second_names))
 
         first_set = []
         count = 0
 
-        for i in range(0, 10):
+        for i in range(0, b_boards):
             if i == 9:
                 first_set.append(game.Game.create_bye_game(second_half_a[count], onewhite=True, twowhite=False))
             else:
@@ -254,7 +309,7 @@ class Schedule(object):
         second_set = []
         count = 0
 
-        for i in range(0, 10):
+        for i in range(0, b_boards):
             if i == 9:
                 second_set.append(game.Game.create_bye_game(second_half_a[count - 1], onewhite=False, twowhite=True))
             else:
@@ -265,7 +320,7 @@ class Schedule(object):
         third_set = []
         count = 0
 
-        for i in range(0, 10):
+        for i in range(0, b_boards):
             if i == 9:
                 third_set.append(game.Game.create_bye_game(second_half_a[count - 2], onewhite=True, twowhite=False))
             else:
@@ -276,7 +331,7 @@ class Schedule(object):
         fourth_set = []
         count = 0
 
-        for i in range(0, 10):
+        for i in range(0, b_boards):
             if i == 9:
                 fourth_set.append(game.Game.create_bye_game(second_half_a[count - 3], onewhite=False, twowhite=True))
             else:
@@ -325,12 +380,12 @@ class Schedule(object):
 
         return False
 
-    def _print_player_draws(self, print_players):
+    def _print_player_draws(self):
         """
         This method will print all the players and their draw
         information to the command line
         """
-        for p in print_players:
+        for p in self._players:
             player_draw = p.get_draw()
             print(player_draw)
 
@@ -377,7 +432,7 @@ class Schedule(object):
         return self._b_group
 
     def print_group_players(self, group):
-        self._print_player_draws(group)
+        self._print_player_draws()
 
     def _get_beginner_players(self):
         return self._beginner_players

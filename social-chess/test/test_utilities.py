@@ -36,8 +36,8 @@ def test_get_number_of_boards_and_tweaks():
     assert (4, not lopsided, not bye) == utilities.get_number_of_boards_and_tweaks(16)
 
     # 17 players
-    #     Round 1A: 8 players, 4 boards, 1 player sits out
-    #     Round 1B: 8 players, 4 boards
+    #     Round 1A: 8 players, 4 boards
+    #     Round 1B: 8 players, 4 boards, one bye
     assert (4, not lopsided, bye) == utilities.get_number_of_boards_and_tweaks(17)
 
     # 18 players
