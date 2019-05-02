@@ -11,7 +11,6 @@ the test utilities class
 
 
 def test_initialize_schedule(get_all_players):
-
     players = get_all_players
     number_of_players = len(players)
 
@@ -25,6 +24,18 @@ def test_initialize_schedule(get_all_players):
 
     # FIXME: We should test other things here
 
+def test_divide_players(get_all_players):
+    # FIXME: need more here
+    players = get_all_players
+
+    test_schedule = schedule.Schedule(players, 8, True, True, 10)
+
+
+def test_sort_players(get_all_players):
+    pass
+
+def test_assign_players_do_draws(get_all_players):
+    pass
 
 def test_setup(get_all_players):
     players = get_all_players
@@ -35,9 +46,10 @@ def test_setup(get_all_players):
 
     test_schedule.sort_players()
 
-    beginners = test_schedule.get_beginner_players()
-    intermediates = test_schedule.get_intermediate_players()
-    advanceds = test_schedule.get_advanced_players()
+    # These are internal methods
+    beginners = test_schedule._get_beginner_players()
+    intermediates = test_schedule._get_intermediate_players()
+    advanceds = test_schedule._get_advanced_players()
 
     assert len(advanceds) == 14
     assert len(intermediates) == 13
