@@ -283,24 +283,24 @@ class Schedule(object):
         # For 37, b_boards = 10
 
         if self._lopsided:
-            b_boards_extra = 1
+            b_boards_extra_lopsided = 1
         else:
-            b_boards_extra = 0
+            b_boards_extra_lopsided = 0
 
-        print("B Boards was {} and the extra was {} ".format(b_boards, b_boards_extra))
+        print("B Boards was {} and the extra was {} ".format(b_boards,b_boards_extra_lopsided))
 
         # So we've got 19 and 10 slots
 
         # So we need 2 groups of 9
 
         # Group of 9
-        first_half_a = self._b_group[0:b_boards+1]
+        first_half_a = self._b_group[:b_boards+b_boards_extra_lopsided]
 
         # Group of 10
-        second_half_a = self._b_group[b_boards+1:]
+        second_half_a = self._b_group[b_boards+b_boards_extra_lopsided:]
 
         first_names = [a.get_name() for a in first_half_a]
-        second_names = [a.get_name() for a in second_half_a]
+        second_names = [s.get_name() for s in second_half_a]
 
         print("First half is: {} ".format(first_names))
         print("Second half is: {} ".format(second_names))
@@ -308,7 +308,7 @@ class Schedule(object):
         first_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra):
+        for i in range(0, b_boards+b_boards_extra_lopsided):
 
             first_set.append(game.Game(first_half_a[count], second_half_a[count], onewhite=True, twowhite=False))
             count += 1
@@ -319,7 +319,7 @@ class Schedule(object):
         second_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra):
+        for i in range(0, b_boards+b_boards_extra_lopsided):
             second_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 1], onewhite=False, twowhite=True))
             count += 1
@@ -330,7 +330,7 @@ class Schedule(object):
         third_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra):
+        for i in range(0, b_boards+b_boards_extra_lopsided):
             third_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 2], onewhite=True, twowhite=False))
             count += 1
@@ -341,7 +341,7 @@ class Schedule(object):
         fourth_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra):
+        for i in range(0, b_boards+b_boards_extra_lopsided):
             fourth_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 3], onewhite=False, twowhite=True))
             count += 1

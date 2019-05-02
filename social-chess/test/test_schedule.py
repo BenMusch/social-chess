@@ -41,11 +41,19 @@ def test_assign_players_do_draws(get_all_players):
 
 
 def test_setup(get_all_players):
-    players = get_all_players[0:31]
+
+    number_to_try = 33
+
+    players = get_all_players[0:number_to_try]
 
     print("\nScheduling players. Number for this run is: {}".format(len(players)))
 
-    test_schedule = schedule.Schedule(players, 8, True, True)
+    # Getting the right params
+    boards, lopsided, bye = utilities.get_number_of_boards_and_tweaks(number_to_try)
+
+    print("Results were: {}, lopsided? {}, bye? {}".format(boards, lopsided, bye))
+
+    test_schedule = schedule.Schedule(players, 8, lopsided, bye)
 
     assert test_schedule is not None
 
@@ -56,12 +64,12 @@ def test_setup(get_all_players):
     intermediates = test_schedule._get_intermediate_players()
     advanceds = test_schedule._get_advanced_players()
 
-    #assert len(advanceds) == 16
-    #assert len(intermediates) == 13
-    #assert len(beginners) == 12
+    # assert len(advanceds) == 16
+    # assert len(intermediates) == 13
+    # assert len(beginners) == 12
 
     test_schedule.initialize_draws_for_players()
-    #test_schedule.shuffle_players()
+    test_schedule.shuffle_players()
 
     # We need to split players into two groups
     # to allow alternate playing rounds
