@@ -9,6 +9,8 @@ def test_constants():
     # Here we are just testing that nobody accidentally
     # messed with the constants in init.py
 
+    print('\n---------------------------\nTesting Noun Constants\n---------------------------')
+
     assert chessnouns.DEFAULT_NUMBER_OF_GAMES == 4
     assert chessnouns.DEFAULT_NUMBER_OF_ROUNDS == 8
 

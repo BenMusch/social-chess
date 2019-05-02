@@ -82,29 +82,12 @@ def test_level_to_text():
     assert "King" == utilities.level_to_text(5)
 
 
-def test_random_game_result():
-    """
-    This method just tests the random result generator
-    that we use for testing
-    """
-    possible_result_tuple = (0, 1, 2)
+def test_get_player_for_id(get_all_players):
 
-    for i in range(0, 100):
-        x = utilities.get_random_game_result()
-        #print(x)
-        assert x in possible_result_tuple
+    testing_players = get_all_players
+    sample_player = testing_players[0]
+    another_player = testing_players[1]
 
+    assert utilities.get_player_for_id(sample_player.get_id()).get_name() == sample_player.get_name()
+    assert utilities.get_player_for_id(another_player.get_id()).get_name() == another_player.get_name()
 
-def test_random_color_choice():
-    """
-    Testing random color generator
-    """
-    possible_result_tuple = (0, 1)
-
-    for i in range(0, 100):
-        x = utilities.get_random_color()
-        #print(x)
-        assert x in possible_result_tuple
-
-def test_get_player_for_id():
-    pass

@@ -27,8 +27,11 @@ class Player(object):
         self._vip = vip
         self._draw = None
 
+    @classmethod
+    def make_bye_player(cls):
+        return Player(chessnouns.BYE_ID, chessnouns.BYE_NAME)
+
     def set_draw(self, number_rounds):
-        #print("Setting draw for {}".format(self.get_name()))
         self._draw = draw.Draw(self, number_rounds)
 
     def get_draw(self):
@@ -54,7 +57,3 @@ class Player(object):
 
     def make_on_time(self):
         self._late = False
-
-    @classmethod
-    def make_bye_player(cls):
-        return Player(chessnouns.BYE_ID, chessnouns.BYE_NAME)

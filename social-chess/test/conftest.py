@@ -41,7 +41,6 @@ def get_five_players(get_all_players):
 def get_five_draws(get_all_players):
     draws = []
     five_players = get_all_players[0:5]
-    #print("We had {} players. ".format(len(five_players)))
 
     # Now we need to set up the draws
 

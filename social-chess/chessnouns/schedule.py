@@ -192,17 +192,24 @@ class Schedule(object):
 
     def schedule_players(self):
 
-        first, second, third, fourth = self._scheule_a_players()
+        first, second, third, fourth = self._schedule_a_players()
         fifth, sixth, seventh, eighth = self._schedule_b_players()
 
-        my_rounds = [first, fifth, second, sixth, third, seventh, fourth, eighth]
+        self._rounds = [round.Round(1, 10, first),
+                        round.Round(2, 10, fifth),
+                        round.Round(3, 10, second),
+                        round.Round(4, 10, sixth),
+                        round.Round(5, 10, third),
+                        round.Round(6, 10, seventh),
+                        round.Round(7, 10, fourth),
+                        round.Round(8, 10, eighth)]
 
-        self._print_all_rounds(my_rounds)
+        self._print_all_rounds()
 
     def _assign_scheduled_games_to_draws(self):
         pass
 
-    def _scheule_a_players(self):
+    def _schedule_a_players(self):
         # So we've got 20 and 10 slots
         first_half_a = self._a_group[0:10]
         second_half_a = self._a_group[10:20]
@@ -332,7 +339,7 @@ class Schedule(object):
         return True
 
     def print_group_players(self, group):
-        utilities.print_player_draws(group)
+        self._print_player_draws(group)
 
     def is_a_mirror_game(self, candidate_game, game_list):
 
@@ -504,23 +511,35 @@ class Schedule(object):
 
         return master_list
 
+    def _print_player_draws(self, print_players):
+        """
+        This method will print all the players and their draw
+        information to the command line
+        :param players:
+        :return:
+        """
+        for p in print_players:
+            player_draw = p.get_draw()
+            print(player_draw)
+
+
     def print_schedule(self):
         # OK, now let us print and see
         print("***********")
         print("About to print beginner players (LEVEL 1).")
-        utilities.print_player_draws(self._beginner_players)
-
+        self._print_player_draws(self._beginner_players)
         # OK, now let us print and see
         print("***********")
         print("About to print intermediate players (LEVEL 2,3).")
-        utilities.print_player_draws(self._intermediate_players)
+        self._print_player_draws(self._intermediate_players)
 
         # OK, now let us print and see
         print("***********")
         print("About to print advanced players (LEVELS 4-5).")
-        utilities.print_player_draws(self._advanced_players)
+        self._print_player_draws(self._advanced_players)
 
-    def _print_all_rounds(self, rounds):
+
+    def _print_all_rounds(self):
         """""
         So we are going to print out all the rounds
         """
@@ -528,109 +547,13 @@ class Schedule(object):
                  "7:00-7:10", "7:15-7:25", "7:30-7:40", "7:45-7:55"]
         print("Schedule of all games")
         count = 1
-        for ind_round in rounds:
+        for ind_round in self._rounds:
             print("***************")
 
             print("Round {} ({}):".format(count, times[count - 1]))
             print("***************")
             board = 1
-            for ind_game in ind_round:
+            for ind_game in ind_round.get_games():
                 print("Board {}: {}".format(board, ind_game))
                 board += 1
             count += 1
-
-    def fill_in_rounds(self):
-        """
-        So what we are going to do is take everyone's draws
-        and figure out when the games are all going to take place
-
-        So we're looking at a set of rounds like:
-
-        9 games - 1 bye
-        10 games
-        9 games - 1 bye
-        10 games
-        9 games - 1 bye
-        10 games
-        9 games - 1 bye
-        10 games
-        :return:
-        """
-        players = utilities.get_set_of_players()
-
-        clem = players[0]
-        sarah = players[1]
-        will = players[2]
-        evan = players[3]
-        jay = players[4]
-
-        real_game = game.Game(clem, sarah)
-        real_game.set_random_colors()
-        bye_game = game.Game.create_bye_game(will)
-        bye_game.set_random_colors()
-
-        first_set = [real_game] * 9
-        first_set.append(bye_game)
-        second_set = [real_game] * 10
-
-        third_set = [real_game] * 9
-        third_set.append(bye_game)
-        fourth_set = [real_game] * 10
-
-        fifth_set = [real_game] * 9
-        fifth_set.append(bye_game)
-        sixth_set = [real_game] * 10
-
-        seventh_set = [real_game] * 9
-        seventh_set.append(bye_game)
-        eighth_set = [real_game] * 10
-
-        rounds = [first_set, second_set, third_set, fourth_set, fifth_set,
-                  sixth_set, seventh_set, eighth_set]
-
-        # So let's try to add the real games
-        player_one = self._advanced_players[0]
-        one_draw = player_one.get_draw()
-        one_draw_games = one_draw.get_games()
-        first_set[0] = one_draw_games[0]
-        third_set[0] = one_draw_games[1]
-        fifth_set[0] = one_draw_games[2]
-
-        seventh_set[0] = one_draw_games[3]
-
-        # Now let's get preston
-
-        self._print_all_rounds(rounds)
-
-    def update_draw_dictionary(self, draw_dict, two_players):
-        first_player_name = two_players[0].get_name()
-        second_player_name = two_players[1].get_name()
-
-        if first_player_name in draw_dict:
-            draw_dict[first_player_name] += 1
-        else:
-            draw_dict[first_player_name] = 1
-
-        if second_player_name in draw_dict:
-            draw_dict[second_player_name] += 1
-        else:
-            draw_dict[second_player_name] = 1
-
-        return
-
-    def print_draw_report(self, rounds_list):
-        """"
-        So what we need to do here is go through the rounds and
-        figure out how many games people played
-        """
-
-        print("IN DRAW REPORT")
-        result_dictionary = {}
-        for games_list in rounds_list:
-
-            for ind_game in games_list:
-                print(ind_game)
-                two_players = ind_game.get_players()
-                self.update_draw_dictionary(result_dictionary, two_players)
-
-        print(result_dictionary)

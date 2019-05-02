@@ -13,7 +13,7 @@ class Round(object):
     to the two sets of games as A and B.
     """
 
-    def __init__(self, number_of_games, round_number):
+    def __init__(self, round_number, number_of_games, set_of_games=None):
         """
         To set this up, we're going to initialize the arrays
         with  the correct number of games
@@ -28,7 +28,10 @@ class Round(object):
         # The convention we are using is that the second group has the maximum
         # number of boards
 
-        self._games = []
+        if set_of_games:
+            self._games = set_of_games
+        else:
+            self._games = []
 
     def get_games(self):
         return self._games
@@ -42,7 +45,7 @@ class Round(object):
 
         # Is there room in a?
         if len(self._games) < self._number_of_games:
-            self._games.append((new_game))
+            self._games.append(new_game)
         else:
             # We should not get here
             raise scheduling_error.SchedulingError("You cannot add a game to a finished round.")

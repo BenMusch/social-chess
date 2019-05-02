@@ -78,18 +78,6 @@ def level_to_text(level):
         return "King"
 
 
-def get_random_game_result():
-    return randint(chessnouns.WHITE_WINS, chessnouns.DRAW)
-
-
-def get_random_skill_level():
-    return randint(chessnouns.BEGINNER, chessnouns.KING)
-
-
-def get_random_color():
-    return randint(chessnouns.COLOR_WHITE, chessnouns.COLOR_BLACK)
-
-
 def get_player_for_id(identifier):
     # We need to handle the bye here
     if chessnouns.BYE_ID == identifier:
@@ -108,14 +96,3 @@ def get_player_for_id(identifier):
     else:
         return None
 
-
-def print_player_draws(players):
-    """
-    This method will print all the players and their draw
-    information to the command line
-    :param players:
-    :return:
-    """
-    for p in players:
-        player_draw = p.get_draw()
-        print(player_draw)
