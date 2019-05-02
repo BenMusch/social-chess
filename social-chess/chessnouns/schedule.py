@@ -294,10 +294,10 @@ class Schedule(object):
         # So we need 2 groups of 9
 
         # Group of 9
-        first_half_a = self._b_group[0:b_boards]
+        first_half_a = self._b_group[0:b_boards+1]
 
         # Group of 10
-        second_half_a = self._b_group[b_boards:]
+        second_half_a = self._b_group[b_boards+1:]
 
         first_names = [a.get_name() for a in first_half_a]
         second_names = [a.get_name() for a in second_half_a]
@@ -308,7 +308,7 @@ class Schedule(object):
         first_set = []
         count = 0
 
-        for i in range(0, b_boards):
+        for i in range(0, b_boards+b_boards_extra):
 
             first_set.append(game.Game(first_half_a[count], second_half_a[count], onewhite=True, twowhite=False))
             count += 1
@@ -319,7 +319,7 @@ class Schedule(object):
         second_set = []
         count = 0
 
-        for i in range(0, b_boards):
+        for i in range(0, b_boards+b_boards_extra):
             second_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 1], onewhite=False, twowhite=True))
             count += 1
@@ -330,7 +330,7 @@ class Schedule(object):
         third_set = []
         count = 0
 
-        for i in range(0, b_boards):
+        for i in range(0, b_boards+b_boards_extra):
             third_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 2], onewhite=True, twowhite=False))
             count += 1
@@ -341,7 +341,7 @@ class Schedule(object):
         fourth_set = []
         count = 0
 
-        for i in range(0, b_boards):
+        for i in range(0, b_boards+b_boards_extra):
             fourth_set.append(
                     game.Game(first_half_a[count], second_half_a[count - 3], onewhite=False, twowhite=True))
             count += 1

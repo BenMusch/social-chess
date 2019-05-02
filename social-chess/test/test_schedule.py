@@ -41,11 +41,11 @@ def test_assign_players_do_draws(get_all_players):
 
 
 def test_setup(get_all_players):
-    players = get_all_players[0:38]
+    players = get_all_players[0:31]
 
     print("\nScheduling players. Number for this run is: {}".format(len(players)))
 
-    test_schedule = schedule.Schedule(players, 8, False, True)
+    test_schedule = schedule.Schedule(players, 8, True, True)
 
     assert test_schedule is not None
 
