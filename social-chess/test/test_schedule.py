@@ -1,3 +1,4 @@
+import chessnouns
 from chessnouns import schedule, player
 from chessutilities import utilities
 
@@ -29,7 +30,7 @@ def test_divide_players(get_all_players):
     # FIXME: need more here
     players = get_all_players
 
-    test_schedule = schedule.Schedule(players, 8, True, True)
+    test_schedule = schedule.Schedule(players, chessnouns.DEFAULT_NUMBER_OF_ROUNDS, True, True)
 
 
 def test_sort_players(get_all_players):
@@ -40,22 +41,16 @@ def test_assign_players_do_draws(get_all_players):
     pass
 
 
-def test_setup(get_all_players):
+def test_player_grouping(get_all_players):
+    print('\n---------------------------\nTest Schedule Player Grouping\n---------------------------')
 
-    number_to_try = 33
-
+    number_to_try = 41
     players = get_all_players[0:number_to_try]
-
-    print("\nScheduling players. Number for this run is: {}".format(len(players)))
 
     # Getting the right params
     boards, lopsided, bye = utilities.get_number_of_boards_and_tweaks(number_to_try)
 
-    print("Results were: {}, lopsided? {}, bye? {}".format(boards, lopsided, bye))
-
-    test_schedule = schedule.Schedule(players, 8, lopsided, bye)
-
-    assert test_schedule is not None
+    test_schedule = schedule.Schedule(players, chessnouns.DEFAULT_NUMBER_OF_ROUNDS, lopsided, bye)
 
     test_schedule.sort_players()
 
@@ -64,9 +59,28 @@ def test_setup(get_all_players):
     intermediates = test_schedule._get_intermediate_players()
     advanceds = test_schedule._get_advanced_players()
 
-    # assert len(advanceds) == 16
-    # assert len(intermediates) == 13
-    # assert len(beginners) == 12
+    assert len(advanceds) == 16
+    assert len(intermediates) == 13
+    assert len(beginners) == 12
+
+
+def test_create_schedule(get_all_players):
+    print('\n---------------------------\nBig Test for Creating Schedule\n---------------------------')
+
+    number_to_try = 33
+
+    players = get_all_players[0:number_to_try]
+
+    # Getting the right params
+    boards, lopsided, bye = utilities.get_number_of_boards_and_tweaks(number_to_try)
+
+    # print("Results were: {}, lopsided? {}, bye? {}".format(boards, lopsided, bye))
+
+    test_schedule = schedule.Schedule(players, chessnouns.DEFAULT_NUMBER_OF_ROUNDS, lopsided, bye)
+
+    assert test_schedule is not None
+
+    test_schedule.sort_players()
 
     test_schedule.initialize_draws_for_players()
     test_schedule.shuffle_players()
@@ -99,40 +113,36 @@ def test_slot_calculations(get_all_players):
     print('\n---------------------------\nTesting Schedule Slot Calculations\n---------------------------')
     players = get_all_players
 
-    # Let's test out these numbers
-    # 14, 15, 16, 17, 18, 27, 31, 36, 75
+    # These parameters will be adjusted to correct values for
+    # each, but we're using the variables to make the actual
+    # calls much easier to read
     lopsided = True
     bye = True
 
     # 14 players
     #     Round 1A: 6 players, 3 boards
     #     Round 1B: 8 players, 4 boards
-    # assert (4, lopsided, not bye) == utilities.get_number_of_boards_and_tweaks(14)
     test_schedule = schedule.Schedule(players[0:14], 8, lopsided, not bye)
     assert test_schedule._calculate_a_boards_needed() == 3
     assert test_schedule._calculate_b_boards_needed() == 4
 
     # 15 players
     #     Round 1A: 6 players, 3 boards
-    #     Round 1B: 8 players, 4 boards, 1 bye board
-    # assert (4, lopsided, bye) == utilities.get_number_of_boards_and_tweaks(15)
+    #     Round 1B: 8 players, 4 boards, 1 bye board = 5
     test_schedule = schedule.Schedule(players[0:15], 8, lopsided, bye)
     assert test_schedule._calculate_a_boards_needed() == 3
     assert test_schedule._calculate_b_boards_needed() == 5
 
     # 16 players
-    #
     #     Round 1A: 8 players, 4 boards
     #     Round 1B: 8 players, 4 boards
-    # assert (4, not lopsided, not bye) == utilities.get_number_of_boards_and_tweaks(16)
     test_schedule = schedule.Schedule(players[0:16], 8, not lopsided, not bye)
     assert test_schedule._calculate_a_boards_needed() == 4
     assert test_schedule._calculate_b_boards_needed() == 4
 
     # 17 players
     #     Round 1A: 8 players, 4 boards
-    #     Round 1B: 8 players, 4 boards, one bye
-    # assert (4, not lopsided, bye) == utilities.get_number_of_boards_and_tweaks(17)
+    #     Round 1B: 8 players, 4 boards, one bye board = 5
     test_schedule = schedule.Schedule(players[0:17], 8, not lopsided, bye)
     assert test_schedule._calculate_a_boards_needed() == 4
     assert test_schedule._calculate_b_boards_needed() == 5
@@ -147,14 +157,13 @@ def test_slot_calculations(get_all_players):
     # 27 players
     #     Round 1A: 12 players, 6 boards,
     #     Round 1B: 15 players, 7 boards, one bye = 8
-    # assert (7, lopsided, bye) == utilities.get_number_of_boards_and_tweaks(27)
     test_schedule = schedule.Schedule(players[0:27], 8, lopsided, bye)
     assert test_schedule._calculate_a_boards_needed() == 6
     assert test_schedule._calculate_b_boards_needed() == 8
 
     # 31 players
     #     Round 1A: 14 players, 7 boards
-    #     Round 1B: 16 players, 8 boards, one bye
+    #     Round 1B: 16 players, 8 boards, one bye = 9
     test_schedule = schedule.Schedule(players[0:31], 8, lopsided, bye)
     assert test_schedule._calculate_a_boards_needed() == 7
     assert test_schedule._calculate_b_boards_needed() == 9
@@ -162,7 +171,6 @@ def test_slot_calculations(get_all_players):
     # 36 players
     #     Round 1A: 18 players, 9 boards
     #     Round 1B: 18 players, 9 boards
-    # assert (9, not lopsided, not bye) == utilities.get_number_of_boards_and_tweaks(36)
     test_schedule = schedule.Schedule(players[0:36], 8, not lopsided, not bye)
     assert test_schedule._calculate_a_boards_needed() == 9
     assert test_schedule._calculate_b_boards_needed() == 9
