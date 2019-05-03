@@ -124,8 +124,8 @@ class Draw(object):
         :param id: id
         :return: bool
         """
-        for game in self._games:
-            players = game.get_players()
+        for ind_game in self._games:
+            players = ind_game.get_players()
             if players[0].get_id() == self._draw_player.get_id():
                 # Then player one is ours
                 opposing_player = players[1]

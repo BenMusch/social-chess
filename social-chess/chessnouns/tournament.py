@@ -4,14 +4,18 @@ This class will keep track of an individual tournament
 from . import slot
 from . import player
 from . import game
-from . import round
 from datetime import date
 from chessutilities import utilities
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 
 class Tournament(object):
 
-    def __init__(self, schedule, tournament_name, tournament_date):
+    def __init__(self, schedule, tournament_name, tournament_date=None):
 
         # The draw dictionary has the player ids
         # as keys, and the draw objects as values
@@ -32,7 +36,15 @@ class Tournament(object):
                                       self._schedule.get_players()}
 
     def create_random_results_all(self):
-        pass
+
+        rounds = self._schedule.get_rounds()
+        count = 1
+        logger.debug("Creating random results in round {}".format(count))
+        for ind_round in rounds:
+            for ind_game in ind_round:
+                logger.debug("Setting result for game: {} ".format(ind_game))
+                ind_game.set_likely_random_result()
+
 
     def create_random_results_for_round(self):
         pass
@@ -45,12 +57,16 @@ class Tournament(object):
         add the entries to a list of slot objects, and then sort them
 
         """
+
+        # FIXME: We need to check to see that results got created before
+        # doing this
+
         leaderboard = []
         for player_key, draw in self._tournament_draw_dict.items():
-            name = utilities.get_player_for_id(player_key)
+            name = utilities.get_player_for_id(player_key).get_name()
             raw_points = draw.get_total_raw_points()
             weighted_points = draw.get_total_weighted_score()
-            leaderboard.append(slot.Slot(name, raw_points, weighted_points))
+            leaderboard.append(slot.Slot(name, raw_points, str(round(weighted_points, 2))))
 
         return leaderboard
 

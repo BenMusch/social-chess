@@ -476,5 +476,8 @@ class Schedule(object):
     def _get_advanced_players(self):
         return self._advanced_players
 
+    def get_players(self):
+        return self._players
+
     def get_rounds(self):
         return self._rounds

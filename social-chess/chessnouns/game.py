@@ -123,7 +123,7 @@ class Game(object):
     def are_colors_set(self):
         return self._color_code != chessnouns.NO_COLOR_SELECTED
 
-    def set_random_result(self):
+    def set_random_color(self):
 
         r1 = random.randint(0, 2)
 
@@ -132,7 +132,7 @@ class Game(object):
         else:
             self._color_code = chessnouns.PLAYER_ONE_IS_BLACK
 
-    def set_random_results(self):
+    def set_random_result(self):
 
         r1 = random.randint(1, 11)
 
@@ -158,7 +158,7 @@ class Game(object):
             # So he's black
             self._result = chessnouns.BLACK_WINS
 
-    def set_likely_random_results(self):
+    def set_likely_random_result(self):
         """
         This is an improvement on the random result generator
         that will acknowledge that the more experienced player
@@ -263,7 +263,7 @@ class Game(object):
     def get_winning_and_losing_player(self):
 
         if self._bye is True:
-            return self._player_one
+            return self._player_one, player.Player.make_bye_player()
 
         if self._color_code == chessnouns.NO_COLOR_SELECTED:
             raise game_error.GameError("You cannot get the winning player without selecting colors")

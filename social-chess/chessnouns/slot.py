@@ -15,6 +15,9 @@ class Slot(object):
     def __str__(self):
         return "{} |{}|{}".format(self._player_name, self._raw_points, self._weighted_points)
 
+    def __repr__(self):
+        return "{} |{}|{}".format(self._player_name, self._raw_points, self._weighted_points)
+
     def get_line(self):
         """
         This will return a tuple that corresponds to the three values
@@ -26,7 +29,7 @@ class Slot(object):
     These two methods will ensure a list of these is sorted by weighted points
     """
     def __lt__(self, other):
-        return self._weighted_points < other._weighted_points
+        return   other._weighted_points < self._weighted_points
 
     def __eq__(self, other):
         return self._weighted_points == other._weighted_points
