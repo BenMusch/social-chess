@@ -54,4 +54,3 @@ class Tournament(object):
 
         return leaderboard
 
-    
