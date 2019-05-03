@@ -1,11 +1,6 @@
 from chessnouns import schedule, player
 from chessutilities import utilities
 import pytest
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
 
 
 def test_init_tournament():

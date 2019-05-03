@@ -19,7 +19,6 @@ the test utilities class
 
 def test_initialize_schedule(get_all_players):
 
-    logger.debug("Test debug")
     players = get_all_players[0:39]
     number_of_players = len(players)
 
@@ -82,7 +81,7 @@ def test_create_schedule(get_all_players):
     # Getting the right params
     boards, lopsided, bye = utilities.get_number_of_boards_and_tweaks(number_to_try)
 
-    # print("Results were: {}, lopsided? {}, bye? {}".format(boards, lopsided, bye))
+    logger.debug("Results were: {}, lopsided? {}, bye? {}".format(boards, lopsided, bye))
 
     test_schedule = schedule.Schedule(players, chessnouns.DEFAULT_NUMBER_OF_ROUNDS, lopsided, bye)
 
@@ -98,15 +97,8 @@ def test_create_schedule(get_all_players):
 
     a, b = test_schedule.divide_players()
 
-    print("\nFirst Group has: {} players ".format(len(a)))
-    print("\nSecond Group has: {} players ".format(len(b)))
-
-    for thing in a:
-        print("{} ({})".format(thing.get_name(), thing.get_level()))
-
-    print("\nSecond Group has: {} players ".format(len(b)))
-    #for other in b:
-    #    print("{} ({})".format(other.get_name(), other.get_level()))
+    logger.debug("\nFirst Group has: {} players ".format(len(a)))
+    logger.debug("\nSecond Group has: {} players ".format(len(b)))
 
     test_schedule.schedule_players()
 

@@ -1,11 +1,6 @@
 from chessutilities import utilities
 import chessnouns
 import pytest
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
 
 
 def test_get_number_of_boards_and_tweaks():
@@ -88,11 +83,9 @@ def test_level_to_text():
 
 
 def test_get_player_for_id(get_all_players):
-
     testing_players = get_all_players
     sample_player = testing_players[0]
     another_player = testing_players[1]
 
     assert utilities.get_player_for_id(sample_player.get_id()).get_name() == sample_player.get_name()
     assert utilities.get_player_for_id(another_player.get_id()).get_name() == another_player.get_name()
-

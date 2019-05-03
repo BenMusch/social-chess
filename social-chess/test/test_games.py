@@ -3,11 +3,6 @@ from chessnouns import player, game
 import pytest
 import chessexceptions
 from chessexceptions import game_error
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
 
 """
 This group of tests are for the game class
