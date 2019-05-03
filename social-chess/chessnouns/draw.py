@@ -19,7 +19,7 @@ class Draw(object):
     """
 
     def __init__(self, player_for_draw, number_rounds):
-        # print("Draw initialized for {}({}) ".format(player_for_draw.get_name(), player_for_draw.get_level()))
+        logger.debug("Draw initialized for {}({}) ".format(player_for_draw.get_name(), player_for_draw.get_level()))
         self._games = list()
         # print("Number of matchups at init is {} ".format(len(self._matchups)))
         assert isinstance(player_for_draw, player.Player)
@@ -78,7 +78,7 @@ class Draw(object):
         self._games = []
 
     def has_full_draw(self):
-        # print("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games), self._number_of_rounds))
+        logger.debug("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games), self._number_of_rounds))
         return len(self._games) >= self._number_of_rounds
 
     def get_player(self):
@@ -111,7 +111,7 @@ class Draw(object):
                     whites += 1
 
         if whites == chessnouns.DEFAULT_NUMBER_OF_GAMES or blacks == chessnouns.DEFAULT_NUMBER_OF_GAMES:
-            print("Someone had all one color")
+            logger.info("Someone had all one color")
             return True
         else:
 
@@ -223,7 +223,7 @@ class Draw(object):
         count = 0
         for individual_game in self.get_games():
             count += 1
-            #print("Entering game {} ".format(count))
+            logger.debug("Entering game {} ".format(count))
             if individual_game.get_result() == chessnouns.DRAW:
                 # OK, so there is a draw
                 #print("It was a draw")
@@ -233,8 +233,8 @@ class Draw(object):
             winning_player, losing_player = individual_game.get_winning_and_losing_player()
 
             if winning_player.get_name() == self._draw_player.get_name():
-                #print("It was a win for {}({}) ".format(winning_player.get_name(), winning_player.get_level()))
-                #print("It was against: {}({}) ".format(losing_player.get_name(), losing_player.get_level()))
+                logger.debug("It was a win for {}({}) ".format(winning_player.get_name(), winning_player.get_level()))
+                logger.debug("It was against: {}({}) ".format(losing_player.get_name(), losing_player.get_level()))
                 raw_points += 1
 
         return raw_points

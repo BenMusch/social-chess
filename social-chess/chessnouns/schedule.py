@@ -4,7 +4,7 @@ Note: This is not the same thing as a tournament, as it does
 not have a date, a playoff, a winner, or some other details
 """
 import chessnouns
-from . import game, round, draw
+from . import game
 from random import shuffle
 import math
 from chessutilities import utilities
@@ -17,8 +17,6 @@ logger = logging.getLogger('main')
 
 
 class Schedule(object):
-    # This is the number of boards to play, it will determine
-    # the number of simultaneous games
 
     def __repr__(self):
 
@@ -68,7 +66,6 @@ class Schedule(object):
         self._bye_round = bye
         self._lopsided = lopsided
         self._number_of_rounds = number_of_rounds
-        # self._number_boards = number_of_boards
 
         self._advanced_players = []
         self._intermediate_players = []
@@ -86,16 +83,16 @@ class Schedule(object):
 
         :return:
         """
-        # print("About to sort players")
+        logger.debug("About to sort players")
         for player in self._players:
             if player.get_level() == chessnouns.BEGINNER or player.get_level() == chessnouns.IMPROVING:
-                # print("Adding {} to beginner ".format(player.get_name()))
+                logger.debug("Adding {} to beginner ".format(player.get_name()))
                 self._beginner_players.append(player)
             elif player.get_level() == chessnouns.ADEPT:
-                # print("Adding {} to intermediate ".format(player.get_name()))
+                logger.debug("Adding {} to intermediate ".format(player.get_name()))
                 self._intermediate_players.append(player)
             else:
-                # print("Adding {} to advanced ".format(player.get_name()))
+                logger.debug("Adding {} to advanced ".format(player.get_name()))
                 assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
                 self._advanced_players.append(player)
 
@@ -123,12 +120,20 @@ class Schedule(object):
 
     def _calculate_a_boards_needed(self):
 
-        # Let's imagine 14, 15, 16, 17
+        # As we have two alternating groups and two players are in
+        # game, dividing players by 4 is the way to know how many
+        # boards we need.
         number = math.trunc(len(self._players) / 4)
 
         return number
 
     def _calculate_b_boards_needed(self):
+        """
+        This is just a helper function.
+        We can calculate this directly from the
+        _calculate_a_boards_needed method above
+        when we need it
+        """
 
         number = math.trunc(len(self._players) / 4)
 
@@ -161,23 +166,19 @@ class Schedule(object):
         for candidate_player in self._beginner_players:
             self._b_group.append(candidate_player)
 
-        # Let's get a feel for what we have now.
-
-        # We need twice the slots as boards
+        # We need twice the slots as boards - as there
+        # are two players in a game
         needed_a_slots = self._calculate_a_boards_needed() * 2
 
-        print("Needed a slots was: {} ".format(needed_a_slots))
-
-        needed_b_slots = self._calculate_b_boards_needed() * 2
+        logger.debug("Needed a slots was: {} ".format(needed_a_slots))
 
         actual_a_slots = len(self._a_group)
-        actual_b_slots = len(self._b_group)
-
-        # So group B now has 4
+        # Note that it feels like we need to do calculate the b slots
+        # but if we've divided them correctly, the a is enough to
+        # make the arrays
 
         # Now we need to use the intermediates to fill out the groups
         # How many do we need?
-
         needed = needed_a_slots - actual_a_slots
 
         for i in range(0, needed):
@@ -186,15 +187,18 @@ class Schedule(object):
         for j in range(needed, len(self._intermediate_players)):
             self._b_group.append(self._intermediate_players[j])
 
-        # OK. So the groups should have the right numbers
+        # OK. So the groups should have the right numbers now
         return self._a_group, self._b_group
 
     def schedule_players(self):
 
-        first, second, third, fourth = self._schedule_a_players()
-        fifth, sixth, seventh, eighth = self._schedule_b_players()
+        a_first, a_second, a_third, a_fourth = self._schedule_a_players()
+        b_first, b_second, b_third, b_fourth = self._schedule_b_players()
 
-        self._rounds = [first, fifth, second, sixth, third, seventh, fourth, eighth]
+        # the call below looks weird, but it has to do with the fact
+        # that the a's and b'x are more or less in separate tournaments,
+        # which alternate their use of the boards.
+        self._rounds = [a_first, b_first, a_second, b_second, a_third, b_third, a_fourth, b_fourth]
 
         self._print_all_rounds()
 
@@ -216,8 +220,8 @@ class Schedule(object):
         is_done = False
 
         for other_player in list_of_players:
-            # print("For candidate: {} Looking at possibility: {}".format(candidate_player.get_name(),
-            #                                                            other_player.get_name()))
+            logger.debug("For candidate: {} Looking at possibility: {}".format(candidate_player.get_name(),
+                                                                        other_player.get_name()))
             Schedule.try_scheduling_these_guys(candidate_player, other_player)
             finished = candidate_player.get_draw().has_full_draw()
             if finished:
@@ -230,8 +234,9 @@ class Schedule(object):
         return len(self._advanced_players) + len(self._intermediate_players) + len(self._beginner_players)
 
     def _schedule_a_players(self):
-        # So we've got 20 and 10 slots
-
+        """
+        This is the workhorse method that does the scheduling of the first half of the tournament
+        """
         a_boards = self._calculate_a_boards_needed()
 
         first_half_a = self._a_group[0:a_boards]
@@ -240,8 +245,9 @@ class Schedule(object):
         first_names = [a.get_name() for a in first_half_a]
         second_names = [a.get_name() for a in second_half_a]
 
-        print("First half is: {} ".format(first_names))
-        print("Second half is: {} ".format(second_names))
+
+        logger.info("First half is: {} ".format(first_names))
+        logger.info("Second half is: {} ".format(second_names))
 
         first_set = []
 
@@ -276,27 +282,26 @@ class Schedule(object):
     def _schedule_b_players(self):
 
         """
+        This is the workhorse method for scheduling the second half of the tournament
 
         The b group will always be the same or more than the a
 
         We will get the a, and use the crucial lopsided variable
         to know when we are one more than the number of a games
 
-        We will later use the bye variable
-
-
+        We will later use the bye variable to determine if we add a bye
+        to the games for the round
         """
 
         b_boards = self._calculate_a_boards_needed()
 
-        # For 37, b_boards = 10
 
         if self._lopsided:
             b_boards_extra_lopsided = 1
         else:
             b_boards_extra_lopsided = 0
 
-        print("B Boards was {} and the extra was {} ".format(b_boards, b_boards_extra_lopsided))
+        logger.debug("B Boards was {} and the extra was {} ".format(b_boards, b_boards_extra_lopsided))
 
         # Group of 9
         first_half_a = self._b_group[:b_boards + b_boards_extra_lopsided]
@@ -307,8 +312,8 @@ class Schedule(object):
         first_names = [a.get_name() for a in first_half_a]
         second_names = [s.get_name() for s in second_half_a]
 
-        print("First half is: {} ".format(first_names))
-        print("Second half is: {} ".format(second_names))
+        logger.debug("First half is: {} ".format(first_names))
+        logger.debug("Second half is: {} ".format(second_names))
 
         first_set = []
         count = 0
@@ -378,7 +383,7 @@ class Schedule(object):
         if first.get_draw().has_played_player_id(second.get_id()):
             return False
         # OK. So we can schedule this!
-        # print("We got a hit!")
+        logger.debug("We got a hit!")
         first.get_draw().add_game_by_player(second)
         second.get_draw().add_game_by_player(first)
         return True
@@ -392,7 +397,7 @@ class Schedule(object):
                         existing_players[1].get_id()}
 
             if len(test_set) == 2:
-                # print("Can't do that game")
+                logger.debug("Can't do that game")
                 return True
 
         return False
@@ -411,9 +416,11 @@ class Schedule(object):
             print(player_draw)
 
         # Now let's do it again for games
+
+        logger.info("OUTPUT OF PLAYER DRAWS")
         for p in printed_players:
             player_draw = p.get_draw()
-            print("Player: {} Games: {}".format(p.get_name(), len(player_draw.get_games())))
+            logger.info("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
 
     def _print_schedule(self):
         # OK, now let us print and see

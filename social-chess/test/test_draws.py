@@ -1,10 +1,4 @@
 import chessnouns
-from chessnouns import player, game, draw
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
 
 """
 Testing of the draw class

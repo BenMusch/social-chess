@@ -1,11 +1,6 @@
 import pytest
 import chessnouns
 from chessnouns import player
-import logging
-import logging.config
-
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
 
 
 def test_create_player_exceptions():
