@@ -2,6 +2,11 @@ import pytest
 import sqlite3 as sqlite
 from chessnouns import player, game
 import chessutilities
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 """
 This will hold the fixtures that are needed across test files

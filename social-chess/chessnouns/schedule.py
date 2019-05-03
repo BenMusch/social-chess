@@ -9,6 +9,11 @@ from random import shuffle
 import math
 from chessutilities import utilities
 from chessexceptions import unsolveable_error, scheduling_error
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 
 class Schedule(object):

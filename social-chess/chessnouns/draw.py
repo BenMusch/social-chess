@@ -2,6 +2,11 @@ from . import player, game
 from chessutilities import utilities
 import chessnouns
 from chessexceptions import game_error
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 
 class Draw(object):

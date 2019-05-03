@@ -1,6 +1,11 @@
 from chessutilities import utilities
 import chessnouns
 import pytest
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 
 def test_get_number_of_boards_and_tweaks():

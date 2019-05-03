@@ -1,5 +1,10 @@
 import chessnouns
 from . import draw
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 
 class Player(object):

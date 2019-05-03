@@ -1,6 +1,12 @@
 import chessnouns
 from chessnouns import schedule, player
 from chessutilities import utilities
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
+
 
 """
 These test methods are just to test the Schedule class as a container
@@ -12,6 +18,8 @@ the test utilities class
 
 
 def test_initialize_schedule(get_all_players):
+
+    logger.debug("Test debug")
     players = get_all_players[0:39]
     number_of_players = len(players)
 

@@ -2,6 +2,11 @@ from . import player
 import chessnouns
 import random
 from chessexceptions import game_error
+import logging
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger('main')
 
 
 class Game(object):
