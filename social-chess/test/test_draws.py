@@ -14,8 +14,6 @@ def test_scoring(get_five_draws):
 
     # First, clem
 
-    print(candidate_draw.get_player().get_name())
-
     first_game = candidate_draw.get_games()[0]
     second_game = candidate_draw.get_games()[1]
     third_game = candidate_draw.get_games()[2]
@@ -33,12 +31,6 @@ def test_scoring(get_five_draws):
 
     fourth_game.make_player_two_white()
     fourth_game.set_result(chessnouns.WHITE_WINS)
-
-    # Let's get the names
-    print(first_game)
-    print(second_game)
-    print(third_game)
-    print(fourth_game)
 
     clem_raw_points = candidate_draw.get_total_raw_points()
     clem_weighted_points = candidate_draw.get_total_weighted_score()
@@ -157,7 +149,7 @@ def test_draw_class(get_all_players):
     assert clem_draw.has_full_draw() is True
     assert clem_draw.number_games_scheduled() == 4
 
-    print(clem_draw)
+    #print(clem_draw)
 
     # Now let's test the clear
     clem_draw.clear_games()

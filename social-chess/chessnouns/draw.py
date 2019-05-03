@@ -218,18 +218,18 @@ class Draw(object):
         count = 0
         for individual_game in self.get_games():
             count += 1
-            print("Entering game {} ".format(count))
+            #print("Entering game {} ".format(count))
             if individual_game.get_result() == chessnouns.DRAW:
                 # OK, so there is a draw
-                print("It was a draw")
+                #print("It was a draw")
                 raw_points += 0.5
                 continue
 
             winning_player, losing_player = individual_game.get_winning_and_losing_player()
 
             if winning_player.get_name() == self._draw_player.get_name():
-                print("It was a win for {}({}) ".format(winning_player.get_name(), winning_player.get_level()))
-                print("It was against: {}({}) ".format(losing_player.get_name(), losing_player.get_level()))
+                #print("It was a win for {}({}) ".format(winning_player.get_name(), winning_player.get_level()))
+                #print("It was against: {}({}) ".format(losing_player.get_name(), losing_player.get_level()))
                 raw_points += 1
 
         return raw_points

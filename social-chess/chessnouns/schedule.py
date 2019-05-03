@@ -124,21 +124,13 @@ class Schedule(object):
         return number
 
     def _calculate_b_boards_needed(self):
-        """
-        The a slot is always the even players divided
-        by 4. Extras are always added to the b
-        set. This was done to make it more likely
-        someone unexpectedly late wouldn't miss their game
-        """
 
-        # Let's imagine 14, 15, 16, 17
         number = math.trunc(len(self._players) / 4)
 
-        # So we'd have 4, 5, 4, 5
+        if self._lopsided:
+            number += 1
 
-        if len(self._players) % 4 == 3:
-            number += 2
-        elif len(self._players) % 4 == 1 or len(self._players) % 4 == 2:
+        if self._bye:
             number += 1
 
         return number
@@ -219,8 +211,8 @@ class Schedule(object):
         is_done = False
 
         for other_player in list_of_players:
-            print("For candidate: {} Looking at possibility: {}".format(candidate_player.get_name(),
-                                                                        other_player.get_name()))
+            # print("For candidate: {} Looking at possibility: {}".format(candidate_player.get_name(),
+            #                                                            other_player.get_name()))
             Schedule.try_scheduling_these_guys(candidate_player, other_player)
             finished = candidate_player.get_draw().has_full_draw()
             if finished:
@@ -278,6 +270,18 @@ class Schedule(object):
 
     def _schedule_b_players(self):
 
+        """
+
+        The b group will always be the same or more than the a
+
+        We will get the a, and use the crucial lopsided variable
+        to know when we are one more than the number of a games
+
+        We will later use the bye variable
+
+
+        """
+
         b_boards = self._calculate_a_boards_needed()
 
         # For 37, b_boards = 10
@@ -287,17 +291,13 @@ class Schedule(object):
         else:
             b_boards_extra_lopsided = 0
 
-        print("B Boards was {} and the extra was {} ".format(b_boards,b_boards_extra_lopsided))
-
-        # So we've got 19 and 10 slots
-
-        # So we need 2 groups of 9
+        print("B Boards was {} and the extra was {} ".format(b_boards, b_boards_extra_lopsided))
 
         # Group of 9
-        first_half_a = self._b_group[:b_boards+b_boards_extra_lopsided]
+        first_half_a = self._b_group[:b_boards + b_boards_extra_lopsided]
 
         # Group of 10
-        second_half_a = self._b_group[b_boards+b_boards_extra_lopsided:]
+        second_half_a = self._b_group[b_boards + b_boards_extra_lopsided:]
 
         first_names = [a.get_name() for a in first_half_a]
         second_names = [s.get_name() for s in second_half_a]
@@ -308,8 +308,7 @@ class Schedule(object):
         first_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra_lopsided):
-
+        for i in range(0, b_boards + b_boards_extra_lopsided):
             first_set.append(game.Game(first_half_a[count], second_half_a[count], onewhite=True, twowhite=False))
             count += 1
 
@@ -319,9 +318,10 @@ class Schedule(object):
         second_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra_lopsided):
+        # We will subtract one to move the pairings over one from the last round to get new games
+        for i in range(0, b_boards + b_boards_extra_lopsided):
             second_set.append(
-                    game.Game(first_half_a[count], second_half_a[count - 1], onewhite=False, twowhite=True))
+                game.Game(first_half_a[count], second_half_a[count - 1], onewhite=False, twowhite=True))
             count += 1
 
         if self._bye:
@@ -330,9 +330,10 @@ class Schedule(object):
         third_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra_lopsided):
+        # We will subtract one more to move the pairings over one from the last round to get new games
+        for i in range(0, b_boards + b_boards_extra_lopsided):
             third_set.append(
-                    game.Game(first_half_a[count], second_half_a[count - 2], onewhite=True, twowhite=False))
+                game.Game(first_half_a[count], second_half_a[count - 2], onewhite=True, twowhite=False))
             count += 1
 
         if self._bye:
@@ -341,9 +342,10 @@ class Schedule(object):
         fourth_set = []
         count = 0
 
-        for i in range(0, b_boards+b_boards_extra_lopsided):
+        # We will subtract one more to move the pairings over one from the last round to get new games
+        for i in range(0, b_boards + b_boards_extra_lopsided):
             fourth_set.append(
-                    game.Game(first_half_a[count], second_half_a[count - 3], onewhite=False, twowhite=True))
+                game.Game(first_half_a[count], second_half_a[count - 3], onewhite=False, twowhite=True))
             count += 1
 
         if self._bye:
@@ -390,17 +392,21 @@ class Schedule(object):
 
         return False
 
-    def _print_player_draws(self):
+    def _print_player_draws(self, printed_players=None):
         """
         This method will print all the players and their draw
         information to the command line
         """
-        for p in self._players:
+
+        if not printed_players:
+            printed_players = self._players
+
+        for p in printed_players:
             player_draw = p.get_draw()
             print(player_draw)
 
         # Now let's do it again for games
-        for p in self._players:
+        for p in printed_players:
             player_draw = p.get_draw()
             print("Player: {} Games: {}".format(p.get_name(), len(player_draw.get_games())))
 
@@ -447,7 +453,7 @@ class Schedule(object):
         return self._b_group
 
     def print_group_players(self, group):
-        self._print_player_draws()
+        self._print_player_draws(group)
 
     def _get_beginner_players(self):
         return self._beginner_players

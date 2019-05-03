@@ -97,8 +97,8 @@ def test_create_schedule(get_all_players):
         print("{} ({})".format(thing.get_name(), thing.get_level()))
 
     print("\nSecond Group has: {} players ".format(len(b)))
-    for other in b:
-        print("{} ({})".format(other.get_name(), other.get_level()))
+    #for other in b:
+    #    print("{} ({})".format(other.get_name(), other.get_level()))
 
     test_schedule.schedule_players()
 
