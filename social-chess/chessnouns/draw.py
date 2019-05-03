@@ -168,8 +168,13 @@ class Draw(object):
 
         weighted_points = 0
 
+        if not self.get_games():
+            return 0
+
+        """
         if self.number_games_scheduled() == 0:
             raise game_error.GameError("You cannot calculate a score without games")
+        """
 
         for individual_game in self.get_games():
             if individual_game.get_result() == chessnouns.DRAW:
@@ -217,8 +222,14 @@ class Draw(object):
 
         raw_points = 0
 
+        # FIXME: Do we want to check this in a different way?
+        """
         if self.number_games_scheduled() == 0:
             raise game_error.GameError("You cannot calculate a score without games")
+        """
+
+        if not self.get_games():
+            return 0
 
         count = 0
         for individual_game in self.get_games():
