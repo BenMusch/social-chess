@@ -476,6 +476,16 @@ class Schedule(object):
                 board += 1
             count += 1
 
+    def get_common_game(self, player_one, player_two):
+
+        draw_in_question = player_one.get_draw()
+        if draw_in_question.has_played_player_id(player_two.get_id()):
+            # OK, so they played
+            played_game = draw_in_question.get_game(player_two.get_id())
+            return played_game
+
+        return None
+
     def get_a_players(self):
         return self._a_group
 

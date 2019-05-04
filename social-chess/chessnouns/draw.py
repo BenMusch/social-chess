@@ -136,6 +136,10 @@ class Draw(object):
 
         return False
 
+    def get_game_for_player(self, opposing_player):
+        pass
+
+
     def _get_points_for_level(self, level):
         """
         This gets used when an upset is over and

@@ -93,10 +93,10 @@ class Tournament(object):
 
         leaderboard = []
         for player_key, draw in self._tournament_draw_dict.items():
-            name = utilities.get_player_for_id(player_key).get_name()
+            tourney_player = utilities.get_player_for_id(player_key)
             raw_points = draw.get_total_raw_points()
             weighted_points = draw.get_total_weighted_score()
-            leaderboard.append(slot.Slot(name, raw_points, str(round(weighted_points, 2))))
+            leaderboard.append(slot.Slot(tourney_player, raw_points, str(round(weighted_points, 2))))
 
         return leaderboard
 
@@ -146,6 +146,8 @@ class Tournament(object):
 
     def _try_to_resolve_finalists(self, finalists):
 
+        # FIXME: We need to be careful about how draws are scored
+
         change = False
         new_finalists = []
 
@@ -157,6 +159,35 @@ class Tournament(object):
         if top_score > second_score:
             # OK, so the top guy is alone
             new_finalists.append(finalists[0])
+
+            # OK, let's see how many others
+            if len(finalists) == 3:
+                # So we only have two left
+                # Let's see if they played
+                second_player = finalists[1].get_player()
+                third_player = finalists[2].get_player()
+                played_game = self._schedule.get_common_game(second_player, third_player)
+                if played_game:
+
+                    if played_game.was_drawn():
+                        # Ugh.
+                        pass
+                    elif (played_game.did_player_id_win(second_player.get_id())):
+                        new_finalists.append(finalists[1])
+                    else:
+                        new_finalists.append(finalists[2])
+
+                else:
+                    # So they didn't play
+                    # Let's see if we can do a performance bonus
+                    pass
+
+            if len(finalists) > 3:
+                # So we have lots
+                pass
+
+
+
         else:
             # Ugh, they are tied. Worse, that means
             # all of them are tied. This means we
