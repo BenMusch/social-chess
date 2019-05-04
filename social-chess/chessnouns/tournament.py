@@ -45,9 +45,39 @@ class Tournament(object):
                 logger.debug("Setting result for game: {} ".format(ind_game))
                 ind_game.set_likely_random_result()
 
-
     def create_random_results_for_round(self):
         pass
+
+    def return_result_numbers(self):
+        """
+        This method is just a check on the data.
+        It will return wins, losses, and draws for
+        the tournament.
+
+        If there are no draws, it should return
+        40 wins, 40 losses for 40 games, etc.
+
+        """
+        wins = 0
+        byes = 0
+        losses = 0
+        draws = 0
+
+        for player_key, draw in self._tournament_draw_dict.items():
+            for ind_game in draw.get_games():
+                if ind_game.was_drawn():
+                    draws += 1
+                elif ind_game.was_bye():
+                    byes += 1
+                elif ind_game.did_player_id_win(player_key):
+                    wins += 1
+                else:
+                    losses += 1
+
+        return wins, byes, losses, draws
+
+    def get_total_number_of_games(self):
+        return self._schedule.get_total_number_of_games()
 
     def get_leaderboard(self):
         """
@@ -69,4 +99,70 @@ class Tournament(object):
             leaderboard.append(slot.Slot(name, raw_points, str(round(weighted_points, 2))))
 
         return leaderboard
+
+    def calculate_playoff_candidates(self):
+        """
+        Here we are trying to figure out the top two people,
+        or, if there are ties, the people tied for the top
+        two slots
+        :return:
+        """
+
+        finalists = []
+
+        # First, let's get the list
+        leader_list = sorted(self.get_leaderboard())
+
+        top_person = leader_list[0]
+
+        top_score = top_person.get_weighted_score()
+        logger.debug("Top score was: {}".format(top_score))
+
+        finalists.append(top_person)
+
+        next_person = leader_list[1]
+        next_score = next_person.get_weighted_score()
+        logger.debug("Next score was: {}".format(next_score))
+
+        finalists.append(next_person)
+
+        # Now we have to figure out if the next person
+
+        remaining_list = leader_list[2:]
+
+        for possible_person in remaining_list:
+            if possible_person.get_weighted_score() == next_score:
+                finalists.append(possible_person)
+            else:
+                break
+
+        player_break = False
+
+        if len(finalists) > 2:
+            return self._try_to_resolve_finalists(finalists)
+
+        return player_break, finalists
+
+
+    def _try_to_resolve_finalists(self, finalists):
+
+        change = False
+        new_finalists = []
+
+        # The logic here isn't easy.
+        # Let's first determine if the leader is alone
+        top_score = finalists[0].get_weighted_score()
+        second_score = finalists[1].get_weighted_score()
+
+        if top_score > second_score:
+            # OK, so the top guy is alone
+            new_finalists.append(finalists[0])
+        else:
+            # Ugh, they are tied. Worse, that means
+            # all of them are tied. This means we
+            # need to see if any played each other
+            pass
+
+        return change, new_finalists
+
 

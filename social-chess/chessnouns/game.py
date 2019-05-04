@@ -169,9 +169,9 @@ class Game(object):
         second_player_level = self._player_two.get_level()
 
         # Let's get the draw out of the way - very unlikely
-        number = random.randint(1, 15)
+        try_draw_number = random.randint(1, 90)
 
-        if number == 1:
+        if try_draw_number == 1:
             self._result = chessnouns.DRAW
             return
 
@@ -260,7 +260,20 @@ class Game(object):
     def get_result(self):
         return self._result
 
+    def was_drawn(self):
+        return self._result == chessnouns.DRAW
+
+    def was_bye(self):
+        return self._bye
+
+    def did_player_id_win(self, player_id):
+        winner, _ = self.get_winning_and_losing_player()
+        return player_id == winner.get_id()
+
     def get_winning_and_losing_player(self):
+
+        if self._result == chessnouns.DRAW:
+            raise game_error.GameError("You must check for a draw before seeking a winner")
 
         if self._bye is True:
             return self._player_one, player.Player.make_bye_player()

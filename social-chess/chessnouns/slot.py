@@ -25,6 +25,9 @@ class Slot(object):
         """
         return self._player_name, self._raw_points, self._weighted_points
 
+    def get_weighted_score(self):
+        return self._weighted_points
+
     """
     These two methods will ensure a list of these is sorted by weighted points
     """
@@ -33,3 +36,5 @@ class Slot(object):
 
     def __eq__(self, other):
         return self._weighted_points == other._weighted_points
+
+

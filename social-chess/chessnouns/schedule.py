@@ -123,9 +123,9 @@ class Schedule(object):
         # As we have two alternating groups and two players are in
         # game, dividing players by 4 is the way to know how many
         # boards we need.
-        number = math.trunc(len(self._players) / 4)
+        number_boards = math.trunc(len(self._players) / 4)
 
-        return number
+        return number_boards
 
     def _calculate_b_boards_needed(self):
         """
@@ -135,15 +135,33 @@ class Schedule(object):
         when we need it
         """
 
-        number = math.trunc(len(self._players) / 4)
+        number_boards = math.trunc(len(self._players) / 4)
 
         if self._lopsided:
-            number += 1
+            number_boards += 1
 
         if self._bye:
-            number += 1
+            number_boards += 1
 
-        return number
+        return number_boards
+
+
+    def get_total_number_of_games(self):
+
+        total_number = self._calculate_a_boards_needed() * 4
+
+        # Now double that for minimum b games
+        total_number = total_number * 2
+
+        # if it's lopsided, you have four more games
+        if self._lopsided:
+            total_number += 4
+
+        # If there are byes, you add four more
+        if self._bye:
+            total_number += 4
+
+        return total_number
 
     def divide_players(self):
 
