@@ -113,8 +113,6 @@ class Schedule(object):
                 return ind_player
         return None
 
-
-
     def shuffle_players(self):
         """
         This function randomizes the order of the players to create different pairings
@@ -151,7 +149,6 @@ class Schedule(object):
             number_boards += 1
 
         return number_boards
-
 
     def get_total_number_of_games(self):
 
@@ -246,7 +243,7 @@ class Schedule(object):
 
         for other_player in list_of_players:
             logger.debug("For candidate: {} Looking at possibility: {}".format(candidate_player.get_name(),
-                                                                        other_player.get_name()))
+                                                                               other_player.get_name()))
             Schedule.try_scheduling_these_guys(candidate_player, other_player)
             finished = candidate_player.get_draw().has_full_draw()
             if finished:
@@ -270,9 +267,8 @@ class Schedule(object):
         first_names = [a.get_name() for a in first_half_a]
         second_names = [a.get_name() for a in second_half_a]
 
-
-        logger.info("First half is: {} ".format(first_names))
-        logger.info("Second half is: {} ".format(second_names))
+        logger.debug("First half is: {} ".format(first_names))
+        logger.debug("Second half is: {} ".format(second_names))
 
         first_set = []
 
@@ -319,7 +315,6 @@ class Schedule(object):
         """
 
         b_boards = self._calculate_a_boards_needed()
-
 
         if self._lopsided:
             b_boards_extra_lopsided = 1
@@ -445,7 +440,7 @@ class Schedule(object):
         logger.info("OUTPUT OF PLAYER DRAWS")
         for p in printed_players:
             player_draw = p.get_draw()
-            #logger.info("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
+            # logger.info("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
 
     def _print_schedule(self):
         # OK, now let us print and see

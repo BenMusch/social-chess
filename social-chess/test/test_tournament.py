@@ -57,13 +57,6 @@ def test_add_schedule(get_all_players):
     for ind_slot in board_slots:
         print(ind_slot)
 
-    print("\n\nNOW FOR THE SORT\n\n")
-
-    sorted_slots = sorted(board_slots)
-
-    for ind_slot in sorted_slots:
-        print(ind_slot)
-
     print("Let's get the stats for the tournament")
 
     print("Number of games: {}".format(may_tournament.get_total_number_of_games()))
@@ -75,8 +68,9 @@ def test_add_schedule(get_all_players):
     print("Number of losses: {}".format(losses))
     print("Number of draws: {}".format(draws))
 
-    candidates = may_tournament.calculate_playoff_candidates()
+    tie_breakers_used, candidates = may_tournament.calculate_playoff_candidates()
 
+    print("Playoff Players:")
     print(candidates)
 
 
@@ -87,7 +81,7 @@ def test_tiebreakers(get_all_players):
     schedules_with_four_in_playoffs = 0
     schedules_with_more_in_playoffs = 0
 
-    number_of_tournaments = 10000
+    number_of_tournaments = 1
 
     for count in range(0, number_of_tournaments):
         did_break = False

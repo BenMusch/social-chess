@@ -1,6 +1,7 @@
 """
 This class will keep track of an individual tournament
 """
+import chessnouns
 from . import slot
 from . import player
 from . import game
@@ -79,7 +80,7 @@ class Tournament(object):
     def get_total_number_of_games(self):
         return self._schedule.get_total_number_of_games()
 
-    def get_leaderboard(self):
+    def get_leaderboard(self, maximum_number=0):
         """
         This method will return a list of tuples, sorted
 
@@ -91,15 +92,21 @@ class Tournament(object):
         # FIXME: We need to check to see that results got created before
         # doing this
 
-        leaderboard = []
+        slot_list = []
         for player_key, draw in self._tournament_draw_dict.items():
             # tourney_player = utilities.get_player_for_id(player_key)
             tourney_player = self._schedule.get_scheduled_player_for_id(player_key)
             raw_points = draw.get_total_raw_points()
             weighted_points = draw.get_total_weighted_score()
-            leaderboard.append(slot.Slot(tourney_player, raw_points, str(round(weighted_points, 2))))
+            rounds_completed = draw.get_number_of_rounds_completed()
+            slot_list.append(slot.Slot(tourney_player, rounds_completed, raw_points,
+                                       str(round(weighted_points, chessnouns.WEIGHTED_SCORE_DECIMAL_PRECISION))))
 
-        return leaderboard
+        if maximum_number == 0:
+            return sorted(slot_list)
+        else:
+            # So we only want the top X players
+            return sorted(slot_list)[:maximum_number]
 
     def calculate_playoff_candidates(self):
         """

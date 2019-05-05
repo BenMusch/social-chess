@@ -53,6 +53,9 @@ class Draw(object):
     def get_number_of_rounds(self):
         return self._number_of_rounds
 
+    def get_number_of_rounds_completed(self):
+        return len(self._games)
+
     def get_rounds_left(self):
         return self._number_of_rounds - len(self._games)
 
