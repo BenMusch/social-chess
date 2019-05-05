@@ -10,7 +10,7 @@ import logging
 import logging.config
 
 logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
+logger = logging.getLogger('chess')
 
 
 class Tournament(object):
@@ -42,7 +42,7 @@ class Tournament(object):
         logger.debug("Creating random results in round {}".format(count))
         for ind_round in rounds:
             for ind_game in ind_round:
-                logger.debug("Setting result for game: {} ".format(ind_game))
+                # logger.debug("Setting result for game: {} ".format(ind_game))
                 ind_game.set_likely_random_result()
 
     def create_random_results_for_round(self):
@@ -93,7 +93,8 @@ class Tournament(object):
 
         leaderboard = []
         for player_key, draw in self._tournament_draw_dict.items():
-            tourney_player = utilities.get_player_for_id(player_key)
+            # tourney_player = utilities.get_player_for_id(player_key)
+            tourney_player = self._schedule.get_scheduled_player_for_id(player_key)
             raw_points = draw.get_total_raw_points()
             weighted_points = draw.get_total_weighted_score()
             leaderboard.append(slot.Slot(tourney_player, raw_points, str(round(weighted_points, 2))))
@@ -139,61 +140,138 @@ class Tournament(object):
         player_break = False
 
         if len(finalists) > 2:
+            logger.debug("We have more than two finalists with scores: ")
+            for final_person in finalists:
+                logger.debug(str(final_person.get_weighted_score()))
             return self._try_to_resolve_finalists(finalists)
 
         return player_break, finalists
 
-
-    def _try_to_resolve_finalists(self, finalists):
+    def _try_to_resolve_finalists(self, finalists_slots):
 
         # FIXME: We need to be careful about how draws are scored
+
+        logger.debug("PLAYERS WE ARE RESOLVING:")
+        for final_slot in finalists_slots:
+            logger.debug(final_slot.get_player().get_name() + " | " + str(final_slot.get_player().get_level()))
 
         change = False
         new_finalists = []
 
         # The logic here isn't easy.
         # Let's first determine if the leader is alone
-        top_score = finalists[0].get_weighted_score()
-        second_score = finalists[1].get_weighted_score()
+        top_score = finalists_slots[0].get_weighted_score()
+        second_score = finalists_slots[1].get_weighted_score()
 
         if top_score > second_score:
             # OK, so the top guy is alone
-            new_finalists.append(finalists[0])
+            new_finalists.append(finalists_slots[0])
 
             # OK, let's see how many others
-            if len(finalists) == 3:
+            if len(finalists_slots) == 3:
                 # So we only have two left
                 # Let's see if they played
-                second_player = finalists[1].get_player()
-                third_player = finalists[2].get_player()
+                second_player = finalists_slots[1].get_player()
+                logger.debug("Second player was: {}".format(second_player.get_name()))
+                third_player = finalists_slots[2].get_player()
+                logger.debug("Third player was: {}".format(third_player.get_name()))
                 played_game = self._schedule.get_common_game(second_player, third_player)
+
                 if played_game:
 
                     if played_game.was_drawn():
                         # Ugh.
-                        pass
-                    elif (played_game.did_player_id_win(second_player.get_id())):
-                        new_finalists.append(finalists[1])
+                        # OK, let's see if they were the same level
+                        if second_player.get_level() < third_player.get_level():
+                            # OK, that means we give the second player a performance bonus
+                            # as the underdog with same points, and he gets the slot
+                            logger.info("We used a performance bonus: second greater than third in a draw")
+                            new_finalists.append(second_player)
+                            change = True
+                            return change, new_finalists
+                        elif third_player.get_level() < second_player.get_level():
+                            # So the other guy gets the performance bonus
+                            logger.info("We used a performance bonus: third greater than second in a draw")
+                            new_finalists.append(third_player)
+                            change = True
+                            return change, new_finalists
+                        else:
+                            # They are the same level also. So we fail
+                            logger.info("They were equal in the draw, no performance bonus")
+                            new_finalists += [second_player, third_player]
+                            return change, finalists_slots
+                    elif played_game.did_player_id_win(second_player.get_id()):
+                        logger.info("Second beat third. We broke a tie with the played function")
+                        new_finalists.append(finalists_slots[1])
+                        change = True
+                        return change, new_finalists
                     else:
-                        new_finalists.append(finalists[2])
+                        logger.info("Third beat second. We broke a tie with the played function")
+                        new_finalists.append(finalists_slots[2])
+                        change = True
+                        return change, new_finalists
 
                 else:
                     # So they didn't play
                     # Let's see if we can do a performance bonus
-                    pass
+                    if second_player.get_level() < third_player.get_level():
+                        # OK, that means we give the second player a performance bonus
+                        # as the underdog with same points, and he gets the slot
+                        logger.info("We used a performance bonus - second was lower than third")
+                        new_finalists.append(second_player)
+                        change = True
+                        return change, new_finalists
+                    elif third_player.get_level() < second_player.get_level():
+                        # So the other guy gets the performance bonus
+                        logger.info("We used a performance bonus = third was lower than second")
+                        new_finalists.append(third_player)
+                        change = True
+                        return change, new_finalists
+                    else:
+                        # They are the same level also. So we fail
+                        logger.info("Didn't play a game. They were equal, no performance bonus")
+                        new_finalists += [second_player, third_player]
+                        return change, new_finalists
 
-            if len(finalists) > 3:
-                # So we have lots
-                pass
+            if len(finalists_slots) > 3:
+                # So we have a top person, and more than 2 runners-up
+                # Egad.
+                # OK, let's see if we can grab one by being an upset
+                # candidate
 
-
+                # Let's try failing first
+                return change, finalists_slots
 
         else:
             # Ugh, they are tied. Worse, that means
             # all of them are tied. This means we
             # need to see if any played each other
-            pass
+
+            # For now, let's try upset candidates
+            return change, finalists_slots
 
         return change, new_finalists
 
+    def _look_for_upset_candidate(self, candidate_list):
 
+        found = False
+
+        number_found = 0
+
+        # First, we need to find out if there are any difference
+        # among the levels, for any number of candidates
+        total = 0
+
+        for candidate in candidate_list:
+            total += candidate.get_level()
+
+        # OK, now we should be able to see
+        if total % len(candidate_list) == 0:
+            # We're dead. They're all the same
+            return False, None
+
+        else:
+            # Good, we have at least some difference
+            pass
+
+        return found, player

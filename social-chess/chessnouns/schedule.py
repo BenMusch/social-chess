@@ -13,7 +13,7 @@ import logging
 import logging.config
 
 logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
+logger = logging.getLogger('chess')
 
 
 class Schedule(object):
@@ -86,13 +86,11 @@ class Schedule(object):
         logger.debug("About to sort players")
         for player in self._players:
             if player.get_level() == chessnouns.BEGINNER or player.get_level() == chessnouns.IMPROVING:
-                logger.debug("Adding {} to beginner ".format(player.get_name()))
+
                 self._beginner_players.append(player)
             elif player.get_level() == chessnouns.ADEPT:
-                logger.debug("Adding {} to intermediate ".format(player.get_name()))
                 self._intermediate_players.append(player)
             else:
-                logger.debug("Adding {} to advanced ".format(player.get_name()))
                 assert player.get_level() == chessnouns.KING or player.get_level() == chessnouns.KNIGHT
                 self._advanced_players.append(player)
 
@@ -107,6 +105,15 @@ class Schedule(object):
 
         for player in self._advanced_players:
             player.set_draw(self._number_of_rounds)
+
+    def get_scheduled_player_for_id(self, identifier):
+
+        for ind_player in self._players:
+            if ind_player.get_id() == identifier:
+                return ind_player
+        return None
+
+
 
     def shuffle_players(self):
         """
@@ -438,7 +445,7 @@ class Schedule(object):
         logger.info("OUTPUT OF PLAYER DRAWS")
         for p in printed_players:
             player_draw = p.get_draw()
-            logger.info("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
+            #logger.info("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
 
     def _print_schedule(self):
         # OK, now let us print and see
@@ -479,6 +486,8 @@ class Schedule(object):
     def get_common_game(self, player_one, player_two):
 
         draw_in_question = player_one.get_draw()
+        if not draw_in_question:
+            logger.debug("Error: there is no draw object there")
         if draw_in_question.has_played_player_id(player_two.get_id()):
             # OK, so they played
             played_game = draw_in_question.get_game(player_two.get_id())

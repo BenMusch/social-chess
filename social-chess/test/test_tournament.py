@@ -6,7 +6,7 @@ import logging
 import logging.config
 
 logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
+logger = logging.getLogger('chess')
 
 
 def test_init_tournament():
@@ -41,8 +41,6 @@ def test_add_schedule(get_all_players):
     logger.debug("\nSecond Group has: {} players ".format(len(b)))
 
     test_schedule.schedule_players()
-
-    test_schedule.initialize_draws_for_players()
 
     test_schedule.assign_scheduled_games_to_draws()
 
@@ -83,15 +81,16 @@ def test_add_schedule(get_all_players):
 
 
 def test_tiebreakers(get_all_players):
-
     breaks = 0
     schedules_with_two_in_playoffs = 0
     schedules_with_three_in_playoffs = 0
     schedules_with_four_in_playoffs = 0
     schedules_with_more_in_playoffs = 0
 
-    for count in range(0,50):
+    number_of_tournaments = 10000
 
+    for count in range(0, number_of_tournaments):
+        did_break = False
         number_to_try = 41
 
         players = get_all_players[0:number_to_try]
@@ -115,8 +114,6 @@ def test_tiebreakers(get_all_players):
 
         a, b = test_schedule.divide_players()
         test_schedule.schedule_players()
-
-        test_schedule.initialize_draws_for_players()
 
         test_schedule.assign_scheduled_games_to_draws()
 
@@ -167,9 +164,13 @@ def test_tiebreakers(get_all_players):
         if did_break:
             breaks += 1
 
-    print("Final report")
-    print("2 Finalists: {} 3 Finalists: {} 4 finalists: {} >4 : {}".format(schedules_with_two_in_playoffs, schedules_with_three_in_playoffs, schedules_with_four_in_playoffs, schedules_with_more_in_playoffs))
-    print("Tie breaks by game wins: {}".format(breaks))
+    print("Final report for Playoff Generation in {} Tournaments:".format(number_of_tournaments))
+    print("2 Finalists: {}/{}\n3 Finalists: {}/{}\n4 finalists: {}/{}\n5 or more : {}/{}".format(
+        schedules_with_two_in_playoffs, number_of_tournaments, schedules_with_three_in_playoffs, number_of_tournaments,
+        schedules_with_four_in_playoffs,
+        number_of_tournaments, schedules_with_more_in_playoffs, number_of_tournaments, ))
+    print("Playoffs determined by tie breakers: {}".format(breaks))
+
 
 def test_add_result():
     pass
