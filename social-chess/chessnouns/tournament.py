@@ -246,7 +246,35 @@ class Tournament(object):
                 # OK, let's see if we can grab one by being an upset
                 # candidate
 
-                # Let's try failing first
+                # Let's see if we can sort the three other players
+                # by who they lost against
+
+                # First, let's see if there are differences:
+                logger.info("We have more than 2 after the top person")
+
+                # FIXME: Peel off the top guy
+                
+                for item in finalists_slots:
+                    logger.info(str(item))
+                losses_total = 0
+                for finalist_slot in finalists_slots:
+                    candidate_player = finalist_slot.get_player()
+                    logger.info("Player is {}".format(candidate_player))
+                    candidate_draw = candidate_player.get_draw()
+                    logger.info("Draw was {}".format(candidate_draw))
+                    losses_total += candidate_draw.get_total_loss_points()
+
+                if losses_total % len(finalists_slots) == 0:
+                    # OK, so no differences in losses, we fail
+                    return change, finalists_slots
+                else:
+                    # OK, so we have some differences
+                    logger.info("Let's get the list sorted by the losses.")
+                    new_list = sorted(finalists_slots, key=self._get_points_for_player, reverse=False)
+                    for item in new_list:
+                        logger.info("Player: {}, Loss points: {}".format(item.get_player().get_name(),
+                                                                         item.get_player().get_draw().get_total_loss_points()))
+
                 return change, finalists_slots
 
         else:
@@ -258,6 +286,9 @@ class Tournament(object):
             return change, finalists_slots
 
         return change, new_finalists
+
+    def _get_points_for_player(self, item):
+        return item.get_player().get_draw().get_total_loss_points()
 
     def _look_for_upset_candidate(self, candidate_list):
 

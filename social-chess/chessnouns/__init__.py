@@ -59,3 +59,5 @@ LEVEL_FIVE_LEVEL_WIN = 2
 
 ROUND_TIMES = ["6:00-6:10", "6:15-6:25", "6:30-6:40", "6:45-6:55",
          "7:00-7:10", "7:15-7:25", "7:30-7:40", "7:45-7:55"]
+
+USE_LOSSES_FOR_TIEBREAKERS = True

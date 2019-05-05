@@ -81,7 +81,8 @@ class Draw(object):
         self._games = []
 
     def has_full_draw(self):
-        logger.debug("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games), self._number_of_rounds))
+        logger.debug("{} has {} matchups in rounds {} ".format(self._draw_player.get_name(), len(self._games),
+                                                               self._number_of_rounds))
         return len(self._games) >= self._number_of_rounds
 
     def get_player(self):
@@ -90,6 +91,26 @@ class Draw(object):
     def flip_color_two_games(self):
         self._games[0].flip_colors()
         self._games[1].flip_colors()
+
+    def get_total_loss_points(self):
+
+        logger.info("Looking at loss points for {} ".format(self._draw_player.get_name()))
+        loss_points = 0
+        player_id = self._draw_player.get_id()
+
+        for ind_game in self._games:
+            if ind_game.was_drawn():
+                continue
+            elif ind_game.did_player_id_win(player_id):
+                continue
+            else:
+                # OK, a loss
+                _, loser = ind_game.get_winning_and_losing_player()
+                logger.info("{} lost against {}, a level {}".format(self._draw_player.get_name(), loser.get_name(),
+                                                                     loser.get_level()))
+                loss_points += loser.get_level()
+
+        return loss_points
 
     def is_all_one_color(self):
         """
@@ -141,7 +162,6 @@ class Draw(object):
 
     def get_game_for_player(self, opposing_player):
         pass
-
 
     def _get_points_for_level(self, level):
         """
@@ -244,7 +264,7 @@ class Draw(object):
             logger.debug("Entering game {} ".format(count))
             if individual_game.get_result() == chessnouns.DRAW:
                 # OK, so there is a draw
-                #print("It was a draw")
+                # print("It was a draw")
                 raw_points += 0.5
                 continue
 
