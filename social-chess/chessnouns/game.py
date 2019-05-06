@@ -1,8 +1,7 @@
-from . import player
 import chessnouns
+from chessnouns import player
 import random
 from chessexceptions import game_error
-import logging
 import logging.config
 
 logging.config.fileConfig('logging.conf')

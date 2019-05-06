@@ -6,7 +6,7 @@ import logging
 import logging.config
 
 logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('chess')
+logger = logging.getLogger('tournament')
 
 
 def test_init_tournament():
@@ -14,7 +14,7 @@ def test_init_tournament():
 
 
 def test_add_schedule(get_all_players):
-    number_to_try = 41
+    number_to_try = 39
 
     players = get_all_players[0:number_to_try]
 
@@ -74,7 +74,7 @@ def test_add_schedule(get_all_players):
     print(candidates)
 
 
-def test_tiebreakers(get_all_players):
+def xxxtest_tiebreakers(get_all_players):
     breaks = 0
     schedules_with_two_in_playoffs = 0
     schedules_with_three_in_playoffs = 0
