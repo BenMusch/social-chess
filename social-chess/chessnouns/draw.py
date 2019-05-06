@@ -50,6 +50,30 @@ class Draw(object):
 
         return return_line
 
+    def output_win_loss_record(self):
+
+        logger.info("Creating win/loss record for {} ".format(self._draw_player.get_name()))
+
+        return_string = ""
+
+        player_id = self._draw_player.get_id()
+
+        round_number = 1
+        for ind_game in self._games:
+            opposing_player = ind_game.get_opposing_player_of_id(player_id)
+            if ind_game.was_drawn():
+                return_string += "\nRound {} was a draw against: {} L{}\n".format(round_number,
+                                                                                opposing_player.get_name(),
+                                                                                opposing_player.get_level())
+            elif ind_game.did_player_id_win(player_id):
+                return_string += "Round {} was a win against {} L{}\n".format(round_number, opposing_player.get_name(),
+                                                                              opposing_player.get_level())
+            else:
+                return_string += "Round {} was a loss against {} L{}\n".format(round_number, opposing_player.get_name(),
+                                                                               opposing_player.get_level())
+
+        return return_string
+
     def get_number_of_rounds(self):
         return self._number_of_rounds
 
@@ -107,9 +131,10 @@ class Draw(object):
                 # OK, a loss
                 _, loser = ind_game.get_winning_and_losing_player()
                 logger.info("{} lost against {}, a level {}".format(self._draw_player.get_name(), loser.get_name(),
-                                                                     loser.get_level()))
+                                                                    loser.get_level()))
                 loss_points += loser.get_level()
 
+        logger.info("Total loss points were: {}".format(loss_points))
         return loss_points
 
     def is_all_one_color(self):

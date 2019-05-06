@@ -173,14 +173,17 @@ class Tournament(object):
         if top_score > second_score:
             # OK, so the top guy is alone
             new_finalists.append(finalists_slots[0])
+            logger.info("So our clear winner was: {}".format(finalists_slots[0].get_player().get_name()))
+            # We also need to remove him
+            finalists_slots.remove(finalists_slots[0])
 
             # OK, let's see how many others
-            if len(finalists_slots) == 3:
+            if len(finalists_slots) == 2:
                 # So we only have two left
                 # Let's see if they played
-                second_player = finalists_slots[1].get_player()
+                second_player = finalists_slots[0].get_player()
                 logger.debug("Second player was: {}".format(second_player.get_name()))
-                third_player = finalists_slots[2].get_player()
+                third_player = finalists_slots[1].get_player()
                 logger.debug("Third player was: {}".format(third_player.get_name()))
                 played_game = self._schedule.get_common_game(second_player, third_player)
 
@@ -240,7 +243,7 @@ class Tournament(object):
                         new_finalists += [second_player, third_player]
                         return change, new_finalists
 
-            if len(finalists_slots) > 3:
+            if len(finalists_slots) > 2:
                 # So we have a top person, and more than 2 runners-up
                 # Egad.
                 # OK, let's see if we can grab one by being an upset
@@ -252,8 +255,6 @@ class Tournament(object):
                 # First, let's see if there are differences:
                 logger.info("We have more than 2 after the top person")
 
-                # FIXME: Peel off the top guy
-                
                 for item in finalists_slots:
                     logger.info(str(item))
                 losses_total = 0
@@ -266,14 +267,18 @@ class Tournament(object):
 
                 if losses_total % len(finalists_slots) == 0:
                     # OK, so no differences in losses, we fail
+                    logger.info("There were no differences after accounting for losses")
                     return change, finalists_slots
                 else:
                     # OK, so we have some differences
                     logger.info("Let's get the list sorted by the losses.")
                     new_list = sorted(finalists_slots, key=self._get_points_for_player, reverse=False)
-                    for item in new_list:
-                        logger.info("Player: {}, Loss points: {}".format(item.get_player().get_name(),
-                                                                         item.get_player().get_draw().get_total_loss_points()))
+                    for lost_slot in new_list:
+                        lost_player = lost_slot.get_player()
+                        logger.info("Player: {}, Loss points: {}".format(lost_player.get_name(),
+                                                                         lost_player.get_draw().get_total_loss_points()))
+                        logger.info(lost_player.get_draw().output_win_loss_record())
+
 
                 return change, finalists_slots
 

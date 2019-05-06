@@ -214,6 +214,12 @@ class Game(object):
     def contains_player(self, candidate_player):
         return self._player_one == candidate_player or self._player_two == candidate_player
 
+    def get_opposing_player_of_id(self, identifier):
+        if self._player_one.get_id() == identifier:
+            return self._player_two
+        else:
+            return self._player_one
+
     def is_bye(self):
         return self._bye
 

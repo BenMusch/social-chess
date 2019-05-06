@@ -437,10 +437,10 @@ class Schedule(object):
 
         # Now let's do it again for games
 
-        logger.info("OUTPUT OF PLAYER DRAWS")
+        logger.debug("OUTPUT OF PLAYER DRAWS")
         for p in printed_players:
             player_draw = p.get_draw()
-            # logger.info("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
+            logger.debug("{} Got {} Games".format(p.get_name(), len(player_draw.get_games())))
 
     def _print_schedule(self):
         # OK, now let us print and see
