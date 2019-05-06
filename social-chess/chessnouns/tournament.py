@@ -165,8 +165,18 @@ class Tournament(object):
                 # So let's pop off the first guy, and send the list
                 # for processing
                 leader_list.pop(0)
-                return we_used_tiebreaks, tiebreakers.get_one_playoff_contender_from_all_tied(leader_list)
 
+                # Let's get just the tied ones
+                tied_list = tiebreakers.get_tied_list(leader_list)
+                outstanding_list = tiebreakers.get_one_playoff_contender_from_all_tied(tied_list)
+                if len(outstanding_list) == 1:
+                    finalists.append(outstanding_list[0])
+                    return we_used_tiebreaks, finalists
+                else:
+                    # So we still have more than one. Let's see if we can get just
+                    # one by calculating against losses
+                    loss_calculated_list = tiebreakers.extract_using_losses(1, outstanding_list)
+                    return we_used_tiebreaks, loss_calculated_list
 
         # So now we are looking at the possibility of multiple people tied at the top
         elif top_score == next_score:
@@ -179,7 +189,9 @@ class Tournament(object):
                 return did_not_use_tiebreaks, finalists
             else:
                 # Everyone is tied at the top
-                # We will use a function to resolve
-                return we_used_tiebreaks, tiebreakers.get_two_playoff_contenders_from_all_tied(finalists)
+                # We will use a function to resolve and try to get 2
 
-
+                # But first we need to just get the tied players at the top
+                tied_list = tiebreakers.get_tied_list(leader_list)
+                loss_calculated_list = tiebreakers.extract_using_losses(2, tied_list)
+                return we_used_tiebreaks, loss_calculated_list

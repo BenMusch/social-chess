@@ -81,7 +81,7 @@ def test_tiebreakers(get_all_players):
     schedules_with_four_in_playoffs = 0
     schedules_with_more_in_playoffs = 0
 
-    number_of_tournaments = 100
+    number_of_tournaments = 10
 
     for count in range(0, number_of_tournaments):
         did_break = False
