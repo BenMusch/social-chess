@@ -1,12 +1,8 @@
 import pytest
 import sqlite3 as sqlite
-from chessnouns import player, game
+from chessnouns import player, game, schedule
 import chessutilities
-import logging
-import logging.config
 
-logging.config.fileConfig('logging.conf')
-logger = logging.getLogger('main')
 
 """
 This will hold the fixtures that are needed across test files
@@ -79,43 +75,61 @@ def get_four_games():
     games = []
     return games
 
+@pytest.fixture(scope="module")
+def get_random_completed_schedule(get_all_players):
+    pass
 
 @pytest.fixture(scope="module")
-def get_even_players(get_all_players):
+def get_workhorse_completed_schedule():
     """
-    We are going to get a number of players
-    that divide by 4 evenly
+    This is the data for a tournament with a specific
+    outcome, so we can test that outcome
     :return:
     """
-    return get_all_players[0:41]
+    players_list = []
+    for pl in raw_player_list:
+        players_list.append(player.Player(pl[0],pl[1],pl[3],False,vip=(1 == int(pl[4]))))
+    pass
 
 
-@pytest.fixture(scope="module")
-def get_mod_one_players(get_all_players):
-    """
-    We are going to get a number of players
-    that divide by 4 with one remaining
-    :return:
-
-    """
-    return get_all_players[0:36]
-
-
-@pytest.fixture(scope="module")
-def get_mod_two_players(get_all_players):
-    """
-    We are going to get a number of players
-    that divide by 4 with two remaining
-    :return:
-    """
-    return get_all_players[0:37]
-
-
-@pytest.fixture(scope="module")
-def get_mod_three_players(get_all_players):
-    """
-    We are going to get a number of players
-    that divide by 4 with three remaining
-    :return:
-    """
-    return get_all_players[0:38]
+# Here is our data
+raw_player_list = \
+    (1, "Clem Aeppli", "", 1, 0),\
+    (2, "Sarah Betancourt", "", 2, 0),\
+    (3, "Will Brown", "", 5, 0),\
+    (4, "Evan Bruning", "", 2, 0),\
+    (5, "Jay Cincotti", "", 2, 0),\
+    (6, "Tracy Corley", "", 2, 0),\
+    (7, "Stefanie Coxe", "", 3, 0),\
+    (8, "Brendan Crighton", "", 3, 1),\
+    (9, "Josh Cutler", "", 2, 1),\
+    (10, "Rachel Dec", "", 4, 0),\
+    (11, "Mike Deehan", "", 2, 0),\
+    (12, "Joe Deering", "", 4, 0),\
+    (13, "Gintautas Dumcius", "", 2, 0),\
+    (14, "Preston Epps", "", 5, 0),\
+    (15, "Matt Giancola", "", 4, 0),\
+    (16, "Libby Gormley", "", 1, 0),\
+    (17, "Joe Gravellese", "", 3, 0),\
+    (18, "Christian Greve", "", 4, 0),\
+    (19, "Brian Jencunas", "", 3, 0),\
+    (20, "Maya Jonas-Silver", "", 4, 0),\
+    (21, "Steve Koczela", "", 5, 0),\
+    (22, "Ed Lyons", "", 5, 0),\
+    (23, "Juana Matias", "", 3, 0),\
+    (24, "Andy Metzger", "", 5, 0),\
+    (25, "Mike Morales", "", 4, 0),\
+    (26, "Ashira Morris", "", 3, 0),\
+    (27, "Stephanie Murray", "", 1, 0),\
+    (28, "Ben Muschol", "", 5, 0),\
+    (29, "Christine Prignano", "", 3, 0),\
+    (30, "Will Rasky", "", 3, 0),\
+    (31, "Becca Rausch", "", 3, 1),\
+    (32, "Jodi Reed", "", 1, 0),\
+    (33, "Hirak Shah", "", 4, 0),\
+    (34, "Aaron Van Leesten", "", 3, 0),\
+    (35, "Pete Wilson", "", 3, 0),\
+    (36, "Brad Wyatt", "", 5, 0),\
+    (37, "Jon Santiago", "", 3, 1),\
+    (38, "Cory Amzon", "", 1, 0),\
+    (39, "Jim Aloisi", "", 3, 1)
