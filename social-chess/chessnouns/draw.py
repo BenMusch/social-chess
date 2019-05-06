@@ -123,7 +123,11 @@ class Draw(object):
         player_id = self._draw_player.get_id()
 
         for ind_game in self._games:
-            if ind_game.was_drawn():
+            if ind_game.get_result() == chessnouns.NO_RESULT:
+                continue
+            elif ind_game.was_drawn():
+                continue
+            elif ind_game.was_bye():
                 continue
             elif ind_game.did_player_id_win(player_id):
                 continue

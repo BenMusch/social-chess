@@ -168,7 +168,7 @@ class Tournament(object):
 
                 # Let's get just the tied ones
                 tied_list = tiebreakers.get_tied_list(leader_list)
-                outstanding_list = tiebreakers.get_one_playoff_contender_from_all_tied(tied_list)
+                outstanding_list = tiebreakers.get_one_playoff_contender_from_all_tied(self._schedule, tied_list)
                 if len(outstanding_list) == 1:
                     finalists.append(outstanding_list[0])
                     return we_used_tiebreaks, finalists
