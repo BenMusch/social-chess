@@ -275,6 +275,30 @@ class Game(object):
         winner, _ = self.get_winning_and_losing_player()
         return player_id == winner.get_id()
 
+    def get_players_result_string(self):
+
+        if self._result == chessnouns.DRAW:
+            winner = self.get_white_player()
+            loser = self.get_black_player()
+            outcome_string = "draw"
+            color_string = "white"
+        else:
+
+            winner, loser  = self.get_winning_and_losing_player()
+            if self._result == chessnouns.WHITE_WINS:
+                outcome_string = "won"
+                color_string = "white"
+            else:
+                outcome_string = "won"
+                color_string = "black"
+
+        result_string = "{}({}) {} as {} vs. {}({})".format(winner.get_name(), winner.get_level(), outcome_string,
+                                                            color_string, loser.get_name(), loser.get_level())
+
+        return result_string
+
+
+
     def get_winning_and_losing_player(self):
 
         if self._result == chessnouns.DRAW:

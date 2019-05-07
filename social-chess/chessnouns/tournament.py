@@ -49,6 +49,7 @@ class Tournament(object):
         for ind_game in tournament_round:
             logger.debug("Setting result for game: {} ".format(ind_game))
             ind_game.set_likely_random_result()
+            logger.debug("Result: {} vs ")
 
     def return_result_numbers(self):
         """
